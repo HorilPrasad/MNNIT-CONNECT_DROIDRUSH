@@ -7,6 +7,8 @@
     "start": "nodemon app.js "
   },
   "dependencies": {
+    "ajv": "^8.11.0",
+    "ajv-formats": "^2.1.1",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "cookie-parser": "~1.4.4",
