@@ -17,13 +17,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".exploreCommunity"
+            android:exported="false" />
+        <activity
+            android:name=".createCommunity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.signUpActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.LoginActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".Activity.MainActivity"
             android:exported="true">
@@ -32,8 +36,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
     </application>
 

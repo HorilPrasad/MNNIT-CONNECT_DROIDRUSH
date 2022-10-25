@@ -3,12 +3,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.CommunityFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearlayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/colorAccent"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="5dp"
+            app:cardMaxElevation="2dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="     explore \n communities"
+                android:textStyle="bold" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/colorAccent"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="5dp"
+            app:cardMaxElevation="2dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="     create \ncommunities"
+                android:textStyle="bold" />
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="84dp"
+        android:text="Joined Communities "
+        android:textStyle="bold"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearlayout" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="409dp"
+        android:layout_height="626dp"
+
+        android:layout_marginTop="35dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
