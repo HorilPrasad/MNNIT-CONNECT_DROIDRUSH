@@ -22,7 +22,7 @@ const loginValidation = (body) => {
           type: "string"
         }
       },
-      required: ["email", "password", "token"],
+      required: ["email", "password"],
     };
     const valid = ajv.validate(schema, body);
     var error = ajv.errors;
