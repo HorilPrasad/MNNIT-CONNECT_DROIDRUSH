@@ -17,10 +17,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".exploreCommunity"
+            android:name=".Activity.exploreCommunity"
             android:exported="false" />
         <activity
-            android:name=".createCommunity"
+            android:name=".Activity.createCommunity"
             android:exported="false" />
         <activity
             android:name=".Activity.signUpActivity"
