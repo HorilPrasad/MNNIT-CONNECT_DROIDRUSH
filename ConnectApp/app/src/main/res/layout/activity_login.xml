@@ -48,7 +48,7 @@
                 android:layout_marginTop="@dimen/loginViewsMargin">
 
                 <EditText
-                    android:id="@+id/editTextEmail"
+                    android:id="@+id/login_email"
                     style="@style/modifiedEditText"
                     android:hint="Email id"
 
@@ -62,7 +62,7 @@
                 android:layout_marginTop="@dimen/loginViewsMargin">
 
                 <EditText
-                    android:id="@+id/editTextPassword"
+                    android:id="@+id/login_password"
                     style="@style/modifiedEditText"
                     android:hint="@string/login_password_hint"
                     android:inputType="textPassword"
@@ -78,7 +78,7 @@
                 android:textSize="@dimen/newsMoreTextSize" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/cirLoginButton"
+                android:id="@+id/login_button"
                 style="@style/loginButton"
 
                 android:layout_gravity="center_horizontal"
@@ -88,7 +88,7 @@
             <TextView
                 style="@style/parent"
                 android:layout_marginTop="@dimen/loginViewsMargin"
-                android:onClick="onLoginClick"
+                android:onClick="onRegisterClick"
                 android:text="New user? Register Now"
                 android:textAlignment="center"
                 android:textColor="@color/themeColor"
