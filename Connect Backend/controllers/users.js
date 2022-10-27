@@ -80,6 +80,7 @@ exports.user_find_one = async (req, res, next) => {
     try {
       const savedUser = await user.save().then((result) => {
         console.log("Sending email");
+  
         //sendVerificationEmail(result, res);
       });
     } catch (err) {

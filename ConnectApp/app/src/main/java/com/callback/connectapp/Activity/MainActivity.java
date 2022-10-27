@@ -3,6 +3,7 @@ package com.callback.connectapp.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -29,6 +30,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setSelectedItemId(R.id.home);
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startActivity(new Intent(MainActivity.this,signUpActivity.class));
+    }
+
     HomeFragment homeFragment = new HomeFragment();
     CreatePostFragment createPostFragment = new CreatePostFragment();
     CommunityFragment communityFragment = new CommunityFragment();

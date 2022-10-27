@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 
 
-
 //const { app } = require('firebase-admin');
 const UserController = require('../controllers/users');
 const verify = require('../middleware/verify-token')
