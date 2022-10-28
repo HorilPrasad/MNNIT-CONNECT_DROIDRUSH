@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.callback.connectapp.R;
+import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.fragment.CommunityFragment;
 import com.callback.connectapp.fragment.CreatePostFragment;
 import com.callback.connectapp.fragment.HomeFragment;
@@ -34,7 +35,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onStart() {
         super.onStart();
-        startActivity(new Intent(MainActivity.this,signUpActivity.class));
+        AppConfig appConfig = new AppConfig(this);
+        if (!appConfig.isUserLogin())
+            startActivity(new Intent(MainActivity.this,signUpActivity.class));
     }
 
     HomeFragment homeFragment = new HomeFragment();

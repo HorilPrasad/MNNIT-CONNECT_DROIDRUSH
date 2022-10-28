@@ -78,6 +78,10 @@ public class signUpActivity extends AppCompatActivity {
             userPassword.setError("Password can't be empty!");
             userPassword.requestFocus();
             return false;
+        }else if(password.length()<6){
+            userPassword.setError("Password to short!");
+            userPassword.requestFocus();
+            return false;
         }else{
             return true;
         }
