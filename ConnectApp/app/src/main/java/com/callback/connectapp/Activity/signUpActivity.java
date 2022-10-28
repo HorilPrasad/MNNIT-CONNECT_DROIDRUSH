@@ -40,7 +40,7 @@ public class signUpActivity extends AppCompatActivity {
 
         if(check(name,email,password,regNo))
         {
-            User user = new User(name,email,password);
+            User user = new User(name,email,regNo,password);
             Call<ApiResponse> call = APIClient.getInstance()
                     .getApiInterface().registerUser(user);
 
@@ -81,6 +81,10 @@ public class signUpActivity extends AppCompatActivity {
         }else if(password.length()<6){
             userPassword.setError("Password to short!");
             userPassword.requestFocus();
+            return false;
+        }else if(regNo.isEmpty()){
+            userReg.setError("Registration number can't be empty!");
+            userReg.requestFocus();
             return false;
         }else{
             return true;

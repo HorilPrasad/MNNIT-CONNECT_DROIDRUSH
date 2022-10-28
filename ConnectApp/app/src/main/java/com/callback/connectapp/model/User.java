@@ -10,14 +10,17 @@ public class User {
     private String _id;
     private String token;
     private String phone;
+    private String regNo;
+    private String branch;
 
     public User() {
     }
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String regNo, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.regNo = regNo;
     }
 
     public User(String email, String password, String token,boolean random) {
@@ -26,7 +29,7 @@ public class User {
         this.token = token;
     }
 
-    public User(String name, String email, String password, String gender, String dob, String location, String _id, String token, String phone) {
+    public User(String name, String email, String password, String gender, String dob, String location, String _id, String token, String phone, String regNo, String branch) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -36,6 +39,24 @@ public class User {
         this._id = _id;
         this.token = token;
         this.phone = phone;
+        this.regNo = regNo;
+        this.branch = branch;
+    }
+
+    public String getRegNo() {
+        return regNo;
+    }
+
+    public void setRegNo(String regNo) {
+        this.regNo = regNo;
+    }
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
     }
 
     public String getName() {
