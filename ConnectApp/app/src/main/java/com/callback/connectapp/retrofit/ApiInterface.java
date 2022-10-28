@@ -11,6 +11,6 @@ public interface ApiInterface {
     @POST("/user/register")
     Call<ApiResponse> registerUser(@Body User user);
 
-    @POST("/api/user/login")
+    @POST("/user/login")
     Call<User> loginUser(@Body User user);
 }
