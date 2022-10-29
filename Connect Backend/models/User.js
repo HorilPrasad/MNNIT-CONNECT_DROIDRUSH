@@ -42,6 +42,15 @@ const userSchema = new mongoose.Schema({
     },
     phone: {
         type: String
+    },
+    regNo:{
+        type: String
+    },
+    branch: {
+        type: String
+    },
+    imageUrl: {
+        type: String
     }
 
 })

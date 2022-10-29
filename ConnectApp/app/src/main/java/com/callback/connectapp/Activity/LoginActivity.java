@@ -49,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
             if(task.isSuccessful()){
                 String firebaseMessagingToken = task.getResult();
                 userLogin(firebaseMessagingToken);
-                //Toast.makeText(this, firebaseMessagingToken, Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(this, "fail to generate token", Toast.LENGTH_SHORT).show();
             }

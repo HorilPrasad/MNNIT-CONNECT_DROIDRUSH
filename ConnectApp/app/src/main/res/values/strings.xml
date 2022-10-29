@@ -5,4 +5,24 @@
     <string name="login_password_hint">Password</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string-array name="gender_array">
+        <item>Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="course_array">
+        <item>MCA 1st Year</item>
+        <item>MCA 2nd Year</item>
+        <item>MCA 3rd Year</item>
+        <item>B.Tech 1st Year</item>
+        <item>B.Tech 2nd Year</item>
+        <item>B.Tech 3rd Year</item>
+        <item>B.Tech 4th Year</item>
+        <item>M.Tech 1st Year</item>
+        <item>M.Tech 2nd Year</item>
+        <item>Other</item>
+    </string-array>
 </resources>
