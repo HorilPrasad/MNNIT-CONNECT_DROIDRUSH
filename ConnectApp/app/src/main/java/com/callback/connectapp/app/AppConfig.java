@@ -32,7 +32,6 @@ public class AppConfig {
     }
 
     public void setAuthToken(String token){
-        Log.i(TAG, "setAuthToken: "+token);
         tinyDB.putString("AuthToken", token);
     }
 

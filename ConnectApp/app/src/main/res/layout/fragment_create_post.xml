@@ -105,10 +105,9 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="50dp"
-        tools:src="@tools:sample/avatars"
         android:layout_height="50dp"
         android:layout_marginTop="72dp"
-        android:src="@drawable/ic_person"
+        android:src="@drawable/avatar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.046"
         app:layout_constraintStart_toStartOf="parent"

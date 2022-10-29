@@ -29,18 +29,13 @@ public class User {
         this.token = token;
     }
 
-    public User(String name, String email, String password, String gender, String dob, String location, String _id, String token, String phone, String regNo, String branch, String imageUrl) {
-        this.name = name;
+    public User(String email, String gender, String dob, String phone,  String branch, String imageUrl) {
         this.email = email;
-        this.password = password;
         this.gender = gender;
         this.dob = dob;
-        this.location = location;
-        this._id = _id;
-        this.token = token;
         this.phone = phone;
-        this.regNo = regNo;
         this.branch = branch;
+        this.imageUrl = imageUrl;
     }
 
     public String getImageUrl() {

@@ -37,43 +37,43 @@ public class ProfileFragment extends Fragment {
         View view= inflater.inflate(R.layout.fragment_profile , container , false);
 
         // Inflate the layout for this fragment
-        storage = FirebaseStorage.getInstance();
+       // storage = FirebaseStorage.getInstance();
 
-        profileImg= view.findViewById(R.id.profile_image);
+        //profileImg= view.findViewById(R.id.profile_image);
 
-        launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
-                , new ActivityResultCallback <Uri>() {
-                    @Override
-                    public void onActivityResult (Uri result) {
-                        profileImg.setImageURI(result);
+//        launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
+//                , new ActivityResultCallback <Uri>() {
+//                    @Override
+//                    public void onActivityResult (Uri result) {
+//                        profileImg.setImageURI(result);
+//
+//                        //storing Img in firebase storage
+//
+//                        final StorageReference reference = storage.getReference().child("profile");
+//
+//                        reference.putFile(result).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
+//                            @Override
+//                            public void onSuccess (UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener <Uri>() {
+//                                    @Override
+//                                    public void onSuccess (Uri uri) {
+//                                        // store uri in mongo db
+//
+//                                        Toast.makeText(getContext(),uri.toString(),Toast.LENGTH_LONG).show();
+//                                    }
+//                                });
+//                            }
+//                        });
+//                    }
+//                });
 
-                        //storing Img in firebase storage
-
-                        final StorageReference reference = storage.getReference().child("profile");
-
-                        reference.putFile(result).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess (UploadTask.TaskSnapshot taskSnapshot) {
-
-                                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener <Uri>() {
-                                    @Override
-                                    public void onSuccess (Uri uri) {
-                                        // store uri in mongo db
-
-                                        Toast.makeText(getContext(),uri.toString(),Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-
-        profileImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view) {
-                launcher.launch("image/*");
-            }
-        });
+//        profileImg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick (View view) {
+//                launcher.launch("image/*");
+//            }
+//        });
 
         return view;
     }

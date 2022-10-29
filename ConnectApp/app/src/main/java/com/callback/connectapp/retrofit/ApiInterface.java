@@ -13,4 +13,7 @@ public interface ApiInterface {
 
     @POST("/user/login")
     Call<User> loginUser(@Body User user);
+
+    @POST("/user/create")
+    Call<ApiResponse> createProfile(@Body User user);
 }

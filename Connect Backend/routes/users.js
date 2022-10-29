@@ -26,8 +26,8 @@ router.post('/login', UserController.user_login);
 // //getting all user
 // router.get('/users/', verify, UserController.user_find_all)
 
-// //create profile
-// router.post('/create', verify, UserController.user_create_profile)
+//create profile
+router.post('/create',  UserController.user_create_profile)
 
 // //delete profile
 // router.delete('/delete', verify, UserController.user_delete)

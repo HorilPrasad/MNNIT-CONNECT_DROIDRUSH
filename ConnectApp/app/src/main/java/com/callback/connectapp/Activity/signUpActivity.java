@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.callback.connectapp.R;
+import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
@@ -21,6 +22,7 @@ import retrofit2.Response;
 public class signUpActivity extends AppCompatActivity {
     private EditText userName,userEmail,userPassword,userReg;
     private AppCompatButton registerButton;
+    private AppConfig appConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,9 @@ public class signUpActivity extends AppCompatActivity {
                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                     ApiResponse apiResponse = response.body();
                     if(response.isSuccessful()){
+                        appConfig.setLoginStatus(true);
+                        appConfig.setUserEmail(email);
+                        startActivity(new Intent(signUpActivity.this,CreateProfile.class));
                         Toast.makeText(signUpActivity.this,"Successfully registered......",Toast.LENGTH_LONG).show();
 
                     }else{
@@ -58,7 +63,7 @@ public class signUpActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ApiResponse> call, Throwable t) {
-                    Toast.makeText(signUpActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(signUpActivity.this, "fail...", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -98,6 +103,7 @@ public class signUpActivity extends AppCompatActivity {
         userPassword = findViewById(R.id.register_user_password);
         userReg = findViewById(R.id.register_user_reg);
         registerButton = findViewById(R.id.register_button);
+        appConfig = new AppConfig(this);
     }
 
     public void onLoginClick(View view){

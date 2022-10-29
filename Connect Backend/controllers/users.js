@@ -7,6 +7,7 @@ const User = require("../models/User");
 const {
   registerValidation,
   loginValidation,
+  profileValidation,
 } = require("../validation");
 const UserVerifcation = require("../models/UserVerification");
 const createError = require("http-errors");
@@ -28,7 +29,56 @@ exports.user_find_one = async (req, res, next) => {
       return;
     }
   };
-  
+  //edit profile
+  exports.user_edit_profile = async(req, res, next)=>{
+    try{
+      const{_id, location, weight, phone} = req.body;
+      const user = await User.findOneAndUpdate({_id}, {location, weight, phone})
+      if(user){
+        res.status(200).send({
+          status: 200,
+          message: "Profile updated"
+        })
+      }else{
+        next(404, "User not found")
+      } 
+    }catch(error){
+      next(error)
+    }
+  }
+//create Profile
+exports.user_create_profile = async (req, res, next) => {
+  //console.log("Request recieved");
+  const { valid, error } = profileValidation(req.body);
+  console.log(req.body.email)
+  if (!valid) {
+    console.log(error);
+    next(createError(400, error));
+    return;
+  }
+
+  try {
+    const { email } = req.body;
+    const {  gender, dob, phone, branch, imageUrl} = req.body;
+    const user = await User.findOneAndUpdate(
+      { email },
+      {  gender, dob, phone, branch, imageUrl}
+    );
+
+    if (user) {
+      res.status(200).send({
+        status: 200,
+        message: "Profile created",
+      });
+    } else {
+      throw createError(404, "User not found");
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
   //getting all users
   exports.user_find_all = async (req, res, next) => {
     try {
@@ -78,11 +128,17 @@ exports.user_find_one = async (req, res, next) => {
     });
     console.log(user);
     try {
-      const savedUser = await user.save().then((result) => {
-        console.log("Sending email");
-  
-        //sendVerificationEmail(result, res);
-      });
+      await user.save();
+      res.status(200).send({
+        status:200,
+        message:"created"
+      })
+      // const savedUser = await user.save().then((result) => {
+      //   console.log("Sending email");
+
+      //   res.status(200).send("register");
+      //   //sendVerificationEmail(result, res);
+      // });
     } catch (err) {
       next(err);
       return;

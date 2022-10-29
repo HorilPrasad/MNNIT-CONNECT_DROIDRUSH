@@ -77,6 +77,38 @@ const loginValidation = (body) => {
       error,
     };
   };
+  const profileValidation = (body) => {
+    const schema = {
+      type: "object",
+      properties: {
+        phone: {
+          type: "string",
+        },
+        gender: {
+          type: "string",
+        },
+        branch: {
+          type: "string",
+        },
+        dob: {
+          type: "string",
+        }
+      },
+      required: ["gender","dob","phone","branch"],
+    };
+    const valid = ajv.validate(schema, body);
+    var error = ajv.errors;
+    if (!valid) {
+      console.log(ajv.errors);
+      error = ajv.errors[0].message;
+    }
+  
+    return {
+      valid,
+      error,
+    };
+  };
 
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
+module.exports.profileValidation = profileValidation;

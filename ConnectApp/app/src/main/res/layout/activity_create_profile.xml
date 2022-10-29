@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.UpdateProfile">
+    tools:context=".Activity.CreateProfile">
+
 
     <LinearLayout
         android:id="@+id/update_profile_top"
@@ -14,22 +15,17 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
+        android:gravity="center"
         android:padding="10dp">
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_back"
-            android:backgroundTint="@color/background"
-            android:layout_gravity="center"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Update Profile"
+            android:text="Create Profile"
             android:layout_gravity="center"
-            android:layout_marginStart="90dp"
             android:textSize="22sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 
@@ -50,8 +46,11 @@
             android:paddingEnd="30dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/create_profile_image"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:padding="5dp"
@@ -60,23 +59,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:padding="8dp"
-                android:text="Name" />
+                android:padding="5dp"
+                android:text="Phone"
+                android:layout_marginTop="30dp"/>
 
             <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/border"
-                android:padding="8dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Phone" />
-
-            <EditText
+                android:id="@+id/create_profile_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/border"
@@ -86,10 +74,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
+                android:padding="5dp"
                 android:text="Gender" />
 
             <Spinner
+                android:id="@+id/create_profile_gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="50dp"
@@ -98,10 +87,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
+                android:padding="5dp"
                 android:text="Course" />
 
             <Spinner
+                android:id="@+id/create_profile_branch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="50dp"
@@ -110,10 +100,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
+                android:padding="5dp"
                 android:text="Date of Birth" />
 
             <EditText
+                android:id="@+id/create_profile_dob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/border"
@@ -126,11 +117,14 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/update_profile_button"
+        android:id="@+id/create_profile_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-        android:text="Update Profile"
-        android:textAllCaps="false"/>
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Create Profile"
+        android:textAllCaps="false" />
 </RelativeLayout>

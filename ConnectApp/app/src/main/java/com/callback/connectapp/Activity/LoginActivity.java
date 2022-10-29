@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private AppCompatButton loginButton;
     private TinyDB tinyDB;
     private AppConfig appConfig;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,10 @@ public class LoginActivity extends AppCompatActivity {
 
         initialize();
         loginButton.setOnClickListener(v -> {
+            progressDialog.setMessage("Login...");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
             getFirebaseToken();
         });
 
@@ -49,8 +55,10 @@ public class LoginActivity extends AppCompatActivity {
             if(task.isSuccessful()){
                 String firebaseMessagingToken = task.getResult();
                 userLogin(firebaseMessagingToken);
+                progressDialog.dismiss();
             }else{
                 Toast.makeText(this, "fail to generate token", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
     }
@@ -70,7 +78,15 @@ public class LoginActivity extends AppCompatActivity {
                         appConfig.setLoginStatus(true);
                         appConfig.setAuthToken(response.headers().get("auth_token"));
                         appConfig.setUserID(response.body().get_id());
-                        startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                        appConfig.setUserEmail(email);
+                        if(appConfig.isProfileCreated()){
+                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                            finishAffinity();
+                        }
+                        else{
+                            startActivity(new Intent(LoginActivity.this,CreateProfile.class));
+                            finishAffinity();
+                        }
                         Toast.makeText(LoginActivity.this, "login..", Toast.LENGTH_SHORT).show();
                         }else{
                             if (response.code() == 404){
@@ -79,10 +95,12 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, "Invalid credential!", Toast.LENGTH_SHORT).show();
                             }
                         }
+                        progressDialog.dismiss();
                     }
 
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
+                    progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this, "Network connection error!", Toast.LENGTH_LONG).show();
                 }
             });
@@ -113,6 +131,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         tinyDB = new TinyDB(this);
         appConfig = new AppConfig(this);
+        progressDialog = new ProgressDialog(this);
     }
 
     public void onRegisterClick(View View){
