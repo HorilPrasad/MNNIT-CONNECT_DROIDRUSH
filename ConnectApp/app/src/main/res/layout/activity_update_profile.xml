@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_back"
-            android:background=""
+            android:backgroundTint="@color/background"
             android:layout_gravity="center"/>
 
         <TextView
@@ -32,11 +32,12 @@
             android:textStyle="bold"/>
 
     </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/update_profile_top"
         android:layout_above="@+id/update_profile_button"
+        android:layout_below="@+id/update_profile_top"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true">
 
@@ -65,8 +66,8 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:background="@drawable/border"/>
+                android:background="@drawable/border"
+                android:padding="5dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -77,9 +78,9 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:background="@drawable/border"
-                android:drawableLeft="@drawable/ic_baseline_phone"/>
+                android:drawableLeft="@drawable/ic_baseline_phone"
+                android:padding="5dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -91,7 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="50dp"
-                android:padding="5dp"/>
+                android:padding="5dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -103,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="50dp"
-                android:padding="5dp"/>
+                android:padding="5dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -114,9 +115,9 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:background="@drawable/border"
                 android:drawableLeft="@drawable/ic_baseline_date_range"
-                android:background="@drawable/border"/>
+                android:padding="5dp" />
 
 
         </LinearLayout>
