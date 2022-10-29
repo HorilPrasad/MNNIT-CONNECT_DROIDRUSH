@@ -60,8 +60,11 @@ const loginValidation = (body) => {
           type: "string",
           format: "date",
         },
+        regNo: {
+          type: "string"
+        },
       },
-      required: ["name", "email", "password"],
+      required: ["name", "email", "regNo", "password"],
     };
     const valid = ajv.validate(schema, body);
     var error = ajv.errors;

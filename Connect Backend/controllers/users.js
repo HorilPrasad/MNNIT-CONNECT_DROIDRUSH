@@ -80,6 +80,7 @@ exports.user_find_one = async (req, res, next) => {
     try {
       const savedUser = await user.save().then((result) => {
         console.log("Sending email");
+  
         //sendVerificationEmail(result, res);
       });
     } catch (err) {
@@ -92,12 +93,13 @@ exports.user_find_one = async (req, res, next) => {
   exports.user_login = async (req, res, next) => {
     //validating user data
     const { valid, error } = loginValidation(req.body);
-  
+    
     if (!valid) {
       next(createError(400, error));
       return;
     }
-  
+
+    
     //checking if the email exsist
     try {
       const user = await User.findOne({ email: req.body.email });
@@ -118,7 +120,7 @@ exports.user_find_one = async (req, res, next) => {
       }
   
       await User.updateOne({email: req.body.email}, {token: req.body.token})
-  
+
       //create web token
       const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
       res.header("auth_token", token).send(user);
@@ -126,9 +128,8 @@ exports.user_find_one = async (req, res, next) => {
       next(error);
       return;
     }
-  };
+  }; 
   
-
 //deleting user
 exports.user_delete = async (req, res, next)=>{
     try{
