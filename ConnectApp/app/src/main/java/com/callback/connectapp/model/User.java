@@ -12,7 +12,7 @@ public class User {
     private String phone;
     private String regNo;
     private String branch;
-
+    private String imageUrl;
     public User() {
     }
 
@@ -29,7 +29,7 @@ public class User {
         this.token = token;
     }
 
-    public User(String name, String email, String password, String gender, String dob, String location, String _id, String token, String phone, String regNo, String branch) {
+    public User(String name, String email, String password, String gender, String dob, String location, String _id, String token, String phone, String regNo, String branch, String imageUrl) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -41,6 +41,14 @@ public class User {
         this.phone = phone;
         this.regNo = regNo;
         this.branch = branch;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getRegNo() {

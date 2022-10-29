@@ -1,5 +1,7 @@
 package com.callback.connectapp.model;
 
+import java.util.ArrayList;
+
 public class postData {
     private String name;
     private String communityName;

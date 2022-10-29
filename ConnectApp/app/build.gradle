@@ -62,4 +62,7 @@ dependencies {
 
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
 
+    //picasso for image handling
+    implementation 'com.squareup.picasso:picasso:2.8'
+
 }
