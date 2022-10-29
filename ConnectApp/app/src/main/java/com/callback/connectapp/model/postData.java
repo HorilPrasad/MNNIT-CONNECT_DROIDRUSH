@@ -1,8 +1,19 @@
 package com.callback.connectapp.model;
 
 public class postData {
+    private String name;
+    private String communityName;
+    private String time;
+    private String postText;
+    private String likeCount;
+    private String dislikeCount;
+    private String commentCount;
+    private String imgUrl;
+    private String profileUrl;
+    private String postShareLink;
 
-
+    public postData() {
+    }
 
     public postData (String name , String communityName , String time , String postText , String likeCount , String dislikeCount , String commentCount , String imgUrl , String profileUrl , String postShareLink) {
         this.name = name;
@@ -16,16 +27,6 @@ public class postData {
         this.profileUrl = profileUrl;
         this.postShareLink = postShareLink;
     }
-    private String name;
-    private String communityName;
-    private String time;
-    private String postText;
-    private String likeCount;
-    private String dislikeCount;
-    private String commentCount;
-    private String imgUrl;
-    private String profileUrl;
-    private String postShareLink;
 
     public String getName () {
         return name;
