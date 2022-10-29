@@ -3,6 +3,7 @@ package com.callback.connectapp.model;
 import java.util.ArrayList;
 
 public class postData {
+
     private String name;
     private String communityName;
     private String time;
@@ -16,6 +17,7 @@ public class postData {
 
     public postData() {
     }
+
 
     public postData (String name , String communityName , String time , String postText , String likeCount , String dislikeCount , String commentCount , String imgUrl , String profileUrl , String postShareLink) {
         this.name = name;
