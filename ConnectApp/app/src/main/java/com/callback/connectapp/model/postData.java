@@ -1,9 +1,6 @@
 package com.callback.connectapp.model;
 
 public class postData {
-
-
-
     public postData (String name , String communityName , String time , String postText , String likeCount , String dislikeCount , String commentCount , String imgUrl , String profileUrl , String postShareLink) {
         this.name = name;
         this.communityName = communityName;

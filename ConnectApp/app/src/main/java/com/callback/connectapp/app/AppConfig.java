@@ -7,6 +7,7 @@ import com.callback.connectapp.database.TinyDB;
 import com.callback.connectapp.model.User;
 
 public class AppConfig {
+
     private Context context;
     private TinyDB tinyDB;
     private User user;
