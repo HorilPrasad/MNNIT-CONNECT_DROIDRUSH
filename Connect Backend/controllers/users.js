@@ -93,13 +93,16 @@ exports.user_create_profile = async (req, res, next) => {
   // registering new user
   exports.user_register = async (req, res, next) => {
     //validating user data
-    
+  
+
+    console.log(req.body)
     const { valid, error } = registerValidation(req.body);
   
     if (!valid) {
       next(createError(400, error));
       return;
     }
+  
     
     //checking if the user already exsist
   
