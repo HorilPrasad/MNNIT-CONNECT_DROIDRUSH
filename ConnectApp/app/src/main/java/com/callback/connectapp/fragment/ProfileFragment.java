@@ -15,14 +15,21 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.callback.connectapp.R;
+import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.model.User;
+import com.callback.connectapp.retrofit.APIClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class ProfileFragment extends Fragment {
-
+    private AppConfig appConfig;
   ActivityResultLauncher<String>launcher;
   ImageView profileImg;
   FirebaseStorage storage;
@@ -35,6 +42,27 @@ public class ProfileFragment extends Fragment {
     public View onCreateView (LayoutInflater inflater , ViewGroup container ,
                               Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_profile , container , false);
+        appConfig = new AppConfig(getContext());
+        Toast.makeText(getContext(), appConfig.getUserID(), Toast.LENGTH_SHORT).show();
+        Call<User> call = APIClient.getInstance().getApiInterface().getProfile(appConfig.getUserID());
+
+        call.enqueue(new Callback<User>() {
+            @Override
+
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.isSuccessful())
+                {
+                    User user = response.body();
+                    Toast.makeText(getContext(), user.getName(), Toast.LENGTH_SHORT).show();
+                }else
+                    Toast.makeText(getContext(), "Not success...", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
 
         // Inflate the layout for this fragment
        // storage = FirebaseStorage.getInstance();

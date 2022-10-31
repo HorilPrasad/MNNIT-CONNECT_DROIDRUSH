@@ -18,7 +18,8 @@ exports.user_find_one = async (req, res, next) => {
     console.log(id);
     //finding user
     try {
-      const user = await User.findOne({ _id: id });
+      
+      const user = await User.findOne({_id:id});
       if (user) {
         res.status(200).send(user);
       } else {
@@ -50,7 +51,6 @@ exports.user_find_one = async (req, res, next) => {
 exports.user_create_profile = async (req, res, next) => {
   //console.log("Request recieved");
   const { valid, error } = profileValidation(req.body);
-  console.log(req.body.email)
   if (!valid) {
     console.log(error);
     next(createError(400, error));
