@@ -1,27 +1,31 @@
 package com.callback.connectapp.fragment;
 
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.fragment.app.Fragment;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
+<<<<<<< HEAD
 import com.google.android.gms.tasks.OnSuccessListener;
+=======
+>>>>>>> 98395347195b40521e09d5f72e8f7f51794e6f88
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +36,7 @@ public class ProfileFragment extends Fragment {
     private AppConfig appConfig;
   ActivityResultLauncher<String>launcher;
   ImageView profileImg;
+  TextView name,email,phone,regNo,course;
   FirebaseStorage storage;
     public ProfileFragment () {
         // Required empty public constructor
@@ -64,11 +69,49 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        // Inflate the layout for this fragment
-       // storage = FirebaseStorage.getInstance();
+        name=view.findViewById(R.id.name);
+        email=view.findViewById(R.id.email);
+        phone=view.findViewById(R.id.phone);
+        regNo=view.findViewById(R.id.regno);
+        course=view.findViewById(R.id.school);
 
-        //profileImg= view.findViewById(R.id.profile_image);
+        profileImg =view.findViewById(R.id.imageView3);
+        appConfig = new AppConfig(getContext());
+        Call <User> call = APIClient.getInstance().getApiInterface()
+                .getUser(appConfig.getUserID());
 
+        Log.d("userId",appConfig.getUserEmail()+"user");
+
+        call.enqueue(new Callback <User>() {
+            @Override
+            public void onResponse (Call <User> call , Response <User> response) {
+                if(response.isSuccessful()){
+
+                    name.setText(response.body().getName());
+                    email.setText(response.body().getEmail());
+                    phone.setText(response.body().getPhone());
+                    regNo.setText(response.body().getRegNo());
+                    course.setText(response.body().getBranch());
+
+//                    Picasso.get()
+//                            .load(response.body().getImageUrl())
+//                            .placeholder(R.mipmap.ic_person)
+//                            .into(profileImg);
+                }else{
+                    Toast.makeText(getContext(), "Problem in fetching profile"+appConfig.getUserID(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure (Call <User> call , Throwable t) {
+                Toast.makeText(getContext(), "Server error!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+//        storage = FirebaseStorage.getInstance();
+//
+//        profileImg= view.findViewById(R.id.profile_image);
+//
 //        launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
 //                , new ActivityResultCallback <Uri>() {
 //                    @Override
@@ -95,7 +138,7 @@ public class ProfileFragment extends Fragment {
 //                        });
 //                    }
 //                });
-
+//
 //        profileImg.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick (View view) {

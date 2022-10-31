@@ -2,10 +2,17 @@ package com.callback.connectapp.retrofit;
 
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.User;
+import com.callback.connectapp.model.postData;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+<<<<<<< HEAD
+=======
+import retrofit2.http.PATCH;
+>>>>>>> 98395347195b40521e09d5f72e8f7f51794e6f88
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -20,5 +27,22 @@ public interface ApiInterface {
     Call<ApiResponse> createProfile(@Body User user);
 
     @GET("/user/users/{id}")
+<<<<<<< HEAD
     Call<User> getProfile(@Path("id") String id);
+=======
+    Call<User> getUser (@Path("id") String id);
+
+    @PATCH("user/users/{id}")
+    Call<ApiResponse> updateProfileImage(@Path("id") String id,@Body String imageUrl);
+
+    @GET("/user/posts")
+    Call<List <postData>>getAllPosts();
+
+    @GET("/user/posts/{id}")
+    Call<List<postData>>getUserPost(@Path("id")String id);
+
+
+
+
+>>>>>>> 98395347195b40521e09d5f72e8f7f51794e6f88
 }
