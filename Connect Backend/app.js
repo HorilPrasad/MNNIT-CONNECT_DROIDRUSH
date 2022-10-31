@@ -9,7 +9,7 @@ require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-
+const postRouter=require('./routes/post');
 const app = express();
 
 
@@ -20,6 +20,7 @@ app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
+app.use('/post', postRouter);
 
 // database connection
 mongoose.connect(process.env.MONGODB_URL,()=>{
@@ -44,7 +45,7 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.listen(process.env.PORT || 3000,'192.168.102.118',() => {
+app.listen(process.env.PORT || 3000,() => {
   console.log('server started');
 });
 
