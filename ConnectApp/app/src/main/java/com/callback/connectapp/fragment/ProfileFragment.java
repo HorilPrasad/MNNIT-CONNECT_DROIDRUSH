@@ -16,10 +16,7 @@ import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
-<<<<<<< HEAD
-import com.google.android.gms.tasks.OnSuccessListener;
-=======
->>>>>>> 98395347195b40521e09d5f72e8f7f51794e6f88
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
@@ -27,9 +24,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class ProfileFragment extends Fragment {
@@ -47,27 +41,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView (LayoutInflater inflater , ViewGroup container ,
                               Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_profile , container , false);
-        appConfig = new AppConfig(getContext());
-        Toast.makeText(getContext(), appConfig.getUserID(), Toast.LENGTH_SHORT).show();
-        Call<User> call = APIClient.getInstance().getApiInterface().getProfile(appConfig.getUserID());
 
-        call.enqueue(new Callback<User>() {
-            @Override
-
-            public void onResponse(Call<User> call, Response<User> response) {
-                if(response.isSuccessful())
-                {
-                    User user = response.body();
-                    Toast.makeText(getContext(), user.getName(), Toast.LENGTH_SHORT).show();
-                }else
-                    Toast.makeText(getContext(), "Not success...", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-
-            }
-        });
 
         name=view.findViewById(R.id.name);
         email=view.findViewById(R.id.email);
@@ -75,7 +49,7 @@ public class ProfileFragment extends Fragment {
         regNo=view.findViewById(R.id.regno);
         course=view.findViewById(R.id.school);
 
-        profileImg =view.findViewById(R.id.imageView3);
+        profileImg =view.findViewById(R.id.profile_user_image);
         appConfig = new AppConfig(getContext());
         Call <User> call = APIClient.getInstance().getApiInterface()
                 .getUser(appConfig.getUserID());

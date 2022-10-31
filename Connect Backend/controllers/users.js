@@ -14,39 +14,6 @@ const createError = require("http-errors");
 
 //find one user
 exports.user_find_one = async (req, res, next) => {
-<<<<<<< HEAD
-    const { id } = req.params;
-    console.log(id);
-    //finding user
-    try {
-      
-      const user = await User.findOne({_id:id});
-      if (user) {
-        res.status(200).send(user);
-      } else {
-        throw createError(404, "Not found");
-      }
-    } catch (error) {
-      next(error);
-      return;
-    }
-  };
-  //edit profile
-  exports.user_edit_profile = async(req, res, next)=>{
-    try{
-      const{_id, location, weight, phone} = req.body;
-      const user = await User.findOneAndUpdate({_id}, {location, weight, phone})
-      if(user){
-        res.status(200).send({
-          status: 200,
-          message: "Profile updated"
-        })
-      }else{
-        next(404, "User not found")
-      } 
-    }catch(error){
-      next(error)
-=======
   const { id } = req.params;
   console.log(id);
   //finding user
@@ -56,7 +23,6 @@ exports.user_find_one = async (req, res, next) => {
       res.status(200).send(user);
     } else {
       throw createError(404, "Not found");
->>>>>>> 98395347195b40521e09d5f72e8f7f51794e6f88
     }
   } catch (error) {
     next(error);
