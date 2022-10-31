@@ -20,8 +20,8 @@ router.post('/login', UserController.user_login);
 // //verify user email
 // router.get('/verify/:us', UserController.user_verify);
 
-// //finding one user
-// router.get('/users/:id', verify, UserController.user_find_one)
+//finding one user
+router.get('/users/:id', UserController.user_find_one)
 
 // //getting all user
 // router.get('/users/', verify, UserController.user_find_all)

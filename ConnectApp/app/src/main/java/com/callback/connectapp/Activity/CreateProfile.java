@@ -1,9 +1,13 @@
 package com.callback.connectapp.Activity;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +23,10 @@ import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -32,6 +40,8 @@ public class CreateProfile extends AppCompatActivity {
     private AppConfig appConfig;
     private CircleImageView userImage;
     private EditText phone,dob;
+    ActivityResultLauncher <String> launcher;
+    FirebaseStorage storage;
     private Spinner gender,branch;
     private Button createProfile;
     private ArrayAdapter<CharSequence> genderAdapter,branchAdapter;
@@ -82,6 +92,47 @@ public class CreateProfile extends AppCompatActivity {
             }
         });
 
+
+         storage = FirebaseStorage.getInstance();
+
+        userImage= findViewById(R.id.profile_image);
+
+//        launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
+//                , new ActivityResultCallback <Uri>() {
+//                    @Override
+//                    public void onActivityResult (Uri result) {
+//                        userImage.setImageURI(result);
+//
+//                        //storing Img in firebase storage
+//
+//                        final StorageReference reference = storage.getReference().child("profile");
+//
+//                        reference.putFile(result).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
+//                            @Override
+//                            public void onSuccess (UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener <Uri>() {
+//                                    @Override
+//                                    public void onSuccess (Uri uri) {
+//                                        // store uri in mongo db
+//                                       imageUrl=uri.toString();
+//                                        Toast.makeText(CreateProfile.this,uri.toString(),Toast.LENGTH_LONG).show();
+//                                    }
+//                                });
+//                            }
+//                        });
+//                    }
+//                });
+//
+//                userImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick (View view) {
+//                launcher.launch("image/*");
+//            }
+//        });
+
+
+
         dob.setOnClickListener(view -> {
             Calendar cal = Calendar.getInstance(TimeZone.getDefault());
             DatePickerDialog datePicker = new DatePickerDialog(this, datePickerListener,
@@ -95,6 +146,10 @@ public class CreateProfile extends AppCompatActivity {
 
         createProfile.setOnClickListener(v -> {
             phoneString = phone.getText().toString().trim();
+
+            genderString=gender.getSelectedItem().toString();
+            branchString=branch.getSelectedItem().toString();
+
             createProfile();
         });
 
