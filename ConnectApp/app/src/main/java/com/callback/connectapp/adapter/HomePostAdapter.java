@@ -1,17 +1,14 @@
 package com.callback.connectapp.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.callback.connectapp.R;
@@ -46,13 +43,13 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
 //        holder.shopType.setText(shop.getShopType());
 
         postData userPost=postDataArrayList.get(position);
-        holder.userName.setText(userPost.getName());
+        holder.userName.setText(userPost.getUserId());
         holder.communityName.setText(userPost.getCommunityName());
         //glide use to add img in post
-        holder.likeCount.setText("Likes "+userPost.getLikeCount() );
-        holder.commentCount.setText("comments "+userPost.getCommentCount() );
-        holder.dislikeCount.setText("dislike "+userPost.getDislikeCount() );
-        holder.postText.setText(userPost.getPostText());
+        holder.likeCount.setText("Likes "+userPost.getLikes() );
+        holder.commentCount.setText("comments "+userPost.getComments() );
+        holder.dislikeCount.setText("dislike "+userPost.getDislikes() );
+        holder.postText.setText(userPost.getInfo());
         
 //        holder.shopListLayout.setOnClickListener(v -> {
 //            Intent intent=new Intent(context, ProductListActivity.class);

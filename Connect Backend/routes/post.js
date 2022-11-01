@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Post = require('../models/post');
+const Post = require('../models/Post');
 
 // Create Post
 router.post("/create", async function (req, res) {
@@ -7,10 +7,16 @@ router.post("/create", async function (req, res) {
     console.log(newPost)
     try {
         const Post = await newPost.save();
-        res.status(200).json(Post);
+        res.status(200).send({
+            status: 200,
+            message: "post created",
+          });
 
     } catch (error) {
-        res.status(500).json(error);
+        res.status(500).send({
+            status: 200,
+            message: " creating error",
+          });
     }
 });
 
@@ -22,9 +28,15 @@ router.put("/:id", async function (req, res) {
 
         if (post.userId === req.body.userId) {
             await post.updateOne({ $set: req.body })
-            res.status(200).json("Post has been updated successfully");
+            res.status(200).send({
+                status: 200,
+                message: "post updated",
+              });
         } else {
-            res.status(403).json("Action not allowed");
+            res.status(403).send({
+                status: 200,
+                message: " error",
+              });
         };
 
     } catch (error) {
@@ -40,9 +52,15 @@ router.delete("/:id", async function (req, res) {
 
         if (post.userId === req.body.userId) {
             await post.deleteOne({ $set: req.body });
-            res.status(200).json("Post has been deleted successfully");
+            res.status(200).send({
+                status: 200,
+                message: "post delete",
+              });
         } else {
-            res.status(403).json("Action not allowed");
+            res.status(403).send({
+                status: 200,
+                message: "NOt  allowed",
+              });
         }
     } catch (error) {
         res.status(500).json(error);
@@ -55,10 +73,16 @@ router.put("/:id/like", async function (req, res) {
         const post = await Post.findById(req.params.id);
         if (!post.likes.includes(req.body.userId)) {
             await post.updateOne({ $push: { likes: req.body.userId } });
-            res.status(200).json("You liked a post");
+            res.status(200).send({
+                status: 200,
+                message: "liked post",
+              });
         } else {
             await post.updateOne({ $pull: { likes: req.body.userId } });
-            res.status(200).json("Post has been disliked");
+            res.status(200).send({
+                status: 200,
+                message: "like remove",
+              });
         };
 
     } catch (error) {
@@ -72,10 +96,16 @@ router.put("/:id/dislike", async function (req, res) {
         const post = await Post.findById(req.params.id);
         if (!post.likes.includes(req.body.userId)) {
             await post.updateOne({ $push: { dislikes: req.body.userId } });
-            res.status(200).json("You disliked a post");
+            res.status(200).send({
+                status: 200,
+                message: "dislike post",
+              });
         } else {
             await post.updateOne({ $pull: { dislikes: req.body.userId } });
-            res.status(200).json("Post removed disliked");
+            res.status(200).send({
+                status: 200,
+                message: "remove dislike",
+              });
         };
 
     } catch (error) {
@@ -90,7 +120,10 @@ router.put("/:id/comment", async function (req, res) {
 
             // post.comments.unshift(userComment);
             await post.updateOne({ $push: { comments: { user: req.body.userId, comment: req.body.comment } } });
-            res.status(200).json("You comment a post");
+            res.status(200).send({
+                status: 200,
+                message: "post commented",
+              });
         } else {
             // await post.updateOne({$pull: {comments:req.body.userId }});
             // res.status(200).json("Post has been uncommmented");
@@ -106,12 +139,7 @@ router.get("/allpost", async function (req, res) {
     try {
         const posts = await Post.find().sort({ time: -1 });
 
-        res.status(200).json({
-            status: 'success',
-            data: {
-                posts,
-            },
-        });
+        res.status(200).send(posts);
 
     } catch (error) {
         res.status(500).json(error);
@@ -121,7 +149,7 @@ router.get("/allpost", async function (req, res) {
 router.get("/:id", async function (req, res) {
     try {
         const post = await Post.findById(req.params.id);
-        res.status(200).json(post)
+        res.status(200).send(post);
 
     } catch (error) {
         res.status(500).json(error);

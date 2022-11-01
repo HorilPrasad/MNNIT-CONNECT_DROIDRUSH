@@ -1,5 +1,6 @@
 package com.callback.connectapp.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,13 +11,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
+import com.callback.connectapp.Activity.CreateProfile;
+import com.callback.connectapp.Activity.signUpActivity;
 import com.callback.connectapp.R;
 import com.callback.connectapp.adapter.HomePostAdapter;
+import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.postData;
+import com.callback.connectapp.retrofit.APIClient;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class HomeFragment extends Fragment {
@@ -48,7 +59,33 @@ public class HomeFragment extends Fragment {
        postList_recycler.setAdapter(homePostAdapter);
 
 
+       FetchAllpost();
+
         return view;
+    }
+
+    private void FetchAllpost () {
+
+        Call <List <postData>> call = APIClient.getInstance()
+                .getApiInterface().getAllPosts();
+
+        call.enqueue(new Callback <List <postData>>() {
+            @Override
+            public void onResponse (Call <List <postData>> call , Response <List <postData>> response) {
+
+                if(response.isSuccessful()){
+
+                    postDataArrayList.addAll(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure (Call <List <postData>> call , Throwable t) {
+
+            }
+        });
+
+
     }
 
     @Override
@@ -58,11 +95,8 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onPause () {
+    protected void onPause() {
         mShimmerViewContainer.stopShimmerAnimation();
-
-        mShimmerViewContainer.setVisibility(View.GONE);
-
         super.onPause();
     }
 }

@@ -1,17 +1,16 @@
 package com.callback.connectapp.model;
 
 public class Comment {
-    private String userName;
-    private String date;
-    private String profileImg;
-    private String commentText;
+  private String userId;
+  private String date;
+  private String comment;
 
-    public String getUserName () {
-        return userName;
+    public String getUserId () {
+        return userId;
     }
 
-    public void setUserName (String userName) {
-        this.userName = userName;
+    public void setUserId (String userId) {
+        this.userId = userId;
     }
 
     public String getDate () {
@@ -22,19 +21,11 @@ public class Comment {
         this.date = date;
     }
 
-    public String getProfileImg () {
-        return profileImg;
+    public String getComment () {
+        return comment;
     }
 
-    public void setProfileImg (String profileImg) {
-        this.profileImg = profileImg;
-    }
-
-    public String getCommentText () {
-        return commentText;
-    }
-
-    public void setCommentText (String commentText) {
-        this.commentText = commentText;
+    public void setComment (String comment) {
+        this.comment = comment;
     }
 }

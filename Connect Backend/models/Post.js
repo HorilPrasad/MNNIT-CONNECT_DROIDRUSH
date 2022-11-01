@@ -18,6 +18,14 @@ const postSchema = new mongoose.Schema(
     image: {
         type: String
     },
+
+    communityName:{
+      type:String
+    },
+
+    communityId:{
+      type:String
+    },
     dislikes:{
         type: Array,
         default:[]
