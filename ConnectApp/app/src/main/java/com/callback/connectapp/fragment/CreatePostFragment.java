@@ -37,6 +37,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Calendar;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,9 +55,9 @@ public class CreatePostFragment extends Fragment {
     FirebaseStorage storage;
     postData post;
     private String userID;
+   public postData data;
 
-
- public String url="";
+ private String url;
 
     private ConstraintLayout homeLayout;
 
@@ -77,7 +79,7 @@ public class CreatePostFragment extends Fragment {
         userID = appConfig.getUserID();
 
 
-
+       data=new postData("","","");
 
         launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
                 , new ActivityResultCallback <Uri>() {
@@ -87,9 +89,12 @@ public class CreatePostFragment extends Fragment {
 
                         //storing Img in firebase storage
                              storage=FirebaseStorage.getInstance();
-                        final StorageReference reference = storage.getReference().child("profile");
 
-                        reference.putFile(result).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
+                        Calendar cal=Calendar.getInstance();
+                        Long k=cal.getTimeInMillis();
+                        String key=k.toString();
+                        final StorageReference reference = storage.getReference().child("post").child(key);
+                                reference.putFile(result).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess (UploadTask.TaskSnapshot taskSnapshot) {
 
@@ -97,8 +102,10 @@ public class CreatePostFragment extends Fragment {
                                     @Override
                                     public void onSuccess (Uri uri) {
                                         // store uri in mongo db
-                                      url=uri.toString();
-                                        Toast.makeText(getContext(),uri.toString(),Toast.LENGTH_LONG).show();
+                                      String imageUrl=uri.toString();
+                                      url=imageUrl;
+                                      data.setImage(uri.toString());
+
                                     }
                                 });
                             }
@@ -117,19 +124,25 @@ public class CreatePostFragment extends Fragment {
             @Override
             public void onClick (View view) {
 
+                  if(url==null){
+                      url="";
+                  }
 
-                if(etPost.getText().toString()!=""||url!=""){
-                    postData newPost=new postData(userID, etPost.getText().toString(),url);
 
+
+                    postData newPost=new postData(userID, etPost.getText().toString(),url.toString());
+                    Toast.makeText(getContext(),url,Toast.LENGTH_LONG).show();
                     Call <ApiResponse> call = APIClient.getInstance()
                             .getApiInterface().createPost(newPost);
-
+                    url="";
                     call.enqueue(new Callback <ApiResponse>() {
                         @Override
                         public void onResponse(Call<ApiResponse> call, Response <ApiResponse> response) {
                             ApiResponse apiResponse = response.body();
                             if(response.isSuccessful()){
                                   etPost.setText("");
+
+
                                 Toast.makeText(getContext(),"post is uploaded.",Toast.LENGTH_LONG).show();
 
                             }else{
@@ -145,7 +158,7 @@ public class CreatePostFragment extends Fragment {
                 }
 
 
-            }
+
 
         });
 

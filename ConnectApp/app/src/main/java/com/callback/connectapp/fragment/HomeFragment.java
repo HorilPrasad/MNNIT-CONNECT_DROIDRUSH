@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment {
                 if(response.isSuccessful()){
 
                   List<postData> po=response.body();
-                  Log.d("sizeif",po.get(0).getInfo());
+
 
                   postDataArrayList.addAll(response.body());
                     homePostAdapter.notifyDataSetChanged();
