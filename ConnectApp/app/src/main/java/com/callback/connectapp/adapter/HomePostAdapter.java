@@ -21,6 +21,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,14 +56,15 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
 
 //        holder.communityName.setText(userPost.getCommunityName());
         //glide use to add img in post
-        holder.likeCount.setText("likes "+userPost.getLikes().size() );
-        holder.commentCount.setText("comments "+userPost.getComments().size() );
-        holder.dislikeCount.setText("dislike "+userPost.getDislikes().size() );
+        holder.likeCount.setText("likes "+userPost.getLikeCount(userPost.getLikes()) );
+        holder.commentCount.setText("comments "+userPost.getCommenntCount(userPost.getComments()) );
+        holder.dislikeCount.setText("dislike "+userPost.getDislikeCount(userPost.getDislikes()) );
         holder.postText.setText(userPost.getInfo());
         holder.time.setText(userPost.getRelativeTime());
         String url= userPost.getImage();
 
-        if(url!=""){
+        if(!Objects.equals(url,"")) {
+            Log.d("img" , url);
             holder.postImage.setVisibility(View.VISIBLE);
             Picasso.get().load(url).into(holder.postImage);
         }

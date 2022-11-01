@@ -120,7 +120,7 @@ public class CreatePostFragment extends Fragment {
 
 
 
-String u="635eba09ed2505f9db5d30e3";
+                       String u="635eba09ed2505f9db5d30e3";
                     postData newPost=new postData(u, etPost.getText().toString(),url);
 
 
