@@ -52,7 +52,7 @@ public class CreatePostFragment extends Fragment {
     private AppConfig appConfig;
     FirebaseStorage storage;
     postData post;
-
+    private String userID;
 
 
  public String url="";
@@ -73,6 +73,8 @@ public class CreatePostFragment extends Fragment {
         etPost = view.findViewById(R.id.etPost);
         attachBtn=view.findViewById(R.id.attach);
         sendBtn=view.findViewById(R.id.sendBtn);
+        appConfig = new AppConfig(getContext());
+        userID = appConfig.getUserID();
 
 
 
@@ -117,13 +119,7 @@ public class CreatePostFragment extends Fragment {
 
 
                 if(etPost.getText().toString()!=""||url!=""){
-
-
-
-                       String u="635eba09ed2505f9db5d30e3";
-                    postData newPost=new postData(u, etPost.getText().toString(),url);
-
-
+                    postData newPost=new postData(userID, etPost.getText().toString(),url);
 
                     Call <ApiResponse> call = APIClient.getInstance()
                             .getApiInterface().createPost(newPost);

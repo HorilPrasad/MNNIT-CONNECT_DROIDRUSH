@@ -55,7 +55,6 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
 
 
 //        holder.communityName.setText(userPost.getCommunityName());
-        //glide use to add img in post
         holder.likeCount.setText("likes "+userPost.getLikeCount(userPost.getLikes()) );
         holder.commentCount.setText("comments "+userPost.getCommenntCount(userPost.getComments()) );
         holder.dislikeCount.setText("dislike "+userPost.getDislikeCount(userPost.getDislikes()) );
@@ -64,18 +63,9 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
         String url= userPost.getImage();
 
         if(!Objects.equals(url,"")) {
-            Log.d("img" , url);
             holder.postImage.setVisibility(View.VISIBLE);
             Picasso.get().load(url).into(holder.postImage);
         }
-
-//        holder.shopListLayout.setOnClickListener(v -> {
-//            Intent intent=new Intent(context, ProductListActivity.class);
-//            intent.putExtra("uid",shop.getUserId());
-//            intent.putExtra("shopname",shop.getShopName());
-//            context.startActivity(intent);
-//        });
-
 
         Call <User> call = APIClient.getInstance()
                 .getApiInterface().getUser(userPost.getUserId());
