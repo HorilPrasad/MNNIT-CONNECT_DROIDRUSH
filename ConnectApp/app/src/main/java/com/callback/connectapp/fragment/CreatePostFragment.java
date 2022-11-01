@@ -91,8 +91,8 @@ public class CreatePostFragment extends Fragment {
                              storage=FirebaseStorage.getInstance();
 
                         Calendar cal=Calendar.getInstance();
-                        Long k=cal.getTimeInMillis();
-                        String key=k.toString();
+                        long k=cal.getTimeInMillis();
+                        String key= Long.toString(k);
                         final StorageReference reference = storage.getReference().child("post").child(key);
                                 reference.putFile(result).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
                             @Override
@@ -127,8 +127,6 @@ public class CreatePostFragment extends Fragment {
                   if(url==null){
                       url="";
                   }
-
-
 
                     postData newPost=new postData(userID, etPost.getText().toString(),url.toString());
                     Toast.makeText(getContext(),url,Toast.LENGTH_LONG).show();

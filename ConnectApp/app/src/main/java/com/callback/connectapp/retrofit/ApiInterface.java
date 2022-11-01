@@ -1,6 +1,7 @@
 package com.callback.connectapp.retrofit;
 
 import com.callback.connectapp.model.ApiResponse;
+import com.callback.connectapp.model.Community;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.model.postData;
 
@@ -62,6 +63,12 @@ public interface ApiInterface {
 
     @DELETE("post/{id}")
     Call<ApiResponse>deletePost(@Path("id") String id,@Body User user);
+
+
+    //community methods
+
+    @POST("/community/create")
+    Call<ApiResponse> createCommunity(@Body Community community);
 
 
 }
