@@ -1,5 +1,11 @@
 package com.callback.connectapp.model;
 
+import android.text.format.DateUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Locale;
+
 public class postData {
 
     private String userId;
@@ -7,9 +13,9 @@ public class postData {
     private String communityId;
     private String time;
     private String info;
-    private String likes;
-    private String dislikes;
-    private String comments;
+    private List <String> likes;
+    private List <String> dislikes;
+    private List<Comment> comments;
     private String image;
     private String profileUrl;
     private String postShareLink;
@@ -23,7 +29,7 @@ public class postData {
         this.image = image;
     }
 
-    public postData (String name , String communityName , String time , String postText , String likeCount , String dislikeCount , String commentCount , String imgUrl , String profileUrl , String postShareLink) {
+    public postData (String name , String communityName , String time , String postText , List <String>  likeCount , List <String> dislikeCount , List<Comment>  commentCount , String imgUrl , String profileUrl , String postShareLink) {
         this.userId = name;
         this.communityName = communityName;
         this.time = time;
@@ -35,7 +41,18 @@ public class postData {
         this.profileUrl = profileUrl;
         this.postShareLink = postShareLink;
     }
+   public int getLikeCount(List<String> t){
 
+        return t.size();
+   }
+    public int getCommenntCount(List<Comment> t){
+
+        return t.size();
+    }
+    public int getDislikeCount(List<String> t){
+
+        return t.size();
+    }
     public String getUserId () {
         return userId;
     }
@@ -68,27 +85,27 @@ public class postData {
         this.info = info;
     }
 
-    public String getLikes () {
+    public List <String>  getLikes () {
         return likes;
     }
 
-    public void setLikes (String likes) {
+    public void setLikes (List <String>  likes) {
         this.likes = likes;
     }
 
-    public String getDislikes () {
+    public List <String> getDislikes () {
         return dislikes;
     }
 
-    public void setDislikes (String dislikes) {
+    public void setDislikes (List <String> dislikes) {
         this.dislikes = dislikes;
     }
 
-    public String getComments () {
+    public List<Comment>  getComments () {
         return comments;
     }
 
-    public void setComments (String comments) {
+    public void setComments (List<Comment>  comments) {
         this.comments = comments;
     }
 
@@ -114,5 +131,32 @@ public class postData {
 
     public void setPostShareLink (String postShareLink) {
         this.postShareLink = postShareLink;
+    }
+
+    // getRelativeTimeAgo("2020-07-07T16:07:26.465Z");
+
+    public String getRelativeTime() {
+
+        return getRelativeTimeAgo(time);
+    }
+
+    public static String getRelativeTimeAgo(String rawJsonDate) {
+        String parseFormat = "EEE MMM dd hh:mm:ss zzz yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(parseFormat, Locale.ENGLISH);
+
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        try {
+            long dateMillis = sf.parse(rawJsonDate).getTime();
+
+            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS, DateUtils.FORMAT_ABBREV_RELATIVE ).toString();
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        return relativeDate;
     }
 }

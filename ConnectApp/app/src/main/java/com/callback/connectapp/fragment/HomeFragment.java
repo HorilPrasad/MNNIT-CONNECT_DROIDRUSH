@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +36,7 @@ public class HomeFragment extends Fragment {
 
     private ShimmerFrameLayout mShimmerViewContainer;
    private RecyclerView postList_recycler;
-   ArrayList<postData>postDataArrayList;
+   List<postData>postDataArrayList;
    private HomePostAdapter homePostAdapter;
 
     public HomeFragment () {
@@ -53,13 +55,15 @@ public class HomeFragment extends Fragment {
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_container);
        postList_recycler=view.findViewById(R.id.homeFeedRecycler);
 
-       postDataArrayList =new ArrayList <>();
-       homePostAdapter=new HomePostAdapter(getContext(),postDataArrayList);
 
-       postList_recycler.setAdapter(homePostAdapter);
+       postDataArrayList =new ArrayList <postData>();
+
+        homePostAdapter=new HomePostAdapter(getContext(),postDataArrayList);
+     postList_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        postList_recycler.setAdapter(homePostAdapter);
 
 
-       FetchAllpost();
+        FetchAllpost();
 
         return view;
     }
@@ -75,12 +79,26 @@ public class HomeFragment extends Fragment {
 
                 if(response.isSuccessful()){
 
-                    postDataArrayList.addAll(response.body());
+                  List<postData> po=response.body();
+                  Log.d("sizeif",po.get(0).getInfo());
+
+                  postDataArrayList.addAll(response.body());
+                    homePostAdapter.notifyDataSetChanged();
+
+                    Log.d("sizeif", String.valueOf(response.body().size()));
+
+                    mShimmerViewContainer.stopShimmerAnimation();
+                    mShimmerViewContainer.setVisibility(View.GONE);
+                }else{
+
+                    Toast.makeText(getContext(), "not sucesss...", Toast.LENGTH_SHORT).show();
+
                 }
             }
 
             @Override
             public void onFailure (Call <List <postData>> call , Throwable t) {
+                Toast.makeText(getContext(), "fail...", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -95,7 +113,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    protected void onPause() {
+    public void onPause () {
         mShimmerViewContainer.stopShimmerAnimation();
         super.onPause();
     }

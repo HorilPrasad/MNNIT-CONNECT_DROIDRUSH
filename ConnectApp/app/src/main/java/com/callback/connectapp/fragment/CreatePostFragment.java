@@ -49,12 +49,13 @@ public class CreatePostFragment extends Fragment {
     private EditText etPost;
     private ImageView sendBtn,attachBtn;
     private ProgressBar pb;
+    private AppConfig appConfig;
     FirebaseStorage storage;
     postData post;
 
-    private AppConfig appConfig;
 
-    String url="";
+
+ public String url="";
 
     private ConstraintLayout homeLayout;
 
@@ -83,7 +84,7 @@ public class CreatePostFragment extends Fragment {
                         postImage.setImageURI(result);
 
                         //storing Img in firebase storage
-
+                             storage=FirebaseStorage.getInstance();
                         final StorageReference reference = storage.getReference().child("profile");
 
                         reference.putFile(result).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
@@ -94,7 +95,7 @@ public class CreatePostFragment extends Fragment {
                                     @Override
                                     public void onSuccess (Uri uri) {
                                         // store uri in mongo db
-                                      post.setImage(uri.toString());
+                                      url=uri.toString();
                                         Toast.makeText(getContext(),uri.toString(),Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -119,8 +120,8 @@ public class CreatePostFragment extends Fragment {
 
 
 
-
-                    postData newPost=new postData(appConfig.getUserID(), etPost.getText().toString(),url);
+String u="635eba09ed2505f9db5d30e3";
+                    postData newPost=new postData(u, etPost.getText().toString(),url);
 
 
 

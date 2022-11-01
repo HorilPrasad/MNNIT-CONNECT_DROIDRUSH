@@ -2,25 +2,36 @@ package com.callback.connectapp.adapter;
 
 import android.content.Context;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.callback.connectapp.R;
+import com.callback.connectapp.model.User;
 import com.callback.connectapp.model.postData;
+import com.callback.connectapp.retrofit.APIClient;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postViewHolder> {
 
     Context context;
-    ArrayList<postData> postDataArrayList;
+    List <postData> postDataArrayList;
 
-    public HomePostAdapter(Context context, ArrayList<postData> postDataArrayList) {
+    public HomePostAdapter(Context context, List<postData> postDataArrayList) {
         this.context = context;
         this.postDataArrayList = postDataArrayList;
     }
@@ -37,26 +48,52 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
     @Override
     public void onBindViewHolder(@NonNull postViewHolder holder, int position) {
 
-//        Shops shop=shopsArrayList.get(position);
-//        holder.shopName.setText(shop.getShopName());
-//        holder.shopAddress.setText(shop.getShopLocation());
-//        holder.shopType.setText(shop.getShopType());
+
 
         postData userPost=postDataArrayList.get(position);
-        holder.userName.setText(userPost.getUserId());
-        holder.communityName.setText(userPost.getCommunityName());
+
+
+//        holder.communityName.setText(userPost.getCommunityName());
         //glide use to add img in post
-        holder.likeCount.setText("Likes "+userPost.getLikes() );
-        holder.commentCount.setText("comments "+userPost.getComments() );
-        holder.dislikeCount.setText("dislike "+userPost.getDislikes() );
+        holder.likeCount.setText("likes "+userPost.getLikes().size() );
+        holder.commentCount.setText("comments "+userPost.getComments().size() );
+        holder.dislikeCount.setText("dislike "+userPost.getDislikes().size() );
         holder.postText.setText(userPost.getInfo());
-        
+        holder.time.setText(userPost.getRelativeTime());
+        String url= userPost.getImage();
+
+        if(url!=""){
+            holder.postImage.setVisibility(View.VISIBLE);
+            Picasso.get().load(url).into(holder.postImage);
+        }
+
 //        holder.shopListLayout.setOnClickListener(v -> {
 //            Intent intent=new Intent(context, ProductListActivity.class);
 //            intent.putExtra("uid",shop.getUserId());
 //            intent.putExtra("shopname",shop.getShopName());
 //            context.startActivity(intent);
 //        });
+
+
+        Call <User> call = APIClient.getInstance()
+                .getApiInterface().getUser(userPost.getUserId());
+        call.enqueue(new Callback <User>() {
+            @Override
+            public void onResponse (Call <User> call , Response <User> response) {
+                if(response.isSuccessful()){
+
+                    holder.userName.setText(response.body().getName());
+
+//                    Picasso.get().load(url).placeholder(R.mipmap.ic_person)
+//                            .into(holder.profileImg);
+                }
+            }
+
+            @Override
+            public void onFailure (Call <User> call , Throwable t) {
+                Log.d("sizeifs","user data fail");
+            }
+        });
     }
 
     @Override

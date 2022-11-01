@@ -54,7 +54,7 @@ public class ProfileFragment extends Fragment {
         Call <User> call = APIClient.getInstance().getApiInterface()
                 .getUser(appConfig.getUserID());
 
-        Log.d("userId",appConfig.getUserEmail()+"user");
+        Log.d("userId",appConfig.getUserID());
 
         call.enqueue(new Callback <User>() {
             @Override
@@ -66,6 +66,7 @@ public class ProfileFragment extends Fragment {
                     phone.setText(response.body().getPhone());
                     regNo.setText(response.body().getRegNo());
                     course.setText(response.body().getBranch());
+                    Toast.makeText(getContext(), appConfig.getUserID(), Toast.LENGTH_SHORT).show();
 
 //                    Picasso.get()
 //                            .load(response.body().getImageUrl())

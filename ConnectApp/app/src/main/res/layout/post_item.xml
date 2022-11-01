@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <kr.co.prnd.readmore.ReadMoreTextView
         android:id="@+id/readMoreTextView2"
@@ -11,18 +11,14 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
 
+        android:layout_marginTop="45dp"
         android:layout_marginRight="6dp"
-        android:text=" Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an  BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specifi"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
 
-        app:layout_constraintVertical_bias="0.13"
+        android:text="hiiiiiiii\n hii"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
         app:readMoreColor="#F3A688"
         app:readMoreMaxLine="2"
         app:readMoreText="…read more" />
@@ -48,14 +44,17 @@ See the License for the specifi"
         android:layout_gravity="center"
 
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="34dp"
         android:src="@drawable/sourabh"
-        app:civ_border_color="#F8F6F5"
 
+        app:civ_border_color="#F8F6F5"
         app:civ_border_width="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/readMoreTextView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintHorizontal_bias="0.017"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView4"
@@ -63,10 +62,10 @@ See the License for the specifi"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginTop="16dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
         android:text="Sourabh chouhan"
+        android:textColor="@color/black"
         android:textSize="12dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/profile_image"
@@ -76,14 +75,12 @@ See the License for the specifi"
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="22dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="44dp"
         android:text="MCA 2nd yr studentljsdljfskljdf"
         android:textSize="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.227"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView6"
@@ -111,16 +108,21 @@ See the License for the specifi"
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="380dp"
-        android:layout_height="406dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
+        android:layout_width="374dp"
 
+        android:layout_height="280dp"
+        android:layout_marginLeft="6dp"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/exploreCommunity"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.631"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/readMoreTextView2"
-        app:srcCompat="@drawable/sourabh" />
+        app:layout_constraintVertical_bias="0.204" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/exploreCommunity"
@@ -135,13 +137,16 @@ See the License for the specifi"
         app:cardMaxElevation="2dp"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3">
+        app:layout_constraintTop_toBottomOf="@id/imageView3">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -183,7 +188,7 @@ See the License for the specifi"
                     android:layout_height="32dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Likes 24" />
+                    android:text="Likes " />
 
                 <TextView
                     android:id="@+id/dislikeCount"
@@ -192,7 +197,7 @@ See the License for the specifi"
 
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Dislike 24" />
+                    android:text="Dislike " />
 
                 <TextView
                     android:id="@+id/commentCount"
@@ -200,12 +205,11 @@ See the License for the specifi"
                     android:layout_height="32dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="comments 24" />
+                    android:text="comments " />
             </LinearLayout>
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
