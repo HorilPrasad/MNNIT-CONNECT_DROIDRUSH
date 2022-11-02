@@ -9,7 +9,8 @@ require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const postRouter=require('./routes/post');
+const postRouter = require('./routes/post');
+const communityRouter = require('./routes/community');
 const app = express();
 
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
 app.use('/post', postRouter);
+app.use('/community',communityRouter);
 
 // database connection
 mongoose.connect(process.env.MONGODB_URL,()=>{
