@@ -50,9 +50,9 @@ public class createCommunity extends AppCompatActivity {
             String cTag = tag.getText().toString().trim();
             String cRule = rule.getText().toString().trim();
             String cAbout = about.getText().toString().trim();
-            List<String> list = new ArrayList<>();
-            list.add(appConfig.getUserID());
-            Community community = new Community(appConfig.getUserID(),cName,cAbout,cTag,cRule);
+            List<String> members = new ArrayList<>();
+            members.add(appConfig.getUserID());
+            Community community = new Community(appConfig.getUserID(),cName,cAbout,cTag,cRule,members);
 
             if(check(cName,cTag,cRule)){
                 communityCreate(community);

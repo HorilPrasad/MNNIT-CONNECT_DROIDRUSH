@@ -1,10 +1,12 @@
 package com.callback.connectapp.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.Fragment;
 
+import com.callback.connectapp.Activity.UpdateProfile;
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.model.User;
@@ -19,6 +22,8 @@ import com.callback.connectapp.retrofit.APIClient;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +36,7 @@ public class ProfileFragment extends Fragment {
   ActivityResultLauncher<String>launcher;
   ImageView profileImg;
   TextView name,email,phone,regNo,course;
+  ImageButton editProfile;
   FirebaseStorage storage;
     public ProfileFragment () {
         // Required empty public constructor
@@ -48,9 +54,15 @@ public class ProfileFragment extends Fragment {
         phone=view.findViewById(R.id.phone);
         regNo=view.findViewById(R.id.regno);
         course=view.findViewById(R.id.school);
+        editProfile = view.findViewById(R.id.profile_edit_button);
 
         profileImg =view.findViewById(R.id.profile_user_image);
         appConfig = new AppConfig(getContext());
+
+        editProfile.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), UpdateProfile.class));
+        });
+
         Call <User> call = APIClient.getInstance().getApiInterface()
                 .getUser(appConfig.getUserID());
 
@@ -66,12 +78,9 @@ public class ProfileFragment extends Fragment {
                     phone.setText(response.body().getPhone());
                     regNo.setText(response.body().getRegNo());
                     course.setText(response.body().getBranch());
-                    Toast.makeText(getContext(), appConfig.getUserID(), Toast.LENGTH_SHORT).show();
 
-//                    Picasso.get()
-//                            .load(response.body().getImageUrl())
-//                            .placeholder(R.mipmap.ic_person)
-//                            .into(profileImg);
+                    if(!Objects.equals(response.body().getImageUrl(), ""))
+                        Picasso.get().load(response.body().getImageUrl()).into(profileImg);
                 }else{
                     Toast.makeText(getContext(), "Problem in fetching profile"+appConfig.getUserID(), Toast.LENGTH_SHORT).show();
                 }

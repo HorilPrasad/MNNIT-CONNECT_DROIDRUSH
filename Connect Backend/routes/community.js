@@ -6,9 +6,10 @@ const router = express.Router();
 
 router.post('/create',async(req,res,next)=>{
 
-    const community =new Community(req.body);
+    const community = new Community(req.body);
     try{
-        await community.save();
+        const comm = await community.save();
+        const userId = req.body.userId;
         res.status(200).send({
             status:200,
             message:"community created"
@@ -17,7 +18,16 @@ router.post('/create',async(req,res,next)=>{
         next(err);
     }
 })
+router.get('/communities',async (req,res) =>{
+    try{
+        const communities = await Community.find();
+        console.log(communities);
+        res.status(200).send(communities);
 
+    }catch(err){
+        res.send(err);
+    }
+});
 router.get('/')
 
 module.exports = router;

@@ -88,7 +88,7 @@ public class CreatePostFragment extends Fragment {
                         postImage.setImageURI(result);
 
                         //storing Img in firebase storage
-                             storage=FirebaseStorage.getInstance();
+                        storage=FirebaseStorage.getInstance();
 
                         Calendar cal=Calendar.getInstance();
                         long k=cal.getTimeInMillis();

@@ -16,10 +16,10 @@
         android:layout_alignParentEnd="true"
         android:padding="10dp">
         <ImageButton
+            android:id="@+id/edit_profile_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_back"
-            android:backgroundTint="@color/background"
+            android:background="@drawable/ic_arrow_back"
             android:layout_gravity="center"/>
 
         <TextView
@@ -50,6 +50,7 @@
             android:paddingEnd="30dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/edit_profile_image"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:layout_gravity="center"
@@ -65,10 +66,12 @@
                 android:text="Name" />
 
             <EditText
+                android:id="@+id/edit_profile_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/border"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:paddingStart="20dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -77,6 +80,7 @@
                 android:text="Phone" />
 
             <EditText
+                android:id="@+id/edit_profile_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/border"
@@ -90,6 +94,7 @@
                 android:text="Gender" />
 
             <Spinner
+                android:id="@+id/edit_profile_gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="50dp"
@@ -102,6 +107,7 @@
                 android:text="Course" />
 
             <Spinner
+                android:id="@+id/edit_profile_branch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="50dp"
@@ -114,6 +120,7 @@
                 android:text="Date of Birth" />
 
             <EditText
+                android:id="@+id/edit_profile_dob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/border"

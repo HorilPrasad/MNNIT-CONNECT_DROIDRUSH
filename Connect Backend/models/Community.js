@@ -26,13 +26,10 @@ const communitySchema = new mongoose.Schema({
         default: ""
 
     },
-    admins:[{
-        user:{
-            type: String,
-            require: true
-        }
+    members:{
+        type:Array,
+        default:[]
     }
-    ]
 });
 
 module.exports = mongoose.model('community', communitySchema);

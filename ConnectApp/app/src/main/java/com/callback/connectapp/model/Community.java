@@ -10,7 +10,7 @@ public class Community {
     private String tag;
     private String rules;
     private String image;
-    private List<String> admins;
+    private List<String> members;
 
     public Community() {
     }
@@ -23,23 +23,23 @@ public class Community {
         this.rules = rules;
     }
 
-    public Community(String userId, String name, String about, String tag, String rules, List<String> admins) {
+    public Community(String userId, String name, String about, String tag, String rules, List<String> members) {
         this.userId = userId;
         this.name = name;
         this.about = about;
         this.tag = tag;
         this.rules = rules;
-        this.admins = admins;
+        this.members = members;
     }
 
-    public Community(String userId, String name, String about, String tag, String rules, String image, List<String> admins) {
+    public Community(String userId, String name, String about, String tag, String rules, String image, List<String> members) {
         this.userId = userId;
         this.name = name;
         this.about = about;
         this.tag = tag;
         this.rules = rules;
         this.image = image;
-        this.admins = admins;
+        this.members = members;
     }
 
     public String get_id() {
@@ -98,11 +98,11 @@ public class Community {
         this.image = image;
     }
 
-    public List<String> getAdmins() {
-        return admins;
+    public List<String> getMembers() {
+        return members;
     }
 
-    public void setAdmins(List<String> admins) {
-        this.admins = admins;
+    public void setMembers(List<String> members) {
+        this.members = members;
     }
 }

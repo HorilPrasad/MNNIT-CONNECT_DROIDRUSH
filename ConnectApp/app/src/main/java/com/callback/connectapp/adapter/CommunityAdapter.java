@@ -1,12 +1,12 @@
 package com.callback.connectapp.adapter;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +37,8 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
     @Override
     public void onBindViewHolder(@NonNull CommunityViewHolder holder, int position) {
         Community community = communityList.get(position);
-
+        holder.communityName.setText(community.getName());
+        Toast.makeText(context, "aya", Toast.LENGTH_SHORT).show();
 
     }
 
