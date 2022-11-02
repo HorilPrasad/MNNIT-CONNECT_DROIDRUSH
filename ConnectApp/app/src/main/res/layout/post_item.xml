@@ -157,7 +157,7 @@
                 <ImageView
                     android:id="@+id/likebtn"
                     android:layout_width="42dp"
-
+                    android:clickable="true"
                     android:layout_height="32dp"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/filledlike" />
@@ -166,12 +166,14 @@
                     android:id="@+id/dislikeBtn"
                     android:layout_width="42dp"
                     android:layout_height="32dp"
+                    android:clickable="true"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/dislike" />
+                    app:srcCompat="@drawable/filledislike" />
 
                 <ImageView
                     android:id="@+id/commentsBtn"
                     android:layout_width="42dp"
+                    android:clickable="true"
                     android:layout_height="32dp"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/chat" />

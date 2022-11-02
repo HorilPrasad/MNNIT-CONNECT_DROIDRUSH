@@ -7,6 +7,23 @@ import java.util.List;
 import java.util.Locale;
 
 public class postData {
+    private String _id;
+
+    public String get_id () {
+        return _id;
+    }
+
+    public void set_id (String _id) {
+        this._id = _id;
+    }
+
+    public String getCommunityId () {
+        return communityId;
+    }
+
+    public void setCommunityId (String communityId) {
+        this.communityId = communityId;
+    }
 
     private String userId;
     private String communityName;
