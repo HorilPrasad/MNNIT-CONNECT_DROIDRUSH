@@ -68,20 +68,20 @@ router.delete("/:id", async function (req, res) {
 });
 
 // Like and dislike post 
-router.put("/:id/like", async function (req, res) {
+router.put("/like/:id", async function (req, res) {
     console.log('aaya')
     console.log(req.params.id)
-    console.log(req.body.userId)
+    console.log(req.body._id)
     try {
         const post = await Post.findById(req.params.id);
         if (!post.likes.includes(req.body.userId)) {
-            await post.updateOne({ $push: { likes: req.body.userId } });
+            await post.updateOne({ $push: { likes: req.body._id } });
             res.status(200).send({
                 status: 200,
                 message: "liked post",
               });
         } else {
-            await post.updateOne({ $pull: { likes: req.body.userId } });
+            await post.updateOne({ $pull: { likes: req.body._id} });
             res.status(200).send({
                 status: 200,
                 message: "like remove",

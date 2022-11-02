@@ -79,14 +79,8 @@ public class LoginActivity extends AppCompatActivity {
                         appConfig.setAuthToken(response.headers().get("auth_token"));
                         appConfig.setUserID(response.body().get_id());
                         appConfig.setUserEmail(email);
-                        if(appConfig.isProfileCreated()){
                             startActivity(new Intent(LoginActivity.this,MainActivity.class));
                             finishAffinity();
-                        }
-                        else{
-                            startActivity(new Intent(LoginActivity.this,CreateProfile.class));
-                            finishAffinity();
-                        }
                         Toast.makeText(LoginActivity.this, "login..", Toast.LENGTH_SHORT).show();
                         }else{
                             if (response.code() == 404){

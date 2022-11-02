@@ -55,8 +55,7 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
 
 
 
-      final  postData userPost=postDataArrayList.get(position);
-
+      final  postData userPost = postDataArrayList.get(position);
 
 //        holder.communityName.setText(userPost.getCommunityName());
         holder.likeCount.setText("likes "+userPost.getLikeCount(userPost.getLikes()) );
@@ -79,7 +78,6 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
                 if(response.isSuccessful()){
 
                     holder.userName.setText(response.body().getName());
-
 //                    Picasso.get().load(url).placeholder(R.mipmap.ic_person)
 //                            .into(holder.profileImg);
                 }
@@ -94,9 +92,12 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
         holder.LikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view) {
+
                 Toast.makeText(context,"liked "+appConfig.getUserID(),Toast.LENGTH_LONG).show();
+                User user = new User();
+                user.set_id(appConfig.getUserID());
                 Call <ApiResponse> call = APIClient.getInstance()
-                        .getApiInterface().likePost(userPost.get_id(),appConfig.getUserID());
+                        .getApiInterface().likePost(userPost.get_id(), user);
 
                 call.enqueue(new Callback <ApiResponse>() {
                     @Override
