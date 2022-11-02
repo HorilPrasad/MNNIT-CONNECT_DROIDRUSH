@@ -5,6 +5,12 @@ public class Comment {
   private String date;
   private String comment;
 
+    public Comment (String userId , String date , String comment) {
+        this.userId = userId;
+        this.date = date;
+        this.comment = comment;
+    }
+
     public String getUserId () {
         return userId;
     }

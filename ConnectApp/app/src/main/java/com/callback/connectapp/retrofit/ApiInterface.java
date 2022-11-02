@@ -2,6 +2,7 @@ package com.callback.connectapp.retrofit;
 
 import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.model.ApiResponse;
+import com.callback.connectapp.model.Comment;
 import com.callback.connectapp.model.Community;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.model.postData;
@@ -50,6 +51,9 @@ public interface ApiInterface {
     @GET("/post/{id}")
     Call<List<postData>>getUserPost(@Path("id")String id,@Body User user);
 
+    @GET("/post/{id}")
+    Call<postData>getPost(@Path("id")String id);
+
     @POST("/post/create")
     Call<ApiResponse>createPost(@Body postData post);
 
@@ -61,10 +65,10 @@ public interface ApiInterface {
     Call<ApiResponse>likePost(@Path("id") String id,@Body User user);
 
     @PUT("/post/{id}/dislike")
-    Call<ApiResponse>dislikePost(@Path("id") String id,@Body String userId);
+    Call<ApiResponse>dislikePost(@Path("id") String id,@Body User user);
 
     @PUT("post/{id}/comment")
-    Call<ApiResponse>commentPost(@Path("id") String id,@Body String userId);
+    Call<ApiResponse>commentPost(@Path("id") String id,@Body Comment c);
 
     @DELETE("post/{id}")
     Call<ApiResponse>deletePost(@Path("id") String id,@Body User user);

@@ -5,6 +5,7 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -53,7 +54,10 @@ public class signUpActivity extends AppCompatActivity {
                     if(response.isSuccessful()){
                         appConfig.setLoginStatus(true);
                         appConfig.setUserEmail(email);
-                        appConfig.setUserID(response.body().get_id());
+//                        appConfig.setAuthToken(response.headers().get("auth_token"));
+//                        Log.d("size",response.body().get_id());
+//                        if(response.body().get_id()!="")
+//                        appConfig.setUserID(response.body().get_id());
                         startActivity(new Intent(signUpActivity.this,CreateProfile.class));
                         Toast.makeText(signUpActivity.this,"Successfully registered......",Toast.LENGTH_LONG).show();
 

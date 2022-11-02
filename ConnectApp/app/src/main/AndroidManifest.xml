@@ -22,20 +22,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.PostDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.CreateProfile"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".Activity.CommunityPage"
-            android:exported="false">
-            
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".Activity.UpdateProfile"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".Activity.exploreCommunity"
             android:exported="false" />
