@@ -60,6 +60,7 @@ public class HomeFragment extends Fragment {
 
         homePostAdapter=new HomePostAdapter(getContext(),postDataArrayList);
      postList_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+     postList_recycler.setHasFixedSize(true);
         postList_recycler.setAdapter(homePostAdapter);
 
 
@@ -81,7 +82,7 @@ public class HomeFragment extends Fragment {
 
                   List<postData> po=response.body();
 
-                      postDataArrayList.clear();
+                      homePostAdapter.clear();
                   postDataArrayList.addAll(response.body());
                     homePostAdapter.notifyDataSetChanged();
 

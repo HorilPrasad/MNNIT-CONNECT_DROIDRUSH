@@ -13,7 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
+
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.model.ApiResponse;
@@ -43,15 +43,15 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
 
     @NonNull
     @Override
-    public postViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public postViewHolder onCreateViewHolder(@NonNull final ViewGroup parent,final  int viewType) {
 
-        View view = LayoutInflater.from(context).inflate(R.layout.post_item,parent,false);
+       final View view = LayoutInflater.from(context).inflate(R.layout.post_item,parent,false);
 
         return new postViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull postViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull  final postViewHolder holder, final int position) {
 
 
 
@@ -103,14 +103,16 @@ Toast.makeText(context,"liked"+userPost.get_id()+"   "+appConfig.getUserID(),Toa
                     public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
 
                         if(response.isSuccessful()){
-
+Toast.makeText(context,"succes",Toast.LENGTH_SHORT).show();
                             Log.d("ss",response.body().toString());
                         }
                     }
 
                     @Override
                     public void onFailure (Call <ApiResponse> call , Throwable t) {
-                               Log.d("ss ","fail");
+                        Toast.makeText(context,"fail ",Toast.LENGTH_SHORT).show();
+
+                        Log.d("ss ","fail");
                     }
                 });
             }
@@ -158,7 +160,7 @@ Log.d("api","fail dislike");
         TextView userName,communityName,postText,likeCount,dislikeCount,commentCount,time;
         ImageView profileImg,postImage,shareBtn,LikeBtn,DislikeBtn,commentBtn;
 
-        public postViewHolder(@NonNull View itemView) {
+        public postViewHolder(@NonNull final  View itemView) {
             super(itemView);
 
             userName=itemView.findViewById(R.id.textView4);
