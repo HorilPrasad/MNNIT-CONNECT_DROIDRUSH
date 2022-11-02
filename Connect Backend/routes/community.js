@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.post('/create',async(req,res,next)=>{
 
-    console.log(req.body);
     const community =new Community(req.body);
     try{
         await community.save();
@@ -18,5 +17,7 @@ router.post('/create',async(req,res,next)=>{
         next(err);
     }
 })
+
+router.get('/')
 
 module.exports = router;

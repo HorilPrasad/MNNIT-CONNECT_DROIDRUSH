@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         if (!appConfig.isUserLogin())
             startActivity(new Intent(MainActivity.this,signUpActivity.class));
-
     }
 
     HomeFragment homeFragment = new HomeFragment();

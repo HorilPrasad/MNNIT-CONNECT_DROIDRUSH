@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/community_list_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/sourabh"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/padding_10">
+
+            <TextView
+                android:id="@+id/community_list_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Community name"
+                android:textSize="22sp"
+                android:textColor="@color/black"
+                android:padding="4dp"/>
+            <TextView
+                android:id="@+id/community_list_created"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Created by horil"
+                android:padding="4dp"
+                android:layout_marginTop="5dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -52,10 +52,10 @@ public interface ApiInterface {
     @PUT("/post/{id}")
     Call<ApiResponse>updatePost(@Path("id") String id,@Body postData post);
 
-    @PUT("post/{id}/like")
+    @PUT("/post/{id}/like")
     Call<ApiResponse>likePost(@Path("id") String id,@Body String userId);
 
-    @PUT("post/{id}/dislike")
+    @PUT("/post/{id}/dislike")
     Call<ApiResponse>dislikePost(@Path("id") String id,@Body String userId);
 
     @PUT("post/{id}/comment")

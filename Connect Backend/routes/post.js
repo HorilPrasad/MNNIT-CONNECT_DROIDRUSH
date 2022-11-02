@@ -69,6 +69,9 @@ router.delete("/:id", async function (req, res) {
 
 // Like and dislike post 
 router.put("/:id/like", async function (req, res) {
+    console.log('aaya')
+    console.log(req.params.id)
+    console.log(req.body.userId)
     try {
         const post = await Post.findById(req.params.id);
         if (!post.likes.includes(req.body.userId)) {

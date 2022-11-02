@@ -94,16 +94,16 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
         holder.LikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view) {
-Toast.makeText(context,"liked"+userPost.get_id()+"   "+appConfig.getUserID(),Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"liked "+appConfig.getUserID(),Toast.LENGTH_LONG).show();
                 Call <ApiResponse> call = APIClient.getInstance()
-                        .getApiInterface().likePost(userPost.get_id(), appConfig.getUserID());
+                        .getApiInterface().likePost(userPost.get_id(),appConfig.getUserID());
 
                 call.enqueue(new Callback <ApiResponse>() {
                     @Override
                     public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
 
                         if(response.isSuccessful()){
-Toast.makeText(context,"succes",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context,"succes",Toast.LENGTH_SHORT).show();
                             Log.d("ss",response.body().toString());
                         }
                     }
