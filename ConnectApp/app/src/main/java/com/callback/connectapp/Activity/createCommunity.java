@@ -2,6 +2,7 @@ package com.callback.connectapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,7 +52,7 @@ public class createCommunity extends AppCompatActivity {
             String cAbout = about.getText().toString().trim();
             List<String> list = new ArrayList<>();
             list.add(appConfig.getUserID());
-            Community community = new Community(appConfig.getUserID(),cName,cAbout,cTag,cRule,list);
+            Community community = new Community(appConfig.getUserID(),cName,cAbout,cTag,cRule);
 
             if(check(cName,cTag,cRule)){
                 communityCreate(community);
@@ -66,6 +67,7 @@ public class createCommunity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful())
+                    startActivity(new Intent(createCommunity.this,MainActivity.class));
                     Toast.makeText(createCommunity.this, "community created", Toast.LENGTH_SHORT).show();
             }
 

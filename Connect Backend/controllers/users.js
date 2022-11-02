@@ -132,10 +132,7 @@ exports.user_register = async (req, res, next) => {
   console.log(user);
   try {
     await user.save();
-    res.status(200).send({
-      status: 200,
-      message: "created"
-    })
+    res.status(200).send(user);
     // const savedUser = await user.save().then((result) => {
     //   console.log("Sending email");
 

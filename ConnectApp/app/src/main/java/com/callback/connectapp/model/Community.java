@@ -15,9 +15,15 @@ public class Community {
     public Community() {
     }
 
+    public Community(String userId, String name, String about, String tag, String rules) {
+        this.userId = userId;
+        this.name = name;
+        this.about = about;
+        this.tag = tag;
+        this.rules = rules;
+    }
 
-
-    public Community(String userId, String name, String about, String tag, String rules,List<String> admins) {
+    public Community(String userId, String name, String about, String tag, String rules, List<String> admins) {
         this.userId = userId;
         this.name = name;
         this.about = about;

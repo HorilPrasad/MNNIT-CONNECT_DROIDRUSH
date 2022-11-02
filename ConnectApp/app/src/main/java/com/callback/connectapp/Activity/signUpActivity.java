@@ -43,26 +43,27 @@ public class signUpActivity extends AppCompatActivity {
         if(check(name,email,password,regNo))
         {
             User user = new User(name,email,regNo,password);
-            Call<ApiResponse> call = APIClient.getInstance()
+            Call<User> call = APIClient.getInstance()
                     .getApiInterface().registerUser(user);
 
-            call.enqueue(new Callback<ApiResponse>() {
+            call.enqueue(new Callback<User>() {
                 @Override
-                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                    ApiResponse apiResponse = response.body();
+                public void onResponse(Call<User> call, Response<User> response) {
+
                     if(response.isSuccessful()){
                         appConfig.setLoginStatus(true);
                         appConfig.setUserEmail(email);
+                        appConfig.setUserID(response.body().get_id());
                         startActivity(new Intent(signUpActivity.this,CreateProfile.class));
                         Toast.makeText(signUpActivity.this,"Successfully registered......",Toast.LENGTH_LONG).show();
 
                     }else{
-                        Toast.makeText(signUpActivity.this, apiResponse.getMessage()+ "status : "+apiResponse.getStatus(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(signUpActivity.this, "fail to register...", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ApiResponse> call, Throwable t) {
+                public void onFailure(Call<User> call, Throwable t) {
                     Toast.makeText(signUpActivity.this, "fail...", Toast.LENGTH_SHORT).show();
                 }
             });

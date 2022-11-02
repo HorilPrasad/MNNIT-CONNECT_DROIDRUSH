@@ -20,7 +20,7 @@ import retrofit2.http.Path;
 
 public interface ApiInterface {
     @POST("/user/register")
-    Call<ApiResponse> registerUser(@Body User user);
+    Call<User> registerUser(@Body User user);
 
     @POST("/user/login")
     Call<User> loginUser(@Body User user);
@@ -70,5 +70,9 @@ public interface ApiInterface {
     @POST("/community/create")
     Call<ApiResponse> createCommunity(@Body Community community);
 
+    @GET("/community/communities")
+    Call<List<Community>> getAllCommunities();
 
+    @GET("/post/{id}")
+    Call<List<Community>> getUserCommunities(@Path("id")String id,@Body User user);
 }
