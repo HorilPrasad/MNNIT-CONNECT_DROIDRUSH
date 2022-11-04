@@ -1,20 +1,26 @@
 package com.callback.connectapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.callback.connectapp.Activity.CommunityPage;
 import com.callback.connectapp.R;
 import com.callback.connectapp.model.Community;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.CommunityViewHolder> {
 
@@ -40,6 +46,22 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         holder.communityName.setText(community.getName());
         Toast.makeText(context, "aya", Toast.LENGTH_SHORT).show();
 
+        if(!Objects.equals(community.getImage(), ""))
+            Picasso.get().load(community.getImage()).into(holder.communityImage);
+
+
+
+        holder.itemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                Gson gson = new Gson();
+                String myJson = gson.toJson(community);
+                Intent intent =new Intent(context, CommunityPage.class);
+                intent.putExtra("myjson", myJson);
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -51,9 +73,10 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
 
         TextView communityName,communityCreated;
         ImageView communityImage;
+        LinearLayout itemLayout;
         public CommunityViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            itemLayout=itemView.findViewById(R.id.communityLayout);
             communityName = itemView.findViewById(R.id.community_list_name);
             communityCreated = itemView.findViewById(R.id.community_list_created);
             communityImage = itemView.findViewById(R.id.community_list_image);

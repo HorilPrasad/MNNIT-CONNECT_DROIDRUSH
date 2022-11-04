@@ -86,6 +86,10 @@ public interface ApiInterface {
     @GET("/community/communities")
     Call<List<Community>> getAllCommunities();
 
+    //get community post
+    @GET("/community/post/{id}")
+    Call<List<postData>> getCommunityPost(@Path("id") String id);
+
     @GET("/post/{id}")
     Call<List<Community>> getUserCommunities(@Path("id")String id,@Body User user);
 }

@@ -147,7 +147,7 @@ public class UpdateProfile extends AppCompatActivity {
 
 
                 User user=new User(nameString,appConfig.getUserEmail(),genderString,dobString,phoneString,branchString,imageUrl);
- Log.d("user",appConfig.getUserID());
+                      Log.d("user",appConfig.getUserID());
                 Call <ApiResponse> call = APIClient.getInstance()
                         .getApiInterface().editProfile(appConfig.getUserID(),user);
 
