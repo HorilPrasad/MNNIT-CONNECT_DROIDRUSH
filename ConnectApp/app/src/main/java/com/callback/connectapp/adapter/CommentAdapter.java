@@ -19,6 +19,7 @@ import com.callback.connectapp.retrofit.APIClient;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,6 +61,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 //                    if(response.body().getImageUrl()!="")
 //                    Picasso.get().load(response.body().getImageUrl()).placeholder(R.mipmap.ic_person)
 //                            .into(holder.userImg);
+
+                    if(!Objects.equals(response.body().getImageUrl(),"")) {
+                        holder.userImg.setVisibility(View.VISIBLE);
+                        Picasso.get().load(response.body().getImageUrl()).into(holder.userImg);
+                    }
                 }
             }
 

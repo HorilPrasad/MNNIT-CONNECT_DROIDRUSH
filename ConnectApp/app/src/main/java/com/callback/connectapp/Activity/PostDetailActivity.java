@@ -41,17 +41,19 @@ public class PostDetailActivity extends AppCompatActivity {
     EditText commentText;
     ImageView sendCommentBtn;
     TextView userName,communityName,postText,likeCount,dislikeCount,commentCount,time;
-    ImageView profileImg,postImage,shareBtn,LikeBtn,DislikeBtn,commentBtn;
+    ImageView profileImg,postImage,shareBtn,LikeBtn,DislikeBtn,commentBtn,commentUserimg;
    private String PostId;
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
-appConfig=new AppConfig(this);
+        appConfig=new AppConfig(this);
         recyclerView=findViewById(R.id.commentRecycler);
-postText=findViewById(R.id.readMoreTextView2);
-userName=findViewById(R.id.textView4);
-postImage=findViewById(R.id.imageView3);
+        postText=findViewById(R.id.readMoreTextView2);
+        profileImg=findViewById(R.id.profile_image);
+        commentUserimg=findViewById(R.id.commentimge);
+        userName=findViewById(R.id.textView4);
+        postImage=findViewById(R.id.imageView3);
         commentList =new ArrayList <Comment>();
        sendCommentBtn=findViewById(R.id.sendcomment);
        commentText=findViewById(R.id.typecommet);
@@ -80,7 +82,8 @@ postImage=findViewById(R.id.imageView3);
                         @Override
                         public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
                             if(response.isSuccessful()){
-
+                                commentList.add(c);
+                                commentAdapter.notifyDataSetChanged();
                                 Toast.makeText(PostDetailActivity.this , "comment send" , Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -125,6 +128,11 @@ postImage=findViewById(R.id.imageView3);
                             if(response.isSuccessful()){
 
                                 userName.setText(response.body().getName());
+
+                                if(!Objects.equals(response.body().getImageUrl(),"")) {
+                                    profileImg.setVisibility(View.VISIBLE);
+                                    Picasso.get().load(response.body().getImageUrl()).into(profileImg);
+                                }
 //                    Picasso.get().load(response.body().getImageUrl()).placeholder(R.mipmap.ic_person)
 //                            .into(profileImg);
                             }

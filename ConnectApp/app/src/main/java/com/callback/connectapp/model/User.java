@@ -38,6 +38,15 @@ public class User {
         this.imageUrl = imageUrl;
     }
 
+    public User(String Name, String email,String gender, String dob, String phone,  String branch, String imageUrl) {
+         this.name=Name;
+        this.gender = gender;
+        this.dob = dob;
+        this.phone = phone;
+        this.branch = branch;
+        this.imageUrl = imageUrl;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }

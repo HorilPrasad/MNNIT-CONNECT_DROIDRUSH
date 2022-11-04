@@ -20,20 +20,20 @@ router.post('/login', UserController.user_login);
 // //verify user email
 // router.get('/verify/:us', UserController.user_verify);
 
-//finding one user
+// //finding one user
 router.get('/users/:id', UserController.user_find_one)
 
 // //getting all user
 // router.get('/users/', verify, UserController.user_find_all)
 
 //create profile
-router.post('/create',  UserController.user_create_profile)
+router.post('/create/:id', UserController.user_create_profile)
 
 // //delete profile
 // router.delete('/delete', verify, UserController.user_delete)
 
-// //edit profile
-// router.put('/edit', verify, UserController.user_edit_profile)
+//edit profile
+router.put('/edit/:id', UserController.user_edit_profile)
 
 // //change password
 // router.patch('/password', verify, UserController.user_change_password)

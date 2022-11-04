@@ -1,12 +1,13 @@
 package com.callback.connectapp.Activity;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,9 +15,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,7 +45,7 @@ public class UpdateProfile extends AppCompatActivity {
     private Spinner gender,branch;
     private ImageButton back;
     private ArrayAdapter<CharSequence> genderAdapter,branchAdapter;
-    private String phoneString,genderString,branchString,dobString,imageUrl;
+    private String phoneString,genderString,branchString,dobString,imageUrl="";
     private FirebaseStorage storage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +102,9 @@ public class UpdateProfile extends AppCompatActivity {
 
                     //storing Img in firebase storage
                     storage= FirebaseStorage.getInstance();
-
+                    Calendar cal=Calendar.getInstance();
+                    long k=cal.getTimeInMillis();
+                    String key= Long.toString(k);
                     final StorageReference reference = storage.getReference().child("profile").child(appConfig.getUserID());
                     reference.putFile(result).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -110,6 +115,12 @@ public class UpdateProfile extends AppCompatActivity {
                                 public void onSuccess (Uri uri) {
                                     // store uri in mongo db
                                     imageUrl=uri.toString();
+
+                                    Toast.makeText(UpdateProfile.this , imageUrl , Toast.LENGTH_SHORT).show();
+
+
+
+
 
                                 }
                             });
@@ -126,7 +137,45 @@ public class UpdateProfile extends AppCompatActivity {
         });
         update.setOnClickListener(v -> {
 
+
+            phoneString = phone.getText().toString().trim();
+           dobString=dob.getText().toString();
+            genderString=gender.getSelectedItem().toString();
+            branchString=branch.getSelectedItem().toString();
+            String nameString=name.getText().toString();
+            phoneString=phone.getText().toString();
+
+
+                User user=new User(nameString,appConfig.getUserEmail(),genderString,dobString,phoneString,branchString,imageUrl);
+ Log.d("user",appConfig.getUserID());
+                Call <ApiResponse> call = APIClient.getInstance()
+                        .getApiInterface().editProfile(appConfig.getUserID(),user);
+
+
+                call.enqueue(new Callback <ApiResponse>() {
+                    @Override
+                    public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
+
+                        if(response.isSuccessful()){
+
+                            Toast.makeText(UpdateProfile.this , "profile update" , Toast.LENGTH_SHORT).show();
+
+                        }else{
+                            Toast.makeText(UpdateProfile.this , "error" , Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure (Call <ApiResponse> call , Throwable t) {
+
+                    }
+                });
+
         });
+
+//        startActivity(new Intent(UpdateProfile.this,MainActivity.class));
+
     }
 
     private void getData() {
@@ -142,6 +191,7 @@ public class UpdateProfile extends AppCompatActivity {
                     dob.setText(response.body().getDob());
                     if(!Objects.equals(response.body().getImageUrl(), "")){
                         Picasso.get().load(response.body().getImageUrl()).into(image);
+                        imageUrl=response.body().getImageUrl();
                     }
                 }
             }

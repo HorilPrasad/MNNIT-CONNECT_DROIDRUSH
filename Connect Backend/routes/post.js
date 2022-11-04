@@ -97,7 +97,7 @@ router.put("/like/:id", async function (req, res) {
 router.put("/:id/dislike", async function (req, res) {
     try {
         const post = await Post.findById(req.params.id);
-        if (!post.likes.includes(req.body._id)) {
+        if (!post.dislikes.includes(req.body._id)) {
             await post.updateOne({ $push: { dislikes: req.body._id } });
             res.status(200).send({
                 status: 200,
@@ -119,7 +119,7 @@ router.put("/:id/dislike", async function (req, res) {
 router.put("/:id/comment", async function (req, res) {
     try {
         const post = await Post.findById(req.params.id);
-        if (!post.likes.includes(req.body.userId)) {
+        if (1) {
 
             // post.comments.unshift(userComment);
             await post.updateOne({ $push: { comments: { user: req.body.userId, comment: req.body.comment } } });

@@ -58,7 +58,10 @@ public class signUpActivity extends AppCompatActivity {
 //                        Log.d("size",response.body().get_id());
 //                        if(response.body().get_id()!="")
 //                        appConfig.setUserID(response.body().get_id());
-                        startActivity(new Intent(signUpActivity.this,CreateProfile.class));
+
+                        Intent i=new Intent(signUpActivity.this,CreateProfile.class);
+                        i.putExtra("userId",response.body().get_id());
+                        startActivity(i);
                         Toast.makeText(signUpActivity.this,"Successfully registered......",Toast.LENGTH_LONG).show();
 
                     }else{

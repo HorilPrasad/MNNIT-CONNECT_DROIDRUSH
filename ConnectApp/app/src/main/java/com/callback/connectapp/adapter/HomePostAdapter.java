@@ -110,8 +110,15 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
                 if(response.isSuccessful()){
 
                     holder.userName.setText(response.body().getName());
-//                    Picasso.get().load(url).placeholder(R.mipmap.ic_person)
-//                            .into(holder.profileImg);
+                    String url ="";
+                    url=response.body().getImageUrl();
+                    if(!Objects.equals(url,""))
+                    {
+
+                        Picasso.get().load(url).placeholder(R.drawable.avatar)
+                            .into(holder.profileImg);
+                    }
+
                 }
             }
 
@@ -132,6 +139,38 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
                         .getApiInterface().likePost(userPost.get_id(), user);
 
 
+                if(userPost.getDislikes().contains(appConfig.getUserID())){
+
+                    Call <ApiResponse> cal = APIClient.getInstance()
+                            .getApiInterface().dislikePost(userPost.get_id(), user);
+
+                    cal.enqueue(new Callback <ApiResponse>() {
+                        @Override
+                        public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
+                            if(response.isSuccessful()){
+                                Toast.makeText(context,response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                                Log.d("api",response.body().toString());
+
+                                int size=userPost.getDislikes().size();
+                                if(response.body().getStatus()==200){
+
+                                    holder.DislikeBtn.setImageResource(R.drawable.filledislike);
+                                }
+                                else{
+
+
+                                    holder.DislikeBtn.setImageResource(R.drawable.dislike);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure (Call <ApiResponse> call , Throwable t) {
+                            Log.d("api","fail dislike");
+                        }
+                    });
+
+                }
 
 
 
@@ -144,11 +183,11 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
                             Log.d("ss",response.body().toString());
 
                             if(response.body().getStatus()==200){
-                                holder.likeCount.setText("likes "+String.valueOf(userPost.getLikes().size()+1));
+//                                holder.likeCount.setText("likes "+String.valueOf(userPost.getLikes().size()+1));
                                 holder.LikeBtn.setImageResource(R.drawable.filledlike);
                             }
                             else{
-                                holder.likeCount.setText("likes"+String.valueOf(userPost.getLikes().size()-1));
+//                                holder.likeCount.setText("likes"+String.valueOf(userPost.getLikes().size()-1));
                                 holder.LikeBtn.setImageResource(R.drawable.like);
                             }
 
@@ -162,6 +201,8 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
                         Log.d("ss ","fail");
                     }
                 });
+
+                notifyDataSetChanged();
             }
         });
 
@@ -172,6 +213,16 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
                 user.set_id(appConfig.getUserID());
                 Call <ApiResponse> call = APIClient.getInstance()
                         .getApiInterface().dislikePost(userPost.get_id(), user);
+
+                if(userPost.getLikes().contains(appConfig.getUserID())){
+
+                    Call <ApiResponse> cal = APIClient.getInstance()
+                            .getApiInterface().likePost(userPost.get_id(), user);
+
+                    holder.LikeBtn.setImageResource(R.drawable.like);
+
+                }
+
 
                 call.enqueue(new Callback <ApiResponse>() {
                     @Override
@@ -198,6 +249,8 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
                         Log.d("api","fail dislike");
                     }
                 });
+
+                notifyDataSetChanged();
             }
         });
          holder.commentBtn.setOnClickListener(new View.OnClickListener() {

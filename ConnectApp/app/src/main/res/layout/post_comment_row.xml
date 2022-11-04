@@ -6,10 +6,12 @@
     android:layout_height="wrap_content"
     android:layout_margin="1dp"
     android:orientation="vertical"
-    app:cardBackgroundColor="@color/background"
+
     app:contentPadding="2dp">
 
     <RelativeLayout
+        app:cardBackgroundColor="@color/background"
+        android:layout_margin='5dp'
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

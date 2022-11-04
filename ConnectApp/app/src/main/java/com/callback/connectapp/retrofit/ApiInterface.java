@@ -33,6 +33,10 @@ public interface ApiInterface {
     @POST("/user/create")
     Call<ApiResponse> createProfile(@Body User user);
 
+
+    @PUT ("/user/edit/{id}")
+    Call<ApiResponse>editProfile(@Path("id") String id,@Body User user);
+
     @GET("/user/users/{id}")
 
     Call<User> getProfile(@Path("id") String id);
@@ -41,7 +45,7 @@ public interface ApiInterface {
     Call<User> getUser (@Path("id") String id);
 
     @PATCH("user/users/{id}")
-    Call<ApiResponse> updateProfileImage(@Path("id") String id,@Body String imageUrl);
+    Call<ApiResponse> updateProfile(@Path("id") String id,@Body User user);
 
 
     //all post Methods

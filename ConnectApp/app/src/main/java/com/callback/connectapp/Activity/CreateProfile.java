@@ -44,6 +44,8 @@ public class CreateProfile extends AppCompatActivity {
     FirebaseStorage storage;
     private Spinner gender,branch;
     private Button createProfile;
+    String userId;
+    private String profileImageUrl="";
     private ArrayAdapter<CharSequence> genderAdapter,branchAdapter;
     private String phoneString,genderString,branchString,dobString,imageUrl="";
 
@@ -59,6 +61,10 @@ public class CreateProfile extends AppCompatActivity {
         gender = findViewById(R.id.create_profile_gender);
         branch = findViewById(R.id.create_profile_branch);
         createProfile = findViewById(R.id.create_profile_button);
+
+        Intent intent = getIntent();
+
+        userId=intent.getStringExtra("userId");
 
         genderAdapter = ArrayAdapter.createFromResource(this,R.array.gender_array,R.layout.spinner_layout);
         genderAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
@@ -97,39 +103,39 @@ public class CreateProfile extends AppCompatActivity {
 
         userImage= findViewById(R.id.profile_image);
 
-//        launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
-//                , new ActivityResultCallback <Uri>() {
-//                    @Override
-//                    public void onActivityResult (Uri result) {
-//                        userImage.setImageURI(result);
-//
-//                        //storing Img in firebase storage
-//
-//                        final StorageReference reference = storage.getReference().child("profile");
-//
-//                        reference.putFile(result).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
-//                            @Override
-//                            public void onSuccess (UploadTask.TaskSnapshot taskSnapshot) {
-//
-//                                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener <Uri>() {
-//                                    @Override
-//                                    public void onSuccess (Uri uri) {
-//                                        // store uri in mongo db
-//                                       imageUrl=uri.toString();
-//                                        Toast.makeText(CreateProfile.this,uri.toString(),Toast.LENGTH_LONG).show();
-//                                    }
-//                                });
-//                            }
-//                        });
-//                    }
-//                });
-//
-//                userImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick (View view) {
-//                launcher.launch("image/*");
-//            }
-//        });
+        launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
+                , new ActivityResultCallback <Uri>() {
+                    @Override
+                    public void onActivityResult (Uri result) {
+                        userImage.setImageURI(result);
+
+                        //storing Img in firebase storage
+
+                        final StorageReference reference = storage.getReference().child("profile");
+
+                        reference.putFile(result).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess (UploadTask.TaskSnapshot taskSnapshot) {
+
+                                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener <Uri>() {
+                                    @Override
+                                    public void onSuccess (Uri uri) {
+                                        // store uri in mongo db
+                                       imageUrl=uri.toString();
+                                        Toast.makeText(CreateProfile.this,uri.toString(),Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+                userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                launcher.launch("image/*");
+            }
+        });
 
 
 
@@ -157,16 +163,17 @@ public class CreateProfile extends AppCompatActivity {
 
     private void createProfile() {
         if(check(phoneString,genderString,dobString,branchString)){
+
             Toast.makeText(this, appConfig.isUserLogin()+"", Toast.LENGTH_SHORT).show();
             User user = new User(appConfig.getUserEmail(),genderString,dobString,phoneString,branchString,imageUrl);
             Call<ApiResponse> call = APIClient.getInstance().getApiInterface()
-                    .createProfile(user);
+                    .editProfile(userId,user);
             call.enqueue(new Callback<ApiResponse>() {
                 @Override
                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                     if(response.isSuccessful()){
                         appConfig.setProfileCreated(true);
-                        startActivity(new Intent(CreateProfile.this,MainActivity.class));
+                        startActivity(new Intent(CreateProfile.this,LoginActivity.class));
                         finish();
                         Toast.makeText(CreateProfile.this, "Profile created successfully...", Toast.LENGTH_SHORT).show();
                     }else{

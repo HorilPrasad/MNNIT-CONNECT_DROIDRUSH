@@ -130,7 +130,7 @@
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="374dp"
-
+android:visibility="gone"
                 android:layout_height="280dp"
                 android:layout_marginLeft="6dp"
 
@@ -239,17 +239,17 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--    </androidx.core.widget.NestedScrollView>-->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/commentRecycler"
-        android:layout_width="385dp"
-        android:layout_height="213dp"
-        android:layout_marginBottom="3dp"
-        app:layout_constraintBottom_toTopOf="@+id/commentsa"
+        android:layout_width="371dp"
+        android:layout_height="425dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.727"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
-<!--    </androidx.core.widget.NestedScrollView>-->
     <RelativeLayout
         android:id="@+id/commentsa"
         android:layout_width="match_parent"
