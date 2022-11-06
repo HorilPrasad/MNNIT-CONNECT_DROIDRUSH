@@ -21,7 +21,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class signUpActivity extends AppCompatActivity {
-    private EditText userName,userEmail,userPassword,userReg;
+    private EditText userName, userEmail, userPassword, userReg;
     private AppCompatButton registerButton;
     private AppConfig appConfig;
 
@@ -41,9 +41,8 @@ public class signUpActivity extends AppCompatActivity {
         String password = userPassword.getText().toString();
         String regNo = userReg.getText().toString().trim();
 
-        if(check(name,email,password,regNo))
-        {
-            User user = new User(name,email,regNo,password);
+        if (check(name, email, password, regNo)) {
+            User user = new User(name, email, regNo, password);
             Call<User> call = APIClient.getInstance()
                     .getApiInterface().registerUser(user);
 
@@ -51,14 +50,14 @@ public class signUpActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
 
-                    if(response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         appConfig.setLoginStatus(true);
                         appConfig.setUserEmail(email);
                         appConfig.setUserID(response.body().get_id());
-                        startActivity(new Intent(signUpActivity.this,CreateProfile.class));
-                        Toast.makeText(signUpActivity.this,"Successfully registered......",Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(signUpActivity.this, CreateProfile.class));
+                        Toast.makeText(signUpActivity.this, "Successfully registered......", Toast.LENGTH_LONG).show();
 
-                    }else{
+                    } else {
                         Toast.makeText(signUpActivity.this, "fail to register...", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -73,27 +72,27 @@ public class signUpActivity extends AppCompatActivity {
     }
 
     private boolean check(String name, String email, String password, String regNo) {
-        if(name.isEmpty()){
+        if (name.isEmpty()) {
             userName.setError("Name can't be empty!");
             userName.requestFocus();
             return false;
-        }else if(email.isEmpty()){
+        } else if (email.isEmpty()) {
             userEmail.setError("Email can't be empty!");
             userEmail.requestFocus();
             return false;
-        }else if(password.isEmpty()){
+        } else if (password.isEmpty()) {
             userPassword.setError("Password can't be empty!");
             userPassword.requestFocus();
             return false;
-        }else if(password.length()<6){
+        } else if (password.length() < 6) {
             userPassword.setError("Password to short!");
             userPassword.requestFocus();
             return false;
-        }else if(regNo.isEmpty()){
+        } else if (regNo.isEmpty()) {
             userReg.setError("Registration number can't be empty!");
             userReg.requestFocus();
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -108,8 +107,8 @@ public class signUpActivity extends AppCompatActivity {
         appConfig = new AppConfig(this);
     }
 
-    public void onLoginClick(View view){
-        startActivity(new Intent(this,LoginActivity.class));
+    public void onLoginClick(View view) {
+        startActivity(new Intent(this, LoginActivity.class));
 
     }
 

@@ -3,6 +3,7 @@ package com.callback.connectapp.Activity;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,6 +28,7 @@ import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -165,6 +167,9 @@ public class CreateProfile extends AppCompatActivity {
         }).addOnFailureListener(e -> {
             Toast.makeText(this, "Internet issue", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
+        }).addOnProgressListener(snapshot -> {
+            double progress = (1.0*100*snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
+            progressDialog.setProgress((int) progress);
         });
     }
 
@@ -234,7 +239,8 @@ public class CreateProfile extends AppCompatActivity {
         progressDialog.setMessage("Uploading...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setMax(100);
         progressDialog.show();
 
     }

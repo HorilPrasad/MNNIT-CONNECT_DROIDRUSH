@@ -45,66 +45,66 @@ import retrofit2.Response;
 
 
 public class CreatePostFragment extends Fragment {
-    ActivityResultLauncher <String> launcher;
+    ActivityResultLauncher<String> launcher;
     private Uri imageUri = null;
     private ImageView postImage;
     private EditText etPost;
-    private ImageView sendBtn,attachBtn;
+    private ImageView sendBtn, attachBtn;
     private ProgressBar pb;
     private AppConfig appConfig;
     FirebaseStorage storage;
     postData post;
     private String userID;
-   public postData data;
+    public postData data;
 
- private String url;
+    private String url;
 
     private ConstraintLayout homeLayout;
 
-    public CreatePostFragment () {
+    public CreatePostFragment() {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView (LayoutInflater inflater , ViewGroup container ,
-                              Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_create_post , container , false);
+        View view = inflater.inflate(R.layout.fragment_create_post, container, false);
         postImage = view.findViewById(R.id.postImage);
         etPost = view.findViewById(R.id.etPost);
-        attachBtn=view.findViewById(R.id.attach);
-        sendBtn=view.findViewById(R.id.sendBtn);
+        attachBtn = view.findViewById(R.id.attach);
+        sendBtn = view.findViewById(R.id.sendBtn);
         appConfig = new AppConfig(getContext());
         userID = appConfig.getUserID();
 
 
-       data=new postData("","","");
+        data = new postData("", "", "");
 
         launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
-                , new ActivityResultCallback <Uri>() {
+                , new ActivityResultCallback<Uri>() {
                     @Override
-                    public void onActivityResult (Uri result) {
+                    public void onActivityResult(Uri result) {
                         postImage.setImageURI(result);
 
                         //storing Img in firebase storage
-                        storage=FirebaseStorage.getInstance();
+                        storage = FirebaseStorage.getInstance();
 
-                        Calendar cal=Calendar.getInstance();
-                        long k=cal.getTimeInMillis();
-                        String key= Long.toString(k);
+                        Calendar cal = Calendar.getInstance();
+                        long k = cal.getTimeInMillis();
+                        String key = Long.toString(k);
                         final StorageReference reference = storage.getReference().child("post").child(key);
-                                reference.putFile(result).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
+                        reference.putFile(result).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
-                            public void onSuccess (UploadTask.TaskSnapshot taskSnapshot) {
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener <Uri>() {
+                                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
-                                    public void onSuccess (Uri uri) {
+                                    public void onSuccess(Uri uri) {
                                         // store uri in mongo db
-                                      String imageUrl=uri.toString();
-                                      url=imageUrl;
-                                      data.setImage(uri.toString());
+                                        String imageUrl = uri.toString();
+                                        url = imageUrl;
+                                        data.setImage(uri.toString());
 
                                     }
                                 });
@@ -115,47 +115,45 @@ public class CreatePostFragment extends Fragment {
 
         attachBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View view) {
+            public void onClick(View view) {
                 launcher.launch("image/*");
             }
         });
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View view) {
+            public void onClick(View view) {
 
-                  if(url==null){
-                      url="";
-                  }
-
-                    postData newPost=new postData(userID, etPost.getText().toString(),url.toString());
-                    Toast.makeText(getContext(),url,Toast.LENGTH_LONG).show();
-                    Call <ApiResponse> call = APIClient.getInstance()
-                            .getApiInterface().createPost(newPost);
-                    url="";
-                    call.enqueue(new Callback <ApiResponse>() {
-                        @Override
-                        public void onResponse(Call<ApiResponse> call, Response <ApiResponse> response) {
-                            ApiResponse apiResponse = response.body();
-                            if(response.isSuccessful()){
-                                  etPost.setText("");
-
-
-                                Toast.makeText(getContext(),"post is uploaded.",Toast.LENGTH_LONG).show();
-
-                            }else{
-                                Toast.makeText(getContext(), apiResponse.getMessage()+ "status : "+apiResponse.getStatus(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ApiResponse> call, Throwable t) {
-                            Toast.makeText(getContext(), "fail...", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                if (url == null) {
+                    url = "";
                 }
 
+                postData newPost = new postData(userID, etPost.getText().toString(), url.toString());
+                Toast.makeText(getContext(), url, Toast.LENGTH_LONG).show();
+                Call<ApiResponse> call = APIClient.getInstance()
+                        .getApiInterface().createPost(newPost);
+                url = "";
+                call.enqueue(new Callback<ApiResponse>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                        ApiResponse apiResponse = response.body();
+                        if (response.isSuccessful()) {
+                            etPost.setText("");
 
+
+                            Toast.makeText(getContext(), "post is uploaded.", Toast.LENGTH_LONG).show();
+
+                        } else {
+                            Toast.makeText(getContext(), apiResponse.getMessage() + "status : " + apiResponse.getStatus(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                        Toast.makeText(getContext(), "fail...", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
 
 
         });

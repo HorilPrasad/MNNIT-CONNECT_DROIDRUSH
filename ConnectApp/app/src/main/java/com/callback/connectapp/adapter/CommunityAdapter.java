@@ -35,7 +35,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
     @NonNull
     @Override
     public CommunityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.community_list,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.community_list, parent, false);
 
         return new CommunityViewHolder(view);
     }
@@ -46,17 +46,16 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         holder.communityName.setText(community.getName());
         Toast.makeText(context, "aya", Toast.LENGTH_SHORT).show();
 
-        if(!Objects.equals(community.getImage(), ""))
+        if (!Objects.equals(community.getImage(), ""))
             Picasso.get().load(community.getImage()).into(holder.communityImage);
-
 
 
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View view) {
+            public void onClick(View view) {
                 Gson gson = new Gson();
                 String myJson = gson.toJson(community);
-                Intent intent =new Intent(context, CommunityPage.class);
+                Intent intent = new Intent(context, CommunityPage.class);
                 intent.putExtra("myjson", myJson);
                 context.startActivity(intent);
             }
@@ -69,14 +68,15 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         return communityList.size();
     }
 
-    public static class CommunityViewHolder extends RecyclerView.ViewHolder{
+    public static class CommunityViewHolder extends RecyclerView.ViewHolder {
 
-        TextView communityName,communityCreated;
+        TextView communityName, communityCreated;
         ImageView communityImage;
         LinearLayout itemLayout;
+
         public CommunityViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemLayout=itemView.findViewById(R.id.communityLayout);
+            itemLayout = itemView.findViewById(R.id.communityLayout);
             communityName = itemView.findViewById(R.id.community_list_name);
             communityCreated = itemView.findViewById(R.id.community_list_created);
             communityImage = itemView.findViewById(R.id.community_list_image);

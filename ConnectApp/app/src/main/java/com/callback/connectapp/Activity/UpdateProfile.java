@@ -173,7 +173,8 @@ public class UpdateProfile extends AppCompatActivity {
         progressDialog.setMessage("Uploading...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setMax(100);
         progressDialog.show();
 
     }
@@ -221,7 +222,11 @@ public class UpdateProfile extends AppCompatActivity {
         }).addOnFailureListener(e -> {
             Toast.makeText(this, "Internet issue", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
+        }).addOnProgressListener(snapshot -> {
+            double progress = (1.0 * 100 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+            progressDialog.setProgress((int) progress);
         });
+        ;
     }
 
     private void getData() {

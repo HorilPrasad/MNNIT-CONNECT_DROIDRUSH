@@ -38,20 +38,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         AppConfig appConfig = new AppConfig(this);
 
         if (!appConfig.isUserLogin())
-            startActivity(new Intent(MainActivity.this,signUpActivity.class));
+            startActivity(new Intent(MainActivity.this, signUpActivity.class));
     }
 
     HomeFragment homeFragment = new HomeFragment();
     CreatePostFragment createPostFragment = new CreatePostFragment();
     CommunityFragment communityFragment = new CommunityFragment();
-    ProfileFragment profileFragment=new ProfileFragment();
+    ProfileFragment profileFragment = new ProfileFragment();
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
             case R.id.home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container,homeFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
                 return true;
 
             case R.id.post:
@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
 
             case R.id.profile:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container,profileFragment).commit();
-             return true;
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, profileFragment).commit();
+                return true;
         }
         return false;
     }

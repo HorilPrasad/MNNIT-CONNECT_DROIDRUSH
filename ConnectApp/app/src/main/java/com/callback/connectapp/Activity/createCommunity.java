@@ -33,17 +33,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class createCommunity extends AppCompatActivity {
-    ActivityResultLauncher <String> launcher;
-    private EditText name,tag,rule,about;
+    ActivityResultLauncher<String> launcher;
+    private EditText name, tag, rule, about;
     private ImageView image;
     private TextView selectImage;
     private Button create;
     private AppConfig appConfig;
     FirebaseStorage storage;
-    String imageUrl="";
+    String imageUrl = "";
 
     @Override
-    protected void onCreate (Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_community);
 
@@ -63,9 +63,9 @@ public class createCommunity extends AppCompatActivity {
             String cAbout = about.getText().toString().trim();
             List<String> members = new ArrayList<>();
             members.add(appConfig.getUserID());
-            Community community = new Community(appConfig.getUserID(),cName,cAbout,cTag,cRule,imageUrl,members);
+            Community community = new Community(appConfig.getUserID(), cName, cAbout, cTag, cRule, imageUrl, members);
 
-            if(check(cName,cTag,cRule)){
+            if (check(cName, cTag, cRule)) {
                 communityCreate(community);
             }
         });
@@ -78,8 +78,8 @@ public class createCommunity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful())
-                    startActivity(new Intent(createCommunity.this,MainActivity.class));
-                    Toast.makeText(createCommunity.this, "community created", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(createCommunity.this, MainActivity.class));
+                Toast.makeText(createCommunity.this, "community created", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -94,25 +94,22 @@ public class createCommunity extends AppCompatActivity {
                     image.setImageURI(result);
 
                     //storing Img in firebase storage
-                    storage= FirebaseStorage.getInstance();
-                    Calendar cal=Calendar.getInstance();
-                    long k=cal.getTimeInMillis();
-                    String key= Long.toString(k);
+                    storage = FirebaseStorage.getInstance();
+                    Calendar cal = Calendar.getInstance();
+                    long k = cal.getTimeInMillis();
+                    String key = Long.toString(k);
                     final StorageReference reference = storage.getReference().child("profile").child(appConfig.getUserID());
-                    reference.putFile(result).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
+                    reference.putFile(result).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onSuccess (UploadTask.TaskSnapshot taskSnapshot) {
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                            reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener <Uri>() {
+                            reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
-                                public void onSuccess (Uri uri) {
+                                public void onSuccess(Uri uri) {
                                     // store uri in mongo db
-                                    imageUrl=uri.toString();
+                                    imageUrl = uri.toString();
 
-                                    Toast.makeText(createCommunity.this , imageUrl , Toast.LENGTH_SHORT).show();
-
-
-
+                                    Toast.makeText(createCommunity.this, imageUrl, Toast.LENGTH_SHORT).show();
 
 
                                 }
@@ -124,7 +121,7 @@ public class createCommunity extends AppCompatActivity {
 
         image.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View view) {
+            public void onClick(View view) {
                 launcher.launch("image/*");
             }
         });
@@ -132,18 +129,18 @@ public class createCommunity extends AppCompatActivity {
 
     private boolean check(String cName, String cTag, String cRule) {
 
-        if(cName.isEmpty()){
+        if (cName.isEmpty()) {
             name.setError("Name can't be empty!");
             name.requestFocus();
             return false;
         }
-        if(cTag.isEmpty()){
+        if (cTag.isEmpty()) {
             tag.setError("Tag can't be empty!");
             tag.requestFocus();
             return false;
         }
 
-        if(cRule.isEmpty()){
+        if (cRule.isEmpty()) {
             rule.setError("Rule can't be empty!");
             rule.requestFocus();
             return false;

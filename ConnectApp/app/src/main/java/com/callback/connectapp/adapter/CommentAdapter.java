@@ -28,7 +28,7 @@ import retrofit2.Response;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
     Context context;
-    List <Comment> commentList;
+    List<Comment> commentList;
 
     public CommentAdapter(Context context, List<Comment> communityList) {
         this.context = context;
@@ -38,7 +38,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @NonNull
     @Override
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.post_comment_row,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.post_comment_row, parent, false);
 
         return new CommentViewHolder(view);
     }
@@ -48,21 +48,21 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         Comment comment = commentList.get(position);
 
 
-       holder.commentText.setText(comment.getComment());
-       holder.time.setText(comment.getDate());
-        Call <User> call = APIClient.getInstance()
+        holder.commentText.setText(comment.getComment());
+        holder.time.setText(comment.getDate());
+        Call<User> call = APIClient.getInstance()
                 .getApiInterface().getUser(comment.getUserId());
-        call.enqueue(new Callback <User>() {
+        call.enqueue(new Callback<User>() {
             @Override
-            public void onResponse (Call <User> call , Response <User> response) {
-                if(response.isSuccessful()){
-                    Log.d("sizeifs","comment userName"+response.body().toString());
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    Log.d("sizeifs", "comment userName" + response.body().toString());
                     holder.userName.setText(response.body().getName());
 //                    if(response.body().getImageUrl()!="")
 //                    Picasso.get().load(response.body().getImageUrl()).placeholder(R.mipmap.ic_person)
 //                            .into(holder.userImg);
 
-                    if(!Objects.equals(response.body().getImageUrl(),"")) {
+                    if (!Objects.equals(response.body().getImageUrl(), "")) {
                         holder.userImg.setVisibility(View.VISIBLE);
                         Picasso.get().load(response.body().getImageUrl()).into(holder.userImg);
                     }
@@ -70,11 +70,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
 
             @Override
-            public void onFailure (Call <User> call , Throwable t) {
-                Log.d("sizeifs","user data fail");
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d("sizeifs", "user data fail");
             }
         });
-            holder.commentText.setText(comment.getComment());
+        holder.commentText.setText(comment.getComment());
 
 
     }
@@ -84,15 +84,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         return commentList.size();
     }
 
-    public static class CommentViewHolder extends RecyclerView.ViewHolder{
+    public static class CommentViewHolder extends RecyclerView.ViewHolder {
 
-        TextView userName,commentText,time;
+        TextView userName, commentText, time;
         ImageView userImg;
+
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
 
             userName = itemView.findViewById(R.id.commentname);
-            commentText=itemView.findViewById(R.id.commenttext);
+            commentText = itemView.findViewById(R.id.commenttext);
             time = itemView.findViewById(R.id.commenttime);
             userImg = itemView.findViewById(R.id.userImg);
         }

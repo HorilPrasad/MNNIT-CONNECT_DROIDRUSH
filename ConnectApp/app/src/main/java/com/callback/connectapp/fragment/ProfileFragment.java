@@ -92,6 +92,7 @@ public class ProfileFragment extends Fragment {
                 }
                 progressDialog.dismiss();
             }
+
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(getContext(), "Server error!", Toast.LENGTH_SHORT).show();
