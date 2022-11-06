@@ -3,9 +3,11 @@ package com.callback.connectapp.Activity;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +29,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -37,17 +41,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CreateProfile extends AppCompatActivity {
+
+    ActivityResultLauncher<String> launcher;
+    private static final int IMAGE_CODE = 1;
     private AppConfig appConfig;
     private CircleImageView userImage;
-    private EditText phone,dob;
-    ActivityResultLauncher <String> launcher;
+    private EditText phone, dob;
     FirebaseStorage storage;
-    private Spinner gender,branch;
+    private Spinner gender, branch;
     private Button createProfile;
-    String userId;
-    private String profileImageUrl;
-    private ArrayAdapter<CharSequence> genderAdapter,branchAdapter;
-    private String phoneString,genderString,branchString,dobString,imageUrl;
+    private ArrayAdapter<CharSequence> genderAdapter, branchAdapter;
+    private String phoneString, genderString, branchString, dobString, imageUrl;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,15 +67,12 @@ public class CreateProfile extends AppCompatActivity {
         branch = findViewById(R.id.create_profile_branch);
         createProfile = findViewById(R.id.create_profile_button);
 
-//        Intent intent = getIntent();
-//
-//        userId=intent.getStringExtra("userId");
 
-        genderAdapter = ArrayAdapter.createFromResource(this,R.array.gender_array,R.layout.spinner_layout);
+        genderAdapter = ArrayAdapter.createFromResource(this, R.array.gender_array, R.layout.spinner_layout);
         genderAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         gender.setAdapter(genderAdapter);
 
-        branchAdapter = ArrayAdapter.createFromResource(this,R.array.course_array,R.layout.spinner_layout);
+        branchAdapter = ArrayAdapter.createFromResource(this, R.array.course_array, R.layout.spinner_layout);
         branchAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         branch.setAdapter(branchAdapter);
 
@@ -99,44 +101,17 @@ public class CreateProfile extends AppCompatActivity {
         });
 
 
-         storage = FirebaseStorage.getInstance();
+        storage = FirebaseStorage.getInstance();
 
-        userImage= findViewById(R.id.create_profile_image);
+        userImage = findViewById(R.id.create_profile_image);
 
-        launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
-                , new ActivityResultCallback <Uri>() {
-                    @Override
-                    public void onActivityResult (Uri result) {
-                        userImage.setImageURI(result);
 
-                        //storing Img in firebase storage
-
-                        final StorageReference reference = storage.getReference().child("profile");
-
-                        reference.putFile(result).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess (UploadTask.TaskSnapshot taskSnapshot) {
-
-                                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener <Uri>() {
-                                    @Override
-                                    public void onSuccess (Uri uri) {
-                                        // store uri in mongo db
-                                       imageUrl=uri.toString();
-                                        Toast.makeText(CreateProfile.this,uri.toString(),Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-
-                userImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view) {
-                launcher.launch("image/*");
-            }
+        userImage.setOnClickListener(view -> {
+            CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1, 1)
+                    .start(this);
         });
-
 
 
         dob.setOnClickListener(view -> {
@@ -152,47 +127,91 @@ public class CreateProfile extends AppCompatActivity {
 
         createProfile.setOnClickListener(v -> {
             phoneString = phone.getText().toString().trim();
-
-            genderString=gender.getSelectedItem().toString();
-            branchString=branch.getSelectedItem().toString();
+            genderString = gender.getSelectedItem().toString();
+            branchString = branch.getSelectedItem().toString();
 
             createProfile();
         });
 
     }
 
-    private void createProfile() {
-        if(check(phoneString,genderString,dobString,branchString)){
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && data != null) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri selectedImage = result.getUri();
+                uploadImageToFirebase(selectedImage);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
 
+    private void uploadImageToFirebase(Uri selectedImage) {
+        storage = FirebaseStorage.getInstance();
+        final StorageReference reference = storage.getReference().child("profile").child(appConfig.getUserID());
+        loading();
+        reference.putFile(selectedImage).addOnSuccessListener(task -> {
+            reference.getDownloadUrl().addOnSuccessListener(uri -> {
+                imageUrl = uri.toString();
+                userImage.setImageURI(selectedImage);
+                progressDialog.dismiss();
+            }).addOnFailureListener(e -> {
+                Toast.makeText(this, "failing to get url", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            });
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Internet issue", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+        });
+    }
+
+    private void createProfile() {
+        loading();
+        if (check(phoneString, dobString)) {
             if (imageUrl == null)
                 imageUrl = "";
 
-            User user = new User(appConfig.getUserEmail(),genderString,dobString,phoneString,branchString,imageUrl);
+            User user = new User(appConfig.getUserEmail(), genderString, dobString, phoneString, branchString, imageUrl);
             Call<ApiResponse> call = APIClient.getInstance().getApiInterface()
-                    .editProfile(appConfig.getUserID(),user);
+                    .editProfile(appConfig.getUserID(), user);
             call.enqueue(new Callback<ApiResponse>() {
                 @Override
                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                    if(response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         appConfig.setProfileCreated(true);
-                        startActivity(new Intent(CreateProfile.this,MainActivity.class));
+                        startActivity(new Intent(CreateProfile.this, MainActivity.class));
                         finish();
                         Toast.makeText(CreateProfile.this, "Profile created successfully...", Toast.LENGTH_SHORT).show();
-                    }else{
+                    } else {
                         Toast.makeText(CreateProfile.this, "Problem in creating profile", Toast.LENGTH_SHORT).show();
                     }
+                    progressDialog.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<ApiResponse> call, Throwable t) {
                     Toast.makeText(CreateProfile.this, "Server error!", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                 }
             });
         }
     }
 
-    private boolean check(String phoneString, String genderString, String dobString, String branchString) {
+    private boolean check(String phoneString, String dobString) {
+        if (phoneString.isEmpty()) {
+            phone.setError("Phone number can't be empty!");
+            phone.requestFocus();
+            return false;
+        }
 
+        if (dobString.isEmpty()) {
+            dob.setError("Date of birth can't be empty!");
+            dob.requestFocus();
+            return false;
+        }
         return true;
     }
 
@@ -201,15 +220,22 @@ public class CreateProfile extends AppCompatActivity {
         // when dialog box is closed, below method will be called.
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
-            selectedMonth=selectedMonth+1;
-            String date = selectedDay+"-"+selectedMonth+"-"+selectedYear;
+            selectedMonth = selectedMonth + 1;
+            String date = selectedDay + "-" + selectedMonth + "-" + selectedYear;
 
             dob.setText(date);
             dobString = date;
         }
     };
 
-    public void loading(){
+    private void loading() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Data");
+        progressDialog.setMessage("Uploading...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
 
     }
 }

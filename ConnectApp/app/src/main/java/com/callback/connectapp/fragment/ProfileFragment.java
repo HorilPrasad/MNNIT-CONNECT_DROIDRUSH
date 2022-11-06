@@ -1,5 +1,6 @@
 package com.callback.connectapp.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,106 +31,83 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-
 public class ProfileFragment extends Fragment {
     private AppConfig appConfig;
-  ActivityResultLauncher<String>launcher;
-  ImageView profileImg;
-  TextView name,email,phone,regNo,course;
-  ImageButton editProfile;
-  FirebaseStorage storage;
-    public ProfileFragment () {
+    ActivityResultLauncher<String> launcher;
+    ImageView profileImg;
+    TextView name, email, phone, regNo, course;
+    ImageButton editProfile;
+    FirebaseStorage storage;
+    ProgressDialog progressDialog;
+
+    public ProfileFragment() {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView (LayoutInflater inflater , ViewGroup container ,
-                              Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_profile , container , false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
 
-        name=view.findViewById(R.id.name);
-        email=view.findViewById(R.id.email);
-        phone=view.findViewById(R.id.phone);
-        regNo=view.findViewById(R.id.regno);
-        course=view.findViewById(R.id.school);
+        name = view.findViewById(R.id.name);
+        email = view.findViewById(R.id.email);
+        phone = view.findViewById(R.id.phone);
+        regNo = view.findViewById(R.id.regno);
+        course = view.findViewById(R.id.school);
         editProfile = view.findViewById(R.id.profile_edit_button);
 
-        profileImg =view.findViewById(R.id.profile_user_image);
+        profileImg = view.findViewById(R.id.profile_user_image);
         appConfig = new AppConfig(getContext());
 
         editProfile.setOnClickListener(v -> {
             startActivity(new Intent(getContext(), UpdateProfile.class));
         });
 
-        Call <User> call = APIClient.getInstance().getApiInterface()
+        getUserData();
+
+
+        return view;
+    }
+
+    private void getUserData() {
+        loading();
+        Call<User> call = APIClient.getInstance().getApiInterface()
                 .getUser(appConfig.getUserID());
-
-        Log.d("userId",appConfig.getUserID());
-
-        call.enqueue(new Callback <User>() {
+        call.enqueue(new Callback<User>() {
             @Override
-            public void onResponse (Call <User> call , Response <User> response) {
-                if(response.isSuccessful()){
-
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
                     name.setText(response.body().getName());
                     email.setText(response.body().getEmail());
                     phone.setText(response.body().getPhone());
                     regNo.setText(response.body().getRegNo());
                     course.setText(response.body().getBranch());
 
-                    if(!Objects.equals(response.body().getImageUrl(), ""))
-                        Picasso.get().load(response.body().getImageUrl()).into(profileImg);
-                }else{
-                    Toast.makeText(getContext(), "Problem in fetching profile"+appConfig.getUserID(), Toast.LENGTH_SHORT).show();
+                    if (!Objects.equals(response.body().getImageUrl(), ""))
+                        Picasso.get().load(response.body().getImageUrl()).placeholder(R.drawable.avatar).into(profileImg);
+                } else {
+                    Toast.makeText(getContext(), "Problem in fetching profile" + appConfig.getUserID(), Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.dismiss();
             }
-
             @Override
-            public void onFailure (Call <User> call , Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(getContext(), "Server error!", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
+    }
 
-//        storage = FirebaseStorage.getInstance();
-//
-//        profileImg= view.findViewById(R.id.profile_image);
-//
-//        launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
-//                , new ActivityResultCallback <Uri>() {
-//                    @Override
-//                    public void onActivityResult (Uri result) {
-//                        profileImg.setImageURI(result);
-//
-//                        //storing Img in firebase storage
-//
-//                        final StorageReference reference = storage.getReference().child("profile");
-//
-//                        reference.putFile(result).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
-//                            @Override
-//                            public void onSuccess (UploadTask.TaskSnapshot taskSnapshot) {
-//
-//                                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener <Uri>() {
-//                                    @Override
-//                                    public void onSuccess (Uri uri) {
-//                                        // store uri in mongo db
-//
-//                                        Toast.makeText(getContext(),uri.toString(),Toast.LENGTH_LONG).show();
-//                                    }
-//                                });
-//                            }
-//                        });
-//                    }
-//                });
-//
-//        profileImg.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick (View view) {
-//                launcher.launch("image/*");
-//            }
-//        });
+    private void loading() {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Fetch");
+        progressDialog.setMessage("User data...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
 
-        return view;
     }
 }
