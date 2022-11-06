@@ -9,10 +9,9 @@
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_view_container"
-        android:layout_width="382dp"
-        android:layout_height="759dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_marginTop="15dp"
         android:orientation="vertical"
         shimmer:duration="800">
 
@@ -36,9 +35,7 @@
     android:layout_width="match_parent"
     android:divider="#faf8f8"
     android:dividerHeight="2dp"
-
     android:layout_height="match_parent">
-
 
 </androidx.recyclerview.widget.RecyclerView>
 </FrameLayout>

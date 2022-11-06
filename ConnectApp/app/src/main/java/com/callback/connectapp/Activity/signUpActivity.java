@@ -54,14 +54,8 @@ public class signUpActivity extends AppCompatActivity {
                     if(response.isSuccessful()){
                         appConfig.setLoginStatus(true);
                         appConfig.setUserEmail(email);
-//                        appConfig.setAuthToken(response.headers().get("auth_token"));
-//                        Log.d("size",response.body().get_id());
-//                        if(response.body().get_id()!="")
-//                        appConfig.setUserID(response.body().get_id());
-
-                        Intent i=new Intent(signUpActivity.this,CreateProfile.class);
-                        i.putExtra("userId",response.body().get_id());
-                        startActivity(i);
+                        appConfig.setUserID(response.body().get_id());
+                        startActivity(new Intent(signUpActivity.this,CreateProfile.class));
                         Toast.makeText(signUpActivity.this,"Successfully registered......",Toast.LENGTH_LONG).show();
 
                     }else{

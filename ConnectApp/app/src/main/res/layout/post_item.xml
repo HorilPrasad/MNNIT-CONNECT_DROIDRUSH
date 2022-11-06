@@ -108,14 +108,14 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="374dp"
+        android:layout_width="match_parent"
 
         android:layout_height="280dp"
-        android:layout_marginLeft="6dp"
-        android:visibility="gone"
+
+        android:visibility="visible"
         android:layout_marginTop="10dp"
 
-        android:layout_marginRight="6dp"
+
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/exploreCommunity"
         app:layout_constraintEnd_toEndOf="parent"
@@ -126,7 +126,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/exploreCommunity"
-        android:layout_width="368dp"
+        android:layout_width="match_parent"
         android:layout_height="81dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"

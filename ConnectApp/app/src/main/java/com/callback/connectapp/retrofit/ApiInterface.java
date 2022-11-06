@@ -30,22 +30,19 @@ public interface ApiInterface {
     @POST("/user/login")
     Call<User> loginUser(@Body User user);
 
-    @POST("/user/create")
-    Call<ApiResponse> createProfile(@Body User user);
+//    @POST("/user/create")
+//    Call<ApiResponse> createProfile(@Body User user);
 
 
     @PUT ("/user/edit/{id}")
     Call<ApiResponse>editProfile(@Path("id") String id,@Body User user);
 
-    @GET("/user/users/{id}")
-
-    Call<User> getProfile(@Path("id") String id);
 
     @GET("/user/users/{id}")
     Call<User> getUser (@Path("id") String id);
 
-    @PATCH("user/users/{id}")
-    Call<ApiResponse> updateProfile(@Path("id") String id,@Body User user);
+//    @PATCH("user/users/{id}")
+//    Call<ApiResponse> updateProfile(@Path("id") String id,@Body User user);
 
 
     //all post Methods

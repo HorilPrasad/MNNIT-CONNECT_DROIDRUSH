@@ -52,14 +52,14 @@ exports.user_find_one = async (req, res, next) => {
 //create Profile
 exports.user_create_profile = async (req, res, next) => {
   //console.log("Request recieved");
-  // const { valid, error } = profileValidation(req.body);
+  const { valid, error } = profileValidation(req.body);
   console.log(req.body)
   console.log("skljdffffff")
-  // if (!valid) {
-  //   console.log(error);
-  //   next(createError(400, error));
-  //   return;
-  // }
+  if (!valid) {
+    console.log(error);
+    next(createError(400, error));
+    return;
+  }
 
   try {
     const _id = req.param.id;
@@ -134,13 +134,11 @@ exports.user_create_profile = async (req, res, next) => {
       password: hashedPassword,
       regNo:req.body.regNo
     });
-    console.log(user);
+    
     try {
-      await user.save();
-      res.status(200).send({
-        status:200,
-        message:"created"
-      })
+      const user1 = await user.save();
+
+      res.status(200).send(user1)
       // const savedUser = await user.save().then((result) => {
       //   console.log("Sending email");
 
