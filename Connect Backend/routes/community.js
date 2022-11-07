@@ -7,6 +7,7 @@ const router = express.Router();
 router.post('/create',async(req,res,next)=>{
 
     const community = new Community(req.body);
+    console.log(community);
     try{
         const comm = await community.save();
         const userId = req.body.userId;
@@ -15,7 +16,7 @@ router.post('/create',async(req,res,next)=>{
             message:"community created"
         })
     }catch(err){
-        next(err);
+       res.status(400).send(err);
     }
 })
 router.get('/communities',async (req,res) =>{
@@ -27,6 +28,62 @@ router.get('/communities',async (req,res) =>{
     }catch(err){
         res.send(err);
     }
+});
+
+//get A specfic community
+router.get('/:id',async(req,res)=>{
+    try{
+        const communities = await Community.findOne(req.param.id);
+        console.log(communities);
+        res.status(200).send(communities);
+
+    }catch(err){
+        res.status(400).send(err);
+    }
+});
+
+router.put('/addmember/:id',async(req,res)=>{
+
+console.log(res.body);
+    try{
+
+        const community = await Community.findById(req.params.id);
+
+        if(community){
+
+            await community.updateOne({ $push: { members: req.body.userId } });
+
+            res.status(200).send({
+                status: 200,
+                message: "member added",
+              });
+        }else{
+
+            res.status(400);
+        }
+    }catch(err){
+
+        res.send(err);
+    }
+});
+
+router.get('/post/:id',async(req,res)=>{
+
+
+    try{
+
+        const posts =await post.findOne({communityId : req.params.id})
+        if (posts) {
+            res.status(200).send(posts);
+          } else {
+            throw createError(404, "Not found");
+          }
+    }
+    catch(err){
+
+        res.send(err);
+    }
+
 });
 router.get('/')
 

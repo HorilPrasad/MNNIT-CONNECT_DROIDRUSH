@@ -53,23 +53,18 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
 
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-<<<<<<< HEAD
+
             public void onClick (View view) {
 
                 Intent intent =new Intent(context, CommunityPage.class);
                 intent.putExtra("id", community.get_id());
                 Toast.makeText(context,community.get_id(),Toast.LENGTH_SHORT);
                 Log.d("comm",community.get_id());
-=======
-            public void onClick(View view) {
-                Gson gson = new Gson();
-                String myJson = gson.toJson(community);
-                Intent intent = new Intent(context, CommunityPage.class);
-                intent.putExtra("myjson", myJson);
->>>>>>> 16b33b0064aa855a96d3d0026c13d17fc1675bf0
-                context.startActivity(intent);
-            }
-        });
+
+
+        }
+
+    });
 
     }
 
