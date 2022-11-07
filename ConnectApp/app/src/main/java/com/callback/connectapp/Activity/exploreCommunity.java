@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.adapter.CommunityAdapter;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.Community;
 import com.callback.connectapp.retrofit.APIClient;
 
@@ -23,12 +24,15 @@ public class exploreCommunity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<Community> communityList;
     private CommunityAdapter communityAdapter;
+    private NoInternetDialog noInternetDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore_community);
 
+        noInternetDialog = new NoInternetDialog(this);
         recyclerView = findViewById(R.id.community_recyclerview);
         communityList = new ArrayList<>();
 
@@ -57,7 +61,8 @@ public class exploreCommunity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Community>> call, Throwable t) {
-
+                if (!noInternetDialog.isConnected())
+                    noInternetDialog.create();
             }
         });
     }

@@ -190,7 +190,8 @@ public class CommunityPage extends AppCompatActivity {
     private void setCommunityData(Community community) {
         //memberCount.setText(community.getMembers().size()+"");
         communityName.setText(community.getName());
-        if (!community.getImage().equals(""))
+        Log.d("page",community.getImage());
+        if (!Objects.equals(community.getImage(), ""))
             Picasso.get().load(community.getImage()).placeholder(R.drawable.background).into(communityImg);
 
         if(community.getMembers().contains(userId)){

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.Community;
 import com.callback.connectapp.retrofit.APIClient;
@@ -41,6 +42,7 @@ public class createCommunity extends AppCompatActivity {
     private AppConfig appConfig;
     FirebaseStorage storage;
     String imageUrl = "";
+    private NoInternetDialog noInternetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class createCommunity extends AppCompatActivity {
         selectImage = findViewById(R.id.community_uploadImg);
         create = findViewById(R.id.createCommunity);
         about = findViewById(R.id.about_community);
+        noInternetDialog = new NoInternetDialog(this);
 
         create.setOnClickListener(v -> {
             String cName = name.getText().toString().trim();
@@ -84,7 +87,8 @@ public class createCommunity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-
+                if (!noInternetDialog.isConnected())
+                    noInternetDialog.create();
             }
         });
 

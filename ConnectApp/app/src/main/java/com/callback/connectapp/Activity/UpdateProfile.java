@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -65,6 +66,7 @@ public class UpdateProfile extends AppCompatActivity {
     private FirebaseStorage storage;
     private ProgressDialog progressDialog;
     private NoInternetDialog noInternetDialog;
+    private RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,7 @@ public class UpdateProfile extends AppCompatActivity {
         back = findViewById(R.id.edit_profile_back);
         appConfig = new AppConfig(this);
         noInternetDialog = new NoInternetDialog(this);
+        relativeLayout = findViewById(R.id.update_profile_layout);
 
         getData();
 
@@ -174,6 +177,8 @@ public class UpdateProfile extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ApiResponse> call, Throwable t) {
+                    if (!noInternetDialog.isConnected())
+                        noInternetDialog.create();
                     progressDialog.dismiss();
                 }
             });
@@ -182,7 +187,6 @@ public class UpdateProfile extends AppCompatActivity {
 
 
     }
-
 
     private void loading() {
         progressDialog = new ProgressDialog(this);
@@ -237,7 +241,8 @@ public class UpdateProfile extends AppCompatActivity {
                 progressDialog.dismiss();
             });
         }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Internet issue", Toast.LENGTH_SHORT).show();
+            if (!noInternetDialog.isConnected())
+                noInternetDialog.create();
             progressDialog.dismiss();
         }).addOnProgressListener(snapshot -> {
             double progress = (1.0 * 100 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
@@ -266,6 +271,7 @@ public class UpdateProfile extends AppCompatActivity {
                         Picasso.get().load(response.body().getImageUrl()).placeholder(R.drawable.avatar).into(image);
                         imageUrl = response.body().getImageUrl();
                     }
+                    relativeLayout.setVisibility(View.VISIBLE);
                 }
                 progressDialog.dismiss();
             }
@@ -279,10 +285,5 @@ public class UpdateProfile extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        noInternetDialog.hide();
-    }
 
 }

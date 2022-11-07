@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.callback.connectapp.R;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.Comment;
 import com.callback.connectapp.model.Community;
 import com.callback.connectapp.model.User;
@@ -29,10 +30,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     Context context;
     List<Comment> commentList;
-
+    NoInternetDialog noInternetDialog;
     public CommentAdapter(Context context, List<Comment> communityList) {
         this.context = context;
         this.commentList = communityList;
+        noInternetDialog = new NoInternetDialog(context);
     }
 
     @NonNull
@@ -47,7 +49,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         Comment comment = commentList.get(position);
 
-
         holder.commentText.setText(comment.getComment());
         holder.time.setText(comment.getDate());
         Call<User> call = APIClient.getInstance()
@@ -58,9 +59,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 if (response.isSuccessful()) {
                     Log.d("sizeifs", "comment userName" + response.body().toString());
                     holder.userName.setText(response.body().getName());
-//                    if(response.body().getImageUrl()!="")
-//                    Picasso.get().load(response.body().getImageUrl()).placeholder(R.mipmap.ic_person)
-//                            .into(holder.userImg);
+                    if(!response.body().getImageUrl().equals(""))
+                    Picasso.get().load(response.body().getImageUrl()).placeholder(R.drawable.avatar)
+                            .into(holder.userImg);
 
                     if (!Objects.equals(response.body().getImageUrl(), "")) {
                         holder.userImg.setVisibility(View.VISIBLE);
@@ -71,10 +72,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Log.d("sizeifs", "user data fail");
+                if (!noInternetDialog.isConnected())
+                    noInternetDialog.create();
             }
         });
-        holder.commentText.setText(comment.getComment());
+
 
 
     }

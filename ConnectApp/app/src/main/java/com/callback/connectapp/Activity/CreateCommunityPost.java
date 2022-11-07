@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.postData;
 import com.callback.connectapp.retrofit.APIClient;
@@ -40,7 +41,7 @@ public class CreateCommunityPost extends AppCompatActivity {
     String communityId;
     private String userID;
     public postData data;
-
+    NoInternetDialog noInternetDialog;
     private String url;
 
     @Override
@@ -60,9 +61,12 @@ public class CreateCommunityPost extends AppCompatActivity {
 
         launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
                 , result -> {
+                    loading();
+                    progressDialog.setTitle("Image");
+                    progressDialog.setMessage("Uploading...");
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    progressDialog.show();
 
-
-                    postImage.setImageURI(result);
 
                     //storing Img in firebase storage
                     storage = FirebaseStorage.getInstance();
@@ -74,10 +78,17 @@ public class CreateCommunityPost extends AppCompatActivity {
                     reference.putFile(result).addOnSuccessListener(taskSnapshot -> reference.getDownloadUrl().addOnSuccessListener(uri -> {
                         // store uri in mongo db
                         url = uri.toString();
-//                        data.setImage(uri.toString());
+                        postImage.setImageURI(result);
+                        progressDialog.dismiss();
 
-
-                    }));
+                    })).addOnProgressListener(snapshot -> {
+                        double progress = (1.0*100*snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
+                        progressDialog.setProgress((int) progress);
+                    }).addOnFailureListener(e ->{
+                        if (!noInternetDialog.isConnected())
+                            noInternetDialog.create();
+                        progressDialog.dismiss();
+                    });
                 });
 
         attachBtn.setOnClickListener(view1 -> launcher.launch("image/*"));
@@ -90,44 +101,49 @@ public class CreateCommunityPost extends AppCompatActivity {
             if (url == null) {
                 url = "";
             }
-
+            loading();
+            progressDialog.setTitle("Post");
+            progressDialog.setMessage("Uploading...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.show();
             postData newPost = new postData(userID, etPost.getText().toString(), url,communityId);
-            Toast.makeText(CreateCommunityPost.this, url, Toast.LENGTH_LONG).show();
-            Call <ApiResponse> call = APIClient.getInstance()
+            Call<ApiResponse> call = APIClient.getInstance()
                     .getApiInterface().createPost(newPost);
-            call.enqueue(new Callback <ApiResponse>() {
+            call.enqueue(new Callback<ApiResponse>() {
                 @Override
-                public void onResponse(Call<ApiResponse> call, Response <ApiResponse> response) {
+                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                     ApiResponse apiResponse = response.body();
                     if (response.isSuccessful()) {
                         etPost.setText("");
 
-
-                        Toast.makeText(CreateCommunityPost.this, "post is uploaded.", Toast.LENGTH_LONG).show();
-
+                            url="";
                     } else {
-                        Toast.makeText(CreateCommunityPost.this, apiResponse.getMessage() + "status : " + apiResponse.getStatus(), Toast.LENGTH_SHORT).show();
+
                     }
+                    progressDialog.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<ApiResponse> call, Throwable t) {
-                    Toast.makeText(CreateCommunityPost.this, "fail...", Toast.LENGTH_SHORT).show();
+                    if (!noInternetDialog.isConnected())
+                        noInternetDialog.create();
+                    progressDialog.dismiss();
                 }
             });
         });
 
+
     }
+
+
 
     private void loading() {
         progressDialog = new ProgressDialog(CreateCommunityPost.this);
-        progressDialog.setTitle("Data");
-        progressDialog.setMessage("Uploading...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setMax(100);
-        progressDialog.show();
 
     }
+
+
 }

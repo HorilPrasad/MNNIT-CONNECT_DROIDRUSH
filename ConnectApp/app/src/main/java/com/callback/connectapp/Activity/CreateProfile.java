@@ -24,11 +24,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
@@ -61,6 +63,8 @@ public class CreateProfile extends AppCompatActivity {
     private ArrayAdapter<CharSequence> genderAdapter, branchAdapter;
     private String phoneString, genderString, branchString, dobString, imageUrl;
     private ProgressDialog progressDialog;
+    private NoInternetDialog noInternetDialog;
+    private RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,8 @@ public class CreateProfile extends AppCompatActivity {
         gender = findViewById(R.id.create_profile_gender);
         branch = findViewById(R.id.create_profile_branch);
         createProfile = findViewById(R.id.create_profile_button);
+        noInternetDialog = new NoInternetDialog(this);
+        relativeLayout = findViewById(R.id.create_profile_layout);
 
 
         genderAdapter = ArrayAdapter.createFromResource(this, R.array.gender_array, R.layout.spinner_layout);
@@ -161,6 +167,9 @@ public class CreateProfile extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         final StorageReference reference = storage.getReference().child("profile").child(appConfig.getUserID());
         loading();
+        progressDialog.setTitle("User Profile Image");
+        progressDialog.setMessage("Uploading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         reference.putFile(selectedImage).addOnSuccessListener(task -> {
             reference.getDownloadUrl().addOnSuccessListener(uri -> {
                 imageUrl = uri.toString();
@@ -181,6 +190,9 @@ public class CreateProfile extends AppCompatActivity {
 
     private void createProfile() {
         loading();
+        progressDialog.setTitle("User Profile");
+        progressDialog.setMessage("creating...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         if (check(phoneString, dobString)) {
             if (imageUrl == null)
                 imageUrl = "";
@@ -204,7 +216,8 @@ public class CreateProfile extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ApiResponse> call, Throwable t) {
-                    Toast.makeText(CreateProfile.this, "Server error!", Toast.LENGTH_SHORT).show();
+                    if (!noInternetDialog.isConnected())
+                        noInternetDialog.create();
                     progressDialog.dismiss();
                 }
             });
@@ -241,13 +254,9 @@ public class CreateProfile extends AppCompatActivity {
 
     private void loading() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Data");
-        progressDialog.setMessage("Uploading...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setMax(100);
-        progressDialog.show();
 
     }
 

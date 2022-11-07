@@ -3,6 +3,7 @@ package com.callback.connectapp.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
@@ -24,6 +26,8 @@ public class signUpActivity extends AppCompatActivity {
     private EditText userName, userEmail, userPassword, userReg;
     private AppCompatButton registerButton;
     private AppConfig appConfig;
+    private NoInternetDialog noInternetDialog;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class signUpActivity extends AppCompatActivity {
         String regNo = userReg.getText().toString().trim();
 
         if (check(name, email, password, regNo)) {
+            loading();
             User user = new User(name, email, regNo, password);
             Call<User> call = APIClient.getInstance()
                     .getApiInterface().registerUser(user);
@@ -58,13 +63,17 @@ public class signUpActivity extends AppCompatActivity {
                         Toast.makeText(signUpActivity.this, "Successfully registered......", Toast.LENGTH_LONG).show();
 
                     } else {
-                        Toast.makeText(signUpActivity.this, "fail to register...", Toast.LENGTH_SHORT).show();
+                        if (!noInternetDialog.isConnected())
+                            noInternetDialog.create();
                     }
+                    progressDialog.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
-                    Toast.makeText(signUpActivity.this, "fail...", Toast.LENGTH_SHORT).show();
+                    if (!noInternetDialog.isConnected())
+                        noInternetDialog.create();
+                    progressDialog.dismiss();
                 }
             });
         }
@@ -97,6 +106,16 @@ public class signUpActivity extends AppCompatActivity {
         }
     }
 
+    private void loading() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("User");
+        progressDialog.setMessage("Creating...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMax(100);
+        progressDialog.show();
+
+    }
 
     private void initialize() {
         userName = findViewById(R.id.register_user_name);
@@ -105,6 +124,7 @@ public class signUpActivity extends AppCompatActivity {
         userReg = findViewById(R.id.register_user_reg);
         registerButton = findViewById(R.id.register_button);
         appConfig = new AppConfig(this);
+        noInternetDialog = new NoInternetDialog(this);
     }
 
     public void onLoginClick(View view) {

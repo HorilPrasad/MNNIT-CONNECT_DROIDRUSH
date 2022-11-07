@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.callback.connectapp.Activity.UpdateProfile;
 import com.callback.connectapp.R;
 import com.callback.connectapp.adapter.HomePostAdapter;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.model.postData;
 import com.callback.connectapp.retrofit.APIClient;
@@ -47,10 +49,15 @@ public class ProfileFragment extends Fragment {
     FirebaseStorage storage;
     ProgressDialog progressDialog;
 
+
     private ShimmerFrameLayout mShimmerViewContainer;
     private RecyclerView postList_recycler;
     List <postData> postDataArrayList;
     private HomePostAdapter homePostAdapter;
+
+
+    NoInternetDialog noInternetDialog;
+    RelativeLayout relativeLayout;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -69,6 +76,8 @@ public class ProfileFragment extends Fragment {
         regNo = view.findViewById(R.id.regno);
         course = view.findViewById(R.id.school);
         editProfile = view.findViewById(R.id.profile_edit_button);
+        noInternetDialog = new NoInternetDialog(getContext());
+        relativeLayout = view.findViewById(R.id.profile_layout);
 
         profileImg = view.findViewById(R.id.profile_user_image);
         appConfig = new AppConfig(getContext());
@@ -111,15 +120,19 @@ public class ProfileFragment extends Fragment {
 
                     if (!Objects.equals(response.body().getImageUrl(), ""))
                         Picasso.get().load(response.body().getImageUrl()).placeholder(R.drawable.avatar).into(profileImg);
+
+                    relativeLayout.setVisibility(View.VISIBLE);
                 } else {
-                    Toast.makeText(getContext(), "Problem in fetching profile" + appConfig.getUserID(), Toast.LENGTH_SHORT).show();
+                    if (!noInternetDialog.isConnected())
+                        noInternetDialog.create();
                 }
                 progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(getContext(), "Server error!", Toast.LENGTH_SHORT).show();
+                if (!noInternetDialog.isConnected())
+                    noInternetDialog.create();
                 progressDialog.dismiss();
             }
         });
