@@ -2,6 +2,7 @@ package com.callback.connectapp.fragment;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,6 +37,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.Calendar;
 
@@ -53,6 +56,7 @@ public class CreatePostFragment extends Fragment {
     private AppConfig appConfig;
     FirebaseStorage storage;
     postData post;
+    private ProgressDialog progressDialog;
     String communityId;
     private String userID;
     public postData data;
@@ -86,6 +90,8 @@ public class CreatePostFragment extends Fragment {
 
         launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
                 , result -> {
+
+
                     postImage.setImageURI(result);
 
                     //storing Img in firebase storage
@@ -98,12 +104,16 @@ public class CreatePostFragment extends Fragment {
                     reference.putFile(result).addOnSuccessListener(taskSnapshot -> reference.getDownloadUrl().addOnSuccessListener(uri -> {
                         // store uri in mongo db
                         url = uri.toString();
-                        data.setImage(uri.toString());
+//                        data.setImage(uri.toString());
+                       
 
                     }));
                 });
 
         attachBtn.setOnClickListener(view1 -> launcher.launch("image/*"));
+
+
+
 
         sendBtn.setOnClickListener(view12 -> {
 
@@ -138,6 +148,20 @@ public class CreatePostFragment extends Fragment {
         });
 
         return view;
+    }
+
+
+
+    private void loading() {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Data");
+        progressDialog.setMessage("Uploading...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setMax(100);
+        progressDialog.show();
+
     }
 
 

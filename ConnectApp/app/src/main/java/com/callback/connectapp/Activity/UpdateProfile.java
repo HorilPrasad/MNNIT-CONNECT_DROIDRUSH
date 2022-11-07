@@ -226,7 +226,7 @@ public class UpdateProfile extends AppCompatActivity {
             double progress = (1.0 * 100 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
             progressDialog.setProgress((int) progress);
         });
-        ;
+
     }
 
     private void getData() {
