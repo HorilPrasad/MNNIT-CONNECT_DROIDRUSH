@@ -25,12 +25,9 @@ public class NoInternetDialog {
         dialog.show();
         Button button = dialog.findViewById(R.id.retry_button);
         button.setOnClickListener(v -> {
-            context.startActivity(new Intent(context, context.getClass()));
+            dialog.dismiss();
         });
     }
-        public void hide(){
-            dialog.dismiss();
-        }
 
     public boolean isConnected(){
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

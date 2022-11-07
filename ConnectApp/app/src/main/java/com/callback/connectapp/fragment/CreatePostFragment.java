@@ -30,6 +30,7 @@ import com.callback.connectapp.Activity.CreateProfile;
 import com.callback.connectapp.Activity.signUpActivity;
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.postData;
 import com.callback.connectapp.retrofit.APIClient;
@@ -60,7 +61,7 @@ public class CreatePostFragment extends Fragment {
     String communityId;
     private String userID;
     public postData data;
-
+    NoInternetDialog noInternetDialog;
     private String url;
 
     private ConstraintLayout homeLayout;
@@ -81,6 +82,7 @@ public class CreatePostFragment extends Fragment {
         sendBtn = view.findViewById(R.id.sendBtn);
         appConfig = new AppConfig(getContext());
         userID = appConfig.getUserID();
+        noInternetDialog = new NoInternetDialog(getContext());
 
         if (this.getArguments() != null) {
             communityId = getArguments().getString("communityId");
@@ -90,9 +92,12 @@ public class CreatePostFragment extends Fragment {
 
         launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
                 , result -> {
+                    loading();
+                    progressDialog.setTitle("Image");
+                    progressDialog.setMessage("Uploading...");
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    progressDialog.show();
 
-
-                    postImage.setImageURI(result);
 
                     //storing Img in firebase storage
                     storage = FirebaseStorage.getInstance();
@@ -104,10 +109,17 @@ public class CreatePostFragment extends Fragment {
                     reference.putFile(result).addOnSuccessListener(taskSnapshot -> reference.getDownloadUrl().addOnSuccessListener(uri -> {
                         // store uri in mongo db
                         url = uri.toString();
-//                        data.setImage(uri.toString());
+                        postImage.setImageURI(result);
+                        progressDialog.dismiss();
 
-
-                    }));
+                    })).addOnProgressListener(snapshot -> {
+                        double progress = (1.0*100*snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
+                        progressDialog.setProgress((int) progress);
+                    }).addOnFailureListener(e ->{
+                        if (!noInternetDialog.isConnected())
+                            noInternetDialog.create();
+                        progressDialog.dismiss();
+                    });
                 });
 
         attachBtn.setOnClickListener(view1 -> launcher.launch("image/*"));
@@ -120,9 +132,12 @@ public class CreatePostFragment extends Fragment {
             if (url == null) {
                 url = "";
             }
-
+            loading();
+            progressDialog.setTitle("Post");
+            progressDialog.setMessage("Uploading...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.show();
             postData newPost = new postData(userID, etPost.getText().toString(), url,communityId);
-            Toast.makeText(getContext(), url, Toast.LENGTH_LONG).show();
             Call<ApiResponse> call = APIClient.getInstance()
                     .getApiInterface().createPost(newPost);
             call.enqueue(new Callback<ApiResponse>() {
@@ -133,16 +148,17 @@ public class CreatePostFragment extends Fragment {
                         etPost.setText("");
 
 
-                        Toast.makeText(getContext(), "post is uploaded.", Toast.LENGTH_LONG).show();
-
                     } else {
-                        Toast.makeText(getContext(), apiResponse.getMessage() + "status : " + apiResponse.getStatus(), Toast.LENGTH_SHORT).show();
+
                     }
+                    progressDialog.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<ApiResponse> call, Throwable t) {
-                    Toast.makeText(getContext(), "fail...", Toast.LENGTH_SHORT).show();
+                    if (!noInternetDialog.isConnected())
+                        noInternetDialog.create();
+                    progressDialog.dismiss();
                 }
             });
         });
@@ -154,13 +170,9 @@ public class CreatePostFragment extends Fragment {
 
     private void loading() {
         progressDialog = new ProgressDialog(getContext());
-        progressDialog.setTitle("Data");
-        progressDialog.setMessage("Uploading...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setMax(100);
-        progressDialog.show();
 
     }
 

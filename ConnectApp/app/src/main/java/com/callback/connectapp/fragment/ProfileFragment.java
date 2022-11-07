@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.callback.connectapp.Activity.UpdateProfile;
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
 
@@ -39,6 +40,7 @@ public class ProfileFragment extends Fragment {
     ImageButton editProfile;
     FirebaseStorage storage;
     ProgressDialog progressDialog;
+    NoInternetDialog noInternetDialog;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -57,6 +59,7 @@ public class ProfileFragment extends Fragment {
         regNo = view.findViewById(R.id.regno);
         course = view.findViewById(R.id.school);
         editProfile = view.findViewById(R.id.profile_edit_button);
+        noInternetDialog = new NoInternetDialog(getContext());
 
         profileImg = view.findViewById(R.id.profile_user_image);
         appConfig = new AppConfig(getContext());
@@ -95,7 +98,8 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(getContext(), "Server error!", Toast.LENGTH_SHORT).show();
+                if (!noInternetDialog.isConnected())
+                    noInternetDialog.create();
                 progressDialog.dismiss();
             }
         });

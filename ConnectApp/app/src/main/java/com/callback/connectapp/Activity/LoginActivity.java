@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.database.TinyDB;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private TinyDB tinyDB;
     private AppConfig appConfig;
     private ProgressDialog progressDialog;
+    private NoInternetDialog noInternetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,8 @@ public class LoginActivity extends AppCompatActivity {
                 userLogin(firebaseMessagingToken);
                 progressDialog.dismiss();
             } else {
-                Toast.makeText(this, "fail to generate token", Toast.LENGTH_SHORT).show();
+                if (!noInternetDialog.isConnected())
+                    noInternetDialog.create();
                 progressDialog.dismiss();
             }
         });
@@ -94,8 +97,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
+                    if (!noInternetDialog.isConnected())
+                        noInternetDialog.create();
                     progressDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "Network connection error!", Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -126,6 +130,7 @@ public class LoginActivity extends AppCompatActivity {
         tinyDB = new TinyDB(this);
         appConfig = new AppConfig(this);
         progressDialog = new ProgressDialog(this);
+        noInternetDialog = new NoInternetDialog(this);
     }
 
     public void onRegisterClick(View View) {

@@ -19,6 +19,7 @@ import com.callback.connectapp.Activity.CreateProfile;
 import com.callback.connectapp.Activity.signUpActivity;
 import com.callback.connectapp.R;
 import com.callback.connectapp.adapter.HomePostAdapter;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.postData;
 import com.callback.connectapp.retrofit.APIClient;
@@ -38,6 +39,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView postList_recycler;
     List<postData> postDataArrayList;
     private HomePostAdapter homePostAdapter;
+    private NoInternetDialog noInternetDialog;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -54,7 +56,7 @@ public class HomeFragment extends Fragment {
 
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_container);
         postList_recycler = view.findViewById(R.id.homeFeedRecycler);
-
+        noInternetDialog = new NoInternetDialog(getContext());
 
         postDataArrayList = new ArrayList<postData>();
 
@@ -64,12 +66,12 @@ public class HomeFragment extends Fragment {
         postList_recycler.setAdapter(homePostAdapter);
 
 
-        FetchAllpost();
+        fetchAllPost();
 
         return view;
     }
 
-    private void FetchAllpost() {
+    private void fetchAllPost() {
 
         Call<List<postData>> call = APIClient.getInstance()
                 .getApiInterface().getAllPosts();
@@ -99,7 +101,8 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<postData>> call, Throwable t) {
-                Toast.makeText(getContext(), "fail...", Toast.LENGTH_SHORT).show();
+                if (!noInternetDialog.isConnected())
+                    noInternetDialog.create();
 
             }
         });

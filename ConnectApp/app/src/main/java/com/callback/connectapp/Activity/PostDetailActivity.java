@@ -17,6 +17,7 @@ import com.callback.connectapp.R;
 import com.callback.connectapp.adapter.CommentAdapter;
 import com.callback.connectapp.adapter.HomePostAdapter;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.Comment;
 import com.callback.connectapp.model.User;
@@ -34,15 +35,16 @@ import retrofit2.Response;
 
 public class PostDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
-    List<Comment> commentList;
+    private List<Comment> commentList;
 
-    AppConfig appConfig;
+    private AppConfig appConfig;
     private CommentAdapter commentAdapter;
-    EditText commentText;
-    ImageView sendCommentBtn;
-    TextView userName, communityName, postText, likeCount, dislikeCount, commentCount, time;
-    ImageView profileImg, postImage, shareBtn, LikeBtn, DislikeBtn, commentBtn, commentUserimg;
+    private EditText commentText;
+    private ImageView sendCommentBtn;
+    private TextView userName, communityName, postText, likeCount, dislikeCount, commentCount, time;
+    private ImageView profileImg, postImage, shareBtn, LikeBtn, DislikeBtn, commentBtn, commentUserimg;
     private String PostId;
+    private NoInternetDialog noInternetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,44 +64,41 @@ public class PostDetailActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(commentAdapter);
-        Intent intent = getIntent();
+        noInternetDialog = new NoInternetDialog(this);
+        PostId = getIntent().getStringExtra("PostId");
 
-        PostId = intent.getStringExtra("PostId");
+        fetchAllComment();
 
-        FetchALlcomment();
+        sendCommentBtn.setOnClickListener(view -> {
+            String text = commentText.getText().toString();
 
-        sendCommentBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String text = commentText.getText().toString();
+            if (text != "") {
 
-                if (text != "") {
+                Comment c = new Comment(appConfig.getUserID(), "", text);
 
-                    Comment c = new Comment(appConfig.getUserID(), "", text);
-
-                    Call<ApiResponse> call = APIClient.getInstance()
-                            .getApiInterface().commentPost(PostId, c);
-                    call.enqueue(new Callback<ApiResponse>() {
-                        @Override
-                        public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                            if (response.isSuccessful()) {
-                                commentList.add(c);
-                                commentAdapter.notifyDataSetChanged();
-                                Toast.makeText(PostDetailActivity.this, "comment send", Toast.LENGTH_SHORT).show();
-                            }
+                Call<ApiResponse> call = APIClient.getInstance()
+                        .getApiInterface().commentPost(PostId, c);
+                call.enqueue(new Callback<ApiResponse>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                        if (response.isSuccessful()) {
+                            commentList.add(c);
+                            commentAdapter.notifyDataSetChanged();
+                            Toast.makeText(PostDetailActivity.this, "comment send", Toast.LENGTH_SHORT).show();
                         }
+                    }
 
-                        @Override
-                        public void onFailure(Call<ApiResponse> call, Throwable t) {
-
-                        }
-                    });
-                }
+                    @Override
+                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                        if (!noInternetDialog.isConnected())
+                            noInternetDialog.create();
+                    }
+                });
             }
         });
     }
 
-    private void FetchALlcomment() {
+    private void fetchAllComment() {
 
         Call<postData> call = APIClient.getInstance()
                 .getApiInterface().getPost(PostId);
@@ -134,14 +133,13 @@ public class PostDetailActivity extends AppCompatActivity {
                                     profileImg.setVisibility(View.VISIBLE);
                                     Picasso.get().load(response.body().getImageUrl()).into(profileImg);
                                 }
-//                    Picasso.get().load(response.body().getImageUrl()).placeholder(R.mipmap.ic_person)
-//                            .into(profileImg);
                             }
                         }
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
-                            Log.d("sizeifs", "user data fail");
+                            if (!noInternetDialog.isConnected())
+                                noInternetDialog.create();
                         }
                     });
 
@@ -153,7 +151,8 @@ public class PostDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<postData> call, Throwable t) {
-
+                if (!noInternetDialog.isConnected())
+                    noInternetDialog.create();
             }
         });
 
