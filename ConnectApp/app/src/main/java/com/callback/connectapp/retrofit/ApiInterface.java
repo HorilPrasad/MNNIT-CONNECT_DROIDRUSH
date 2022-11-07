@@ -50,7 +50,7 @@ public interface ApiInterface {
     Call<List<postData>>getAllPosts();
 
     @GET("/post/{id}")
-    Call<List<postData>>getUserPost(@Path("id")String id,@Body User user);
+    Call<List<postData>>getUserPost(@Path("id")String id);
 
     @GET("/post/{id}")
     Call<postData>getPost(@Path("id")String id);

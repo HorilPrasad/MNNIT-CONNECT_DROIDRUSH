@@ -14,16 +14,23 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.callback.connectapp.Activity.UpdateProfile;
 import com.callback.connectapp.R;
+import com.callback.connectapp.adapter.HomePostAdapter;
 import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.model.User;
+import com.callback.connectapp.model.postData;
 import com.callback.connectapp.retrofit.APIClient;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -39,6 +46,11 @@ public class ProfileFragment extends Fragment {
     ImageButton editProfile;
     FirebaseStorage storage;
     ProgressDialog progressDialog;
+
+    private ShimmerFrameLayout mShimmerViewContainer;
+    private RecyclerView postList_recycler;
+    List <postData> postDataArrayList;
+    private HomePostAdapter homePostAdapter;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -61,11 +73,23 @@ public class ProfileFragment extends Fragment {
         profileImg = view.findViewById(R.id.profile_user_image);
         appConfig = new AppConfig(getContext());
 
+
+        postList_recycler = view.findViewById(R.id.profilePostRecycler);
+
+
+        postDataArrayList = new ArrayList <postData>();
+
+        homePostAdapter = new HomePostAdapter(getContext(), postDataArrayList);
+        postList_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        postList_recycler.setHasFixedSize(true);
+        postList_recycler.setAdapter(homePostAdapter);
+
         editProfile.setOnClickListener(v -> {
             startActivity(new Intent(getContext(), UpdateProfile.class));
         });
 
         getUserData();
+        FetchAllPost();
 
 
         return view;
@@ -100,6 +124,53 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
+
+    private void FetchAllPost() {
+        Call<List<postData>> call = APIClient.getInstance()
+                .getApiInterface().getAllPosts();
+
+        call.enqueue(new Callback<List<postData>>() {
+            @Override
+            public void onResponse(Call<List<postData>> call, Response<List<postData>> response) {
+
+                if (response.isSuccessful()) {
+
+                    List<postData> po = response.body();
+                    homePostAdapter.clear();
+                    for(int i=0;i<po.size();i++){
+
+                        postData data=po.get(i);
+                        if(Objects.equals(data.getUserId(),appConfig.getUserID()))
+                        {
+                            postDataArrayList.add(data);
+                        }
+                    }
+
+
+
+
+                    homePostAdapter.notifyDataSetChanged();
+
+                    Log.d("sizeif", String.valueOf(response.body().size()));
+
+                } else {
+
+                    Toast.makeText(getContext(), "not sucesss...", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<postData>> call, Throwable t) {
+                Toast.makeText(getContext(), "fail...", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+    }
+
 
     private void loading() {
         progressDialog = new ProgressDialog(getContext());

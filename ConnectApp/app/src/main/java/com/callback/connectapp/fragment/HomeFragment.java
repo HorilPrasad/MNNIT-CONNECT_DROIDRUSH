@@ -83,6 +83,8 @@ public class HomeFragment extends Fragment {
                     List<postData> po = response.body();
 
                     homePostAdapter.clear();
+
+
                     postDataArrayList.addAll(response.body());
                     homePostAdapter.notifyDataSetChanged();
 

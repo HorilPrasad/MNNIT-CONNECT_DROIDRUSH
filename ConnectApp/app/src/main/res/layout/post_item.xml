@@ -45,7 +45,7 @@
 
         android:layout_marginTop="16dp"
         android:layout_marginBottom="34dp"
-        android:src="@drawable/sourabh"
+        android:src="@drawable/avatar"
 
         app:civ_border_color="#F8F6F5"
         app:civ_border_width="2dp"
@@ -77,7 +77,7 @@
         android:layout_height="22dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="44dp"
-        android:text="MCA 2nd yr studentljsdljfskljdf"
+        android:text="MCA 2nd year "
         android:textSize="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
