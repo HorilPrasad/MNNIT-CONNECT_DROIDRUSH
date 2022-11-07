@@ -105,7 +105,7 @@ public class CreatePostFragment extends Fragment {
                         // store uri in mongo db
                         url = uri.toString();
 //                        data.setImage(uri.toString());
-                       
+
 
                     }));
                 });
