@@ -35,7 +35,6 @@
                 android:backgroundTint="@color/colorAccent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:background="@color/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -115,7 +114,7 @@
 
     <EditText
         android:id="@+id/etPost"
-        android:layout_width="333dp"
+        android:layout_width="match_parent"
         android:layout_height="234dp"
         android:layout_gravity="start"
         android:layout_marginLeft="5dp"
@@ -134,12 +133,13 @@
 
     <ImageView
         android:id="@+id/postImage"
-        android:layout_width="346dp"
+        android:layout_width="match_parent"
         android:layout_height="253dp"
         android:layout_below="@id/firstHolder"
         android:layout_marginTop="256dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.34"
         app:layout_constraintStart_toStartOf="parent"

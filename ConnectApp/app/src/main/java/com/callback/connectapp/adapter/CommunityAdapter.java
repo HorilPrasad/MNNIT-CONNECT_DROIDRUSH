@@ -44,25 +44,19 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
     @Override
     public void onBindViewHolder(@NonNull CommunityViewHolder holder, int position) {
         Community community = communityList.get(position);
+
         holder.communityName.setText(community.getName());
-//        Toast.makeText(context, "aya", Toast.LENGTH_SHORT).show();
 
         if (!Objects.equals(community.getImage(), ""))
-            Picasso.get().load(community.getImage()).into(holder.communityImage);
+            Picasso.get().load(community.getImage()).placeholder(R.drawable.avatar).into(holder.communityImage);
 
+        holder.itemLayout.setOnClickListener(view -> {
 
-        holder.itemLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
+            Intent intent =new Intent(context, CommunityPage.class);
+            intent.putExtra("id", community.get_id());
+            context.startActivity(intent);
+            Toast.makeText(context,community.get_id(),Toast.LENGTH_SHORT).show();
 
-            public void onClick (View view) {
-
-                Intent intent =new Intent(context, CommunityPage.class);
-                intent.putExtra("id", community.get_id());
-                Toast.makeText(context,community.get_id(),Toast.LENGTH_SHORT);
-                Log.d("comm",community.get_id());
-
-
-        }
 
     });
 

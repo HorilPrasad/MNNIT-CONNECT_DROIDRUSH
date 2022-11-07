@@ -129,15 +129,11 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="374dp"
-android:visibility="gone"
+                android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="280dp"
-                android:layout_marginLeft="6dp"
-
                 android:layout_marginTop="10dp"
-
-                android:layout_marginRight="6dp"
-                android:layout_marginBottom="10dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@+id/exploreCommunity"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.631"
@@ -147,11 +143,10 @@ android:visibility="gone"
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/exploreCommunity"
-                android:layout_width="368dp"
+                android:layout_width="match_parent"
                 android:layout_height="75dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
                 app:cardBackgroundColor="#EFF3F2"
                 app:cardCornerRadius="3dp"
                 app:cardElevation="3dp"
@@ -178,7 +173,7 @@ android:visibility="gone"
 
                         <ImageView
                             android:id="@+id/likebtn"
-                            android:layout_width="42dp"
+                            android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
                             android:clickable="true"
@@ -186,7 +181,7 @@ android:visibility="gone"
 
                         <ImageView
                             android:id="@+id/dislikeBtn"
-                            android:layout_width="42dp"
+                            android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
                             android:clickable="true"
@@ -194,7 +189,7 @@ android:visibility="gone"
 
                         <ImageView
                             android:id="@+id/commentsBtn"
-                            android:layout_width="42dp"
+                            android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
                             android:clickable="true"
@@ -209,7 +204,7 @@ android:visibility="gone"
 
                         <TextView
                             android:id="@+id/likeCount"
-                            android:layout_width="42dp"
+                            android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
                             android:gravity="center"
@@ -217,7 +212,7 @@ android:visibility="gone"
 
                         <TextView
                             android:id="@+id/dislikeCount"
-                            android:layout_width="42dp"
+                            android:layout_width="0dp"
                             android:layout_height="32dp"
 
                             android:layout_weight="1"
@@ -226,7 +221,7 @@ android:visibility="gone"
 
                         <TextView
                             android:id="@+id/commentCount"
-                            android:layout_width="42dp"
+                            android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
                             android:gravity="center"
@@ -243,7 +238,7 @@ android:visibility="gone"
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/commentRecycler"
-        android:layout_width="371dp"
+        android:layout_width="match_parent"
         android:layout_height="425dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.727"
@@ -263,7 +258,7 @@ android:visibility="gone"
             android:id="@+id/commentimge"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_person" />
+            android:src="@drawable/avatar" />
 
         <EditText
             android:id="@+id/typecommet"
@@ -272,6 +267,7 @@ android:visibility="gone"
             android:layout_toStartOf="@id/sendcomment"
             android:layout_toEndOf="@id/commentimge"
             android:layout_weight="1"
+            android:layout_marginLeft="5dp"
             android:background="@color/background"
             android:hint="Enter Comment..."
             android:inputType="textCapSentences|textMultiLine"
@@ -282,8 +278,7 @@ android:visibility="gone"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
-
-            android:src="@drawable/ic_send" />
+            android:background="@drawable/ic_send" />
 
     </RelativeLayout>
 

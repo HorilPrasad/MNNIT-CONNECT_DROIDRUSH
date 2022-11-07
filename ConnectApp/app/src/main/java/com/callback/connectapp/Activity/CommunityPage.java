@@ -39,10 +39,9 @@ public class CommunityPage extends AppCompatActivity {
     ImageView communityImg;
     TextView CreatePost;
     AppConfig appConfig;
-    private Community ob;
     RecyclerView recyclerView;
 
-    List <postData> postDataArrayList;
+    List<postData> postDataArrayList;
     private String communityId;
 
 
@@ -50,52 +49,46 @@ public class CommunityPage extends AppCompatActivity {
     private String userId;
 
     @Override
-    protected void onCreate (Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_page);
         communityImg = findViewById(R.id.communityPicture);
         memberCount = findViewById(R.id.noMember);
-        joinBtn = findViewById(R.id.status);
-        inviteBtn = findViewById(R.id.invite);
+        joinBtn = findViewById(R.id.join_button);
+        inviteBtn = findViewById(R.id.invite_button);
         recyclerView = findViewById(R.id.community_recyclerview);
+        communityName = findViewById(R.id.name_community);
         appConfig = new AppConfig(this);
+        userId = appConfig.getUserID();
 
-
-        Intent intent = getIntent();
-
-        communityId = intent.getStringExtra("id");
+        communityId = getIntent().getStringExtra("id");
 
         loadCommunity();
 
+        postDataArrayList = new ArrayList<>();
 
-        postDataArrayList = new ArrayList <postData>();
-
-        postAdapter = new HomePostAdapter(this , postDataArrayList);
+        postAdapter = new HomePostAdapter(this, postDataArrayList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(postAdapter);
 
 
-        userId = appConfig.getUserID();
-
-
     }
 
-    private void loadCommunity () {
-                    Log.d("comm",communityId);
-        Call <Community> call = APIClient.getInstance().getApiInterface()
+    private void loadCommunity() {
+        Call<Community> call = APIClient.getInstance().getApiInterface()
                 .getCommunityById(communityId);
 
-        call.enqueue(new Callback <Community>() {
+        call.enqueue(new Callback<Community>() {
             @Override
-            public void onResponse (Call <Community> call , Response <Community> response) {
+            public void onResponse(Call<Community> call, Response<Community> response) {
 
                 if (response.isSuccessful()) {
 
                     if (response.code() == 200) {
-                        ob = response.body();
-                        Log.d("comm" , ob.toString());
-                        memberCount.setText(response.body().getMembers().size());
+                        Community community = response.body();
+                        Toast.makeText(CommunityPage.this, community.getName(), Toast.LENGTH_SHORT).show();
+                        //memberCount.setText(response.body().getMembers().size());
                         communityName.setText(response.body().getName());
 
 
@@ -104,8 +97,8 @@ public class CommunityPage extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure (Call <Community> call , Throwable t) {
-                Log.d("comm" , "failToLoadCommunity");
+            public void onFailure(Call<Community> call, Throwable t) {
+                Log.d("comm", "failToLoadCommunity");
             }
         });
 
@@ -190,41 +183,40 @@ public class CommunityPage extends AppCompatActivity {
     }
 
 
+    private void LoadPost() {
 
-                    private void LoadPost () {
+        Call<List<postData>> call = APIClient.getInstance()
+                .getApiInterface().getCommunityPost("tre");
 
-                        Call <List <postData>> call = APIClient.getInstance()
-                                .getApiInterface().getCommunityPost(ob.get_id());
+        call.enqueue(new Callback<List<postData>>() {
+            @Override
+            public void onResponse(Call<List<postData>> call, Response<List<postData>> response) {
 
-                        call.enqueue(new Callback <List <postData>>() {
-                            @Override
-                            public void onResponse (Call <List <postData>> call , Response <List <postData>> response) {
+                if (response.isSuccessful()) {
 
-                                if (response.isSuccessful()) {
+                    List<postData> po = response.body();
 
-                                    List <postData> po = response.body();
+                    postAdapter.clear();
+                    postDataArrayList.addAll(response.body());
+                    postAdapter.notifyDataSetChanged();
 
-                                    postAdapter.clear();
-                                    postDataArrayList.addAll(response.body());
-                                    postAdapter.notifyDataSetChanged();
-
-                                    Log.d("sizeif" , String.valueOf(response.body().size()));
-
-
-                                } else {
-
-                                    Toast.makeText(CommunityPage.this , "not sucesss..." , Toast.LENGTH_SHORT).show();
-
-                                }
-                            }
-
-                            @Override
-                            public void onFailure (Call <List <postData>> call , Throwable t) {
-                                Toast.makeText(CommunityPage.this , "fail..." , Toast.LENGTH_SHORT).show();
-
-                            }
-                        });
+                    Log.d("sizeif", String.valueOf(response.body().size()));
 
 
-                    }
+                } else {
+
+                    Toast.makeText(CommunityPage.this, "not sucesss...", Toast.LENGTH_SHORT).show();
+
                 }
+            }
+
+            @Override
+            public void onFailure(Call<List<postData>> call, Throwable t) {
+                Toast.makeText(CommunityPage.this, "fail...", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+    }
+}

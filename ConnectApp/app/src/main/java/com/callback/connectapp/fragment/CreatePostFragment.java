@@ -46,7 +46,6 @@ import retrofit2.Response;
 
 public class CreatePostFragment extends Fragment {
     ActivityResultLauncher<String> launcher;
-    private Uri imageUri = null;
     private ImageView postImage;
     private EditText etPost;
     private ImageView sendBtn, attachBtn;
@@ -85,118 +84,57 @@ public class CreatePostFragment extends Fragment {
             communityId="";
         }
 
-<<<<<<< HEAD
-=======
-        data = new postData("", "", "");
->>>>>>> 16b33b0064aa855a96d3d0026c13d17fc1675bf0
-
         launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
-                , new ActivityResultCallback<Uri>() {
-                    @Override
-                    public void onActivityResult(Uri result) {
-                        postImage.setImageURI(result);
+                , result -> {
+                    postImage.setImageURI(result);
 
-                        //storing Img in firebase storage
-                        storage = FirebaseStorage.getInstance();
+                    //storing Img in firebase storage
+                    storage = FirebaseStorage.getInstance();
 
-                        Calendar cal = Calendar.getInstance();
-                        long k = cal.getTimeInMillis();
-                        String key = Long.toString(k);
-                        final StorageReference reference = storage.getReference().child("post").child(key);
-                        reference.putFile(result).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Calendar cal = Calendar.getInstance();
+                    long k = cal.getTimeInMillis();
+                    String key = Long.toString(k);
+                    final StorageReference reference = storage.getReference().child("post").child(key);
+                    reference.putFile(result).addOnSuccessListener(taskSnapshot -> reference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        // store uri in mongo db
+                        url = uri.toString();
+                        data.setImage(uri.toString());
 
-                                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        // store uri in mongo db
-                                        String imageUrl = uri.toString();
-                                        url = imageUrl;
-                                        data.setImage(uri.toString());
-
-                                    }
-                                });
-                            }
-                        });
-                    }
+                    }));
                 });
 
-        attachBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launcher.launch("image/*");
+        attachBtn.setOnClickListener(view1 -> launcher.launch("image/*"));
+
+        sendBtn.setOnClickListener(view12 -> {
+
+            if (url == null) {
+                url = "";
             }
-        });
 
-        sendBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-<<<<<<< HEAD
-                  if(url==null){
-                      url="";
-                  }
-
-                    postData newPost=new postData(userID, etPost.getText().toString(),url.toString(),communityId);
-                    Toast.makeText(getContext(),url,Toast.LENGTH_LONG).show();
-                    Call <ApiResponse> call = APIClient.getInstance()
-                            .getApiInterface().createPost(newPost);
-                    url="";
-                    call.enqueue(new Callback <ApiResponse>() {
-                        @Override
-                        public void onResponse(Call<ApiResponse> call, Response <ApiResponse> response) {
-                            ApiResponse apiResponse = response.body();
-                            if(response.isSuccessful()){
-                                  etPost.setText("");
+            postData newPost = new postData(userID, etPost.getText().toString(), url,communityId);
+            Toast.makeText(getContext(), url, Toast.LENGTH_LONG).show();
+            Call<ApiResponse> call = APIClient.getInstance()
+                    .getApiInterface().createPost(newPost);
+            call.enqueue(new Callback<ApiResponse>() {
+                @Override
+                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                    ApiResponse apiResponse = response.body();
+                    if (response.isSuccessful()) {
+                        etPost.setText("");
 
 
-                                Toast.makeText(getContext(),"post is uploaded.",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "post is uploaded.", Toast.LENGTH_LONG).show();
 
-                            }else{
-                                Toast.makeText(getContext(), apiResponse.getMessage()+ "status : "+apiResponse.getStatus(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ApiResponse> call, Throwable t) {
-                            Toast.makeText(getContext(), "fail...", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-=======
-                if (url == null) {
-                    url = "";
->>>>>>> 16b33b0064aa855a96d3d0026c13d17fc1675bf0
+                    } else {
+                        Toast.makeText(getContext(), apiResponse.getMessage() + "status : " + apiResponse.getStatus(), Toast.LENGTH_SHORT).show();
+                    }
                 }
 
-                postData newPost = new postData(userID, etPost.getText().toString(), url.toString());
-                Toast.makeText(getContext(), url, Toast.LENGTH_LONG).show();
-                Call<ApiResponse> call = APIClient.getInstance()
-                        .getApiInterface().createPost(newPost);
-                url = "";
-                call.enqueue(new Callback<ApiResponse>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                        ApiResponse apiResponse = response.body();
-                        if (response.isSuccessful()) {
-                            etPost.setText("");
-
-
-                            Toast.makeText(getContext(), "post is uploaded.", Toast.LENGTH_LONG).show();
-
-                        } else {
-                            Toast.makeText(getContext(), apiResponse.getMessage() + "status : " + apiResponse.getStatus(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse> call, Throwable t) {
-                        Toast.makeText(getContext(), "fail...", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-
+                @Override
+                public void onFailure(Call<ApiResponse> call, Throwable t) {
+                    Toast.makeText(getContext(), "fail...", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         return view;
