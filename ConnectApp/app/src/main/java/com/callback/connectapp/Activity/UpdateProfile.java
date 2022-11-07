@@ -6,11 +6,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,6 +31,7 @@ import android.widget.Toast;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
@@ -54,6 +64,7 @@ public class UpdateProfile extends AppCompatActivity {
     private String phoneString, genderString, branchString, dobString, imageUrl = "";
     private FirebaseStorage storage;
     private ProgressDialog progressDialog;
+    private NoInternetDialog noInternetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +80,7 @@ public class UpdateProfile extends AppCompatActivity {
         branch = findViewById(R.id.edit_profile_branch);
         back = findViewById(R.id.edit_profile_back);
         appConfig = new AppConfig(this);
+        noInternetDialog = new NoInternetDialog(this);
 
         getData();
 
@@ -127,7 +139,11 @@ public class UpdateProfile extends AppCompatActivity {
             onBackPressed();
         });
         update.setOnClickListener(v -> {
-
+            loading();
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle("User Data");
+            progressDialog.setMessage("Fetching...");
+            progressDialog.show();
             phoneString = phone.getText().toString().trim();
             dobString = dob.getText().toString();
             genderString = gender.getSelectedItem().toString();
@@ -153,11 +169,12 @@ public class UpdateProfile extends AppCompatActivity {
                         Toast.makeText(UpdateProfile.this, "error", Toast.LENGTH_SHORT).show();
 
                     }
+                    progressDialog.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<ApiResponse> call, Throwable t) {
-
+                    progressDialog.dismiss();
                 }
             });
 
@@ -169,13 +186,9 @@ public class UpdateProfile extends AppCompatActivity {
 
     private void loading() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Image");
-        progressDialog.setMessage("Uploading...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setMax(100);
-        progressDialog.show();
 
     }
 
@@ -210,6 +223,10 @@ public class UpdateProfile extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         final StorageReference reference = storage.getReference().child("profile").child(appConfig.getUserID());
         loading();
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setTitle("User Image");
+        progressDialog.setMessage("Uploading...");
+        progressDialog.show();
         reference.putFile(selectedImage).addOnSuccessListener(task -> {
             reference.getDownloadUrl().addOnSuccessListener(uri -> {
                 imageUrl = uri.toString();
@@ -230,6 +247,11 @@ public class UpdateProfile extends AppCompatActivity {
     }
 
     private void getData() {
+        loading();
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setTitle("User Data");
+        progressDialog.setMessage("Fetching...");
+        progressDialog.show();
         Call<User> call = APIClient.getInstance()
                 .getApiInterface().getUser(appConfig.getUserID());
 
@@ -245,12 +267,22 @@ public class UpdateProfile extends AppCompatActivity {
                         imageUrl = response.body().getImageUrl();
                     }
                 }
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
+                if(!noInternetDialog.isConnected())
+                    noInternetDialog.create();
+                progressDialog.dismiss();
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        noInternetDialog.hide();
+    }
+
 }
