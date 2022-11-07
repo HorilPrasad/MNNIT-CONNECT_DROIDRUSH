@@ -1,11 +1,13 @@
 package com.callback.connectapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import com.callback.connectapp.R;
 import com.callback.connectapp.adapter.HomePostAdapter;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.fragment.CreatePostFragment;
 import com.callback.connectapp.model.Community;
 import com.callback.connectapp.model.postData;
@@ -34,16 +37,16 @@ import retrofit2.Response;
 import retrofit2.http.HEAD;
 
 public class CommunityPage extends AppCompatActivity {
-    TextView communityName, memberCount;
-    Button joinBtn, inviteBtn;
-    ImageView communityImg;
-    TextView CreatePost;
-    AppConfig appConfig;
-    RecyclerView recyclerView;
+    private TextView communityName, memberCount;
+    private Button joinBtn, inviteBtn;
+    private ImageView communityImg;
+    private TextView CreatePost;
+    private AppConfig appConfig;
+    private RecyclerView recyclerView;
 
-    List<postData> postDataArrayList;
+    private List<postData> postDataArrayList;
     private String communityId;
-
+    private NoInternetDialog noInternetDialog;
 
     private HomePostAdapter postAdapter;
     private String userId;
@@ -60,6 +63,7 @@ public class CommunityPage extends AppCompatActivity {
         communityName = findViewById(R.id.name_community);
         appConfig = new AppConfig(this);
         userId = appConfig.getUserID();
+        noInternetDialog = new NoInternetDialog(this);
 
         communityId = getIntent().getStringExtra("id");
 
@@ -87,9 +91,9 @@ public class CommunityPage extends AppCompatActivity {
 
                     if (response.code() == 200) {
                         Community community = response.body();
+                        setCommunityData(community);
                         Toast.makeText(CommunityPage.this, community.getName(), Toast.LENGTH_SHORT).show();
-                        //memberCount.setText(response.body().getMembers().size());
-                        communityName.setText(response.body().getName());
+
 
 
                     }
@@ -98,7 +102,8 @@ public class CommunityPage extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Community> call, Throwable t) {
-                Log.d("comm", "failToLoadCommunity");
+                if (!noInternetDialog.isConnected())
+                    noInternetDialog.create();
             }
         });
 
@@ -182,6 +187,24 @@ public class CommunityPage extends AppCompatActivity {
 //        }
     }
 
+    private void setCommunityData(Community community) {
+        //memberCount.setText(community.getMembers().size()+"");
+        communityName.setText(community.getName());
+        if (!community.getImage().equals(""))
+            Picasso.get().load(community.getImage()).placeholder(R.drawable.background).into(communityImg);
+
+        if(community.getMembers().contains(userId)){
+            joinBtn.setText("Joined");
+            Drawable img = getResources().getDrawable(R.drawable.ic_baseline_groups_24);
+            joinBtn.setCompoundDrawables(img,null,null,null);
+
+        }else{
+            joinBtn.setText("join");
+            joinBtn.setCompoundDrawables(null,null,null,null);
+        }
+
+    }
+
 
     private void LoadPost() {
 
@@ -212,8 +235,9 @@ public class CommunityPage extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<postData>> call, Throwable t) {
-                Toast.makeText(CommunityPage.this, "fail...", Toast.LENGTH_SHORT).show();
-
+                if (!noInternetDialog.isConnected()){
+                    noInternetDialog.create();
+                }
             }
         });
 

@@ -44,8 +44,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
             android:paddingLeft="2dp"
             android:paddingTop="2dp"
             android:paddingRight="2dp"
@@ -87,17 +85,15 @@
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:orientation="horizontal"
-          android:paddingLeft="10dp"
-          android:paddingRight="10dp">
+          android:orientation="horizontal">
 
         <Button
             android:id="@+id/join_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/ic_baseline_groups_24"
             android:text="Joined" />
 
         <Button
@@ -106,6 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="0dp"
             android:layout_weight="1"
+            android:visibility="gone"
             android:drawableLeft="@drawable/ic_baseline_person_add_alt_1_24"
             android:text="Invite" />
 
