@@ -54,6 +54,7 @@ public class CreatePostFragment extends Fragment {
     private AppConfig appConfig;
     FirebaseStorage storage;
     postData post;
+    String communityId;
     private String userID;
    public postData data;
 
@@ -78,8 +79,12 @@ public class CreatePostFragment extends Fragment {
         appConfig = new AppConfig(getContext());
         userID = appConfig.getUserID();
 
+        if (this.getArguments() != null) {
+            communityId = getArguments().getString("communityId");
+        }else{
+            communityId="";
+        }
 
-       data=new postData("","","");
 
         launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
                 , new ActivityResultCallback <Uri>() {
@@ -128,7 +133,7 @@ public class CreatePostFragment extends Fragment {
                       url="";
                   }
 
-                    postData newPost=new postData(userID, etPost.getText().toString(),url.toString());
+                    postData newPost=new postData(userID, etPost.getText().toString(),url.toString(),communityId);
                     Toast.makeText(getContext(),url,Toast.LENGTH_LONG).show();
                     Call <ApiResponse> call = APIClient.getInstance()
                             .getApiInterface().createPost(newPost);

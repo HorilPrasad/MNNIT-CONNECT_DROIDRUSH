@@ -40,9 +40,10 @@ public class postData {
     public postData() {
     }
 
-    public postData (String userId , String info , String image) {
+    public postData (String userId , String info , String image,String communityId) {
         this.userId = userId;
         this.info = info;
+        this.communityId=communityId;
         this.image = image;
     }
 

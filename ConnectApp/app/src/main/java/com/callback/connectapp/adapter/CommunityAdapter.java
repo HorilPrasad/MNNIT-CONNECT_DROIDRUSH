@@ -2,6 +2,7 @@ package com.callback.connectapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
     public void onBindViewHolder(@NonNull CommunityViewHolder holder, int position) {
         Community community = communityList.get(position);
         holder.communityName.setText(community.getName());
-        Toast.makeText(context, "aya", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "aya", Toast.LENGTH_SHORT).show();
 
         if(!Objects.equals(community.getImage(), ""))
             Picasso.get().load(community.getImage()).into(holder.communityImage);
@@ -54,10 +55,11 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view) {
-                Gson gson = new Gson();
-                String myJson = gson.toJson(community);
+
                 Intent intent =new Intent(context, CommunityPage.class);
-                intent.putExtra("myjson", myJson);
+                intent.putExtra("id", community.get_id());
+                Toast.makeText(context,community.get_id(),Toast.LENGTH_SHORT);
+                Log.d("comm",community.get_id());
                 context.startActivity(intent);
             }
         });
