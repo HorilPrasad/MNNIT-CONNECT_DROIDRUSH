@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -65,6 +66,7 @@ public class UpdateProfile extends AppCompatActivity {
     private FirebaseStorage storage;
     private ProgressDialog progressDialog;
     private NoInternetDialog noInternetDialog;
+    private RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,7 @@ public class UpdateProfile extends AppCompatActivity {
         back = findViewById(R.id.edit_profile_back);
         appConfig = new AppConfig(this);
         noInternetDialog = new NoInternetDialog(this);
+        relativeLayout = findViewById(R.id.update_profile_layout);
 
         getData();
 
@@ -268,6 +271,7 @@ public class UpdateProfile extends AppCompatActivity {
                         Picasso.get().load(response.body().getImageUrl()).placeholder(R.drawable.avatar).into(image);
                         imageUrl = response.body().getImageUrl();
                     }
+                    relativeLayout.setVisibility(View.VISIBLE);
                 }
                 progressDialog.dismiss();
             }

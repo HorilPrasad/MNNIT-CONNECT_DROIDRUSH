@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.callback.connectapp.Activity.LoginActivity;
 import com.callback.connectapp.Activity.createCommunity;
@@ -19,7 +20,7 @@ import com.callback.connectapp.R;
 public class CommunityFragment extends Fragment {
 
     CardView exploreCommunity, createCommunity;
-
+    FrameLayout frameLayout;
     public CommunityFragment() {
         // Required empty public constructor
     }
@@ -35,6 +36,7 @@ public class CommunityFragment extends Fragment {
 
         exploreCommunity = view.findViewById(R.id.exploreCommunity);
         createCommunity = view.findViewById(R.id.createCommunity);
+        frameLayout = view.findViewById(R.id.community_fragment_layout);
 
 
         exploreCommunity.setOnClickListener(new View.OnClickListener() {

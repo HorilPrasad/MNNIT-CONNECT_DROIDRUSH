@@ -66,23 +66,20 @@ public class PostDetailActivity extends AppCompatActivity {
         recyclerView.setAdapter(commentAdapter);
         noInternetDialog = new NoInternetDialog(this);
         PostId = getIntent().getStringExtra("PostId");
-
         fetchAllComment();
 
         sendCommentBtn.setOnClickListener(view -> {
             String text = commentText.getText().toString();
 
-            if (text != "") {
-
-                Comment c = new Comment(appConfig.getUserID(), "", text);
-
+            if (!text.isEmpty()) {
+                Comment comment = new Comment(appConfig.getUserID(), "", text);
                 Call<ApiResponse> call = APIClient.getInstance()
-                        .getApiInterface().commentPost(PostId, c);
+                        .getApiInterface().commentPost(PostId, comment);
                 call.enqueue(new Callback<ApiResponse>() {
                     @Override
                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                         if (response.isSuccessful()) {
-                            commentList.add(c);
+                            commentList.add(comment);
                             commentAdapter.notifyDataSetChanged();
                             Toast.makeText(PostDetailActivity.this, "comment send", Toast.LENGTH_SHORT).show();
                         }
@@ -109,8 +106,6 @@ public class PostDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
 
                     List<Comment> comment = response.body().getComments();
-
-
                     postText.setText(response.body().getInfo());
                     String postImg = response.body().getImage();
                     if (!Objects.equals(postImg, "")) {
@@ -140,6 +135,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         public void onFailure(Call<User> call, Throwable t) {
                             if (!noInternetDialog.isConnected())
                                 noInternetDialog.create();
+                            Toast.makeText(PostDetailActivity.this, "fail", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -153,6 +149,7 @@ public class PostDetailActivity extends AppCompatActivity {
             public void onFailure(Call<postData> call, Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
+                Toast.makeText(PostDetailActivity.this, "fail", Toast.LENGTH_SHORT).show();
             }
         });
 

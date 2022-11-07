@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -63,6 +64,7 @@ public class CreateProfile extends AppCompatActivity {
     private String phoneString, genderString, branchString, dobString, imageUrl;
     private ProgressDialog progressDialog;
     private NoInternetDialog noInternetDialog;
+    private RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class CreateProfile extends AppCompatActivity {
         branch = findViewById(R.id.create_profile_branch);
         createProfile = findViewById(R.id.create_profile_button);
         noInternetDialog = new NoInternetDialog(this);
+        relativeLayout = findViewById(R.id.create_profile_layout);
 
 
         genderAdapter = ArrayAdapter.createFromResource(this, R.array.gender_array, R.layout.spinner_layout);
