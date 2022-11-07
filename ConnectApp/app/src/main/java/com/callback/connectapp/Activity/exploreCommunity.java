@@ -25,14 +25,14 @@ public class exploreCommunity extends AppCompatActivity {
     private CommunityAdapter communityAdapter;
 
     @Override
-    protected void onCreate (Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore_community);
 
         recyclerView = findViewById(R.id.community_recyclerview);
         communityList = new ArrayList<>();
 
-        communityAdapter = new CommunityAdapter(this,communityList);
+        communityAdapter = new CommunityAdapter(this, communityList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(communityAdapter);
@@ -47,7 +47,7 @@ public class exploreCommunity extends AppCompatActivity {
         call.enqueue(new Callback<List<Community>>() {
             @Override
             public void onResponse(Call<List<Community>> call, Response<List<Community>> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     List<Community> communityList1 = response.body();
                     communityList.addAll(communityList1);
                     communityAdapter.notifyDataSetChanged();

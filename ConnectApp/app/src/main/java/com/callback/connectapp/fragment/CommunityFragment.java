@@ -18,35 +18,30 @@ import com.callback.connectapp.R;
 
 public class CommunityFragment extends Fragment {
 
-     CardView exploreCommunity,createCommunity;
+    CardView exploreCommunity, createCommunity;
 
-    public CommunityFragment () {
+    public CommunityFragment() {
         // Required empty public constructor
     }
 
 
-
-
     @Override
-    public View onCreateView (LayoutInflater inflater , ViewGroup container ,
-                              Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
 
+        View view = inflater.inflate(R.layout.fragment_community, container, false);
 
-
-        View view= inflater.inflate(R.layout.fragment_community , container , false);
-
-        exploreCommunity =view.findViewById(R.id.exploreCommunity);
-        createCommunity =view.findViewById(R.id.createCommunity);
-
+        exploreCommunity = view.findViewById(R.id.exploreCommunity);
+        createCommunity = view.findViewById(R.id.createCommunity);
 
 
         exploreCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View view) {
+            public void onClick(View view) {
 
-                Intent i= new Intent(getContext(), exploreCommunity.class);
+                Intent i = new Intent(getContext(), exploreCommunity.class);
 
                 startActivity(i);
             }
@@ -54,9 +49,9 @@ public class CommunityFragment extends Fragment {
 
         createCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View view) {
+            public void onClick(View view) {
 
-                Intent i= new Intent(getContext(), createCommunity.class);
+                Intent i = new Intent(getContext(), createCommunity.class);
 
                 startActivity(i);
             }

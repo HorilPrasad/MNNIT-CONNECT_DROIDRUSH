@@ -34,62 +34,63 @@ import retrofit2.Response;
 
 public class PostDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
-    List <Comment> commentList;
+    List<Comment> commentList;
 
     AppConfig appConfig;
     private CommentAdapter commentAdapter;
     EditText commentText;
     ImageView sendCommentBtn;
-    TextView userName,communityName,postText,likeCount,dislikeCount,commentCount,time;
-    ImageView profileImg,postImage,shareBtn,LikeBtn,DislikeBtn,commentBtn,commentUserimg;
-   private String PostId;
+    TextView userName, communityName, postText, likeCount, dislikeCount, commentCount, time;
+    ImageView profileImg, postImage, shareBtn, LikeBtn, DislikeBtn, commentBtn, commentUserimg;
+    private String PostId;
+
     @Override
-    protected void onCreate (Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
-        appConfig=new AppConfig(this);
-        recyclerView=findViewById(R.id.commentRecycler);
-        postText=findViewById(R.id.readMoreTextView2);
-        profileImg=findViewById(R.id.profile_image);
-        commentUserimg=findViewById(R.id.commentimge);
-        userName=findViewById(R.id.textView4);
-        postImage=findViewById(R.id.imageView3);
-        commentList =new ArrayList <Comment>();
-       sendCommentBtn=findViewById(R.id.sendcomment);
-       commentText=findViewById(R.id.typecommet);
-        commentAdapter=new CommentAdapter(this,commentList);
+        appConfig = new AppConfig(this);
+        recyclerView = findViewById(R.id.commentRecycler);
+        postText = findViewById(R.id.readMoreTextView2);
+        profileImg = findViewById(R.id.profile_image);
+        commentUserimg = findViewById(R.id.commentimge);
+        userName = findViewById(R.id.textView4);
+        postImage = findViewById(R.id.imageView3);
+        commentList = new ArrayList<Comment>();
+        sendCommentBtn = findViewById(R.id.sendcomment);
+        commentText = findViewById(R.id.typecommet);
+        commentAdapter = new CommentAdapter(this, commentList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(commentAdapter);
         Intent intent = getIntent();
 
-        PostId=intent.getStringExtra("PostId");
+        PostId = intent.getStringExtra("PostId");
 
         FetchALlcomment();
 
         sendCommentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View view) {
-                String text=commentText.getText().toString();
+            public void onClick(View view) {
+                String text = commentText.getText().toString();
 
-                if(text!=""){
+                if (text != "") {
 
-                    Comment c=new Comment(appConfig.getUserID(),"",text);
+                    Comment c = new Comment(appConfig.getUserID(), "", text);
 
-                    Call <ApiResponse> call = APIClient.getInstance()
-                            .getApiInterface().commentPost(PostId,c);
-                    call.enqueue(new Callback <ApiResponse>() {
+                    Call<ApiResponse> call = APIClient.getInstance()
+                            .getApiInterface().commentPost(PostId, c);
+                    call.enqueue(new Callback<ApiResponse>() {
                         @Override
-                        public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
-                            if(response.isSuccessful()){
+                        public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                            if (response.isSuccessful()) {
                                 commentList.add(c);
                                 commentAdapter.notifyDataSetChanged();
-                                Toast.makeText(PostDetailActivity.this , "comment send" , Toast.LENGTH_SHORT).show();
+                                Toast.makeText(PostDetailActivity.this, "comment send", Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
-                        public void onFailure (Call <ApiResponse> call , Throwable t) {
+                        public void onFailure(Call<ApiResponse> call, Throwable t) {
 
                         }
                     });
@@ -98,38 +99,38 @@ public class PostDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void FetchALlcomment () {
+    private void FetchALlcomment() {
 
-        Call <postData> call = APIClient.getInstance()
+        Call<postData> call = APIClient.getInstance()
                 .getApiInterface().getPost(PostId);
 
-        call.enqueue(new Callback <postData>() {
+        call.enqueue(new Callback<postData>() {
             @Override
-            public void onResponse (Call <postData> call , Response <postData> response) {
-                if(response.isSuccessful()){
+            public void onResponse(Call<postData> call, Response<postData> response) {
+                if (response.isSuccessful()) {
 
-                    List<Comment> comment=response.body().getComments();
+                    List<Comment> comment = response.body().getComments();
 
 
                     postText.setText(response.body().getInfo());
-                    String postImg=response.body().getImage();
-                    if(!Objects.equals(postImg,"")) {
+                    String postImg = response.body().getImage();
+                    if (!Objects.equals(postImg, "")) {
                         postImage.setVisibility(View.VISIBLE);
                         Picasso.get().load(postImg).into(postImage);
                     }
 
-                   String  userId =response.body().getUserId();
+                    String userId = response.body().getUserId();
 
-                    Call <User> cal = APIClient.getInstance()
+                    Call<User> cal = APIClient.getInstance()
                             .getApiInterface().getUser(userId);
-                    cal.enqueue(new Callback <User>() {
+                    cal.enqueue(new Callback<User>() {
                         @Override
-                        public void onResponse (Call <User> call , Response <User> response) {
-                            if(response.isSuccessful()){
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            if (response.isSuccessful()) {
 
                                 userName.setText(response.body().getName());
 
-                                if(!Objects.equals(response.body().getImageUrl(),"")) {
+                                if (!Objects.equals(response.body().getImageUrl(), "")) {
                                     profileImg.setVisibility(View.VISIBLE);
                                     Picasso.get().load(response.body().getImageUrl()).into(profileImg);
                                 }
@@ -139,8 +140,8 @@ public class PostDetailActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure (Call <User> call , Throwable t) {
-                            Log.d("sizeifs","user data fail");
+                        public void onFailure(Call<User> call, Throwable t) {
+                            Log.d("sizeifs", "user data fail");
                         }
                     });
 
@@ -151,12 +152,10 @@ public class PostDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure (Call <postData> call , Throwable t) {
+            public void onFailure(Call<postData> call, Throwable t) {
 
             }
         });
-
-
 
 
     }

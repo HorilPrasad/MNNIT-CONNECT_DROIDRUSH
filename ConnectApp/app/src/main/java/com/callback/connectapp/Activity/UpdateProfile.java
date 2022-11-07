@@ -2,6 +2,7 @@ package com.callback.connectapp.Activity;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -9,7 +10,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,6 +30,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.Calendar;
 import java.util.Objects;
@@ -102,31 +104,6 @@ public class UpdateProfile extends AppCompatActivity {
             }
         });
 
-        launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
-                , result -> {
-            loading();
-                    //storing Img in firebase storage
-                    storage = FirebaseStorage.getInstance();
-                    final StorageReference reference = storage.getReference().child("profile").child(appConfig.getUserID());
-                    reference.putFile(result).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                            reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    // store uri in mongo db
-                                    imageUrl = uri.toString();
-                                    image.setImageURI(result);
-                                    progressDialog.dismiss();
-                                    Toast.makeText(UpdateProfile.this, imageUrl, Toast.LENGTH_SHORT).show();
-
-
-                                }
-                            });
-                        }
-                    });
-                });
 
         dob.setOnClickListener(view -> {
             Calendar cal = Calendar.getInstance(TimeZone.getDefault());
@@ -140,14 +117,16 @@ public class UpdateProfile extends AppCompatActivity {
         });
 
         image.setOnClickListener(v -> {
-            launcher.launch("image/*");
+            CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1, 1)
+                    .start(this);
         });
 
         back.setOnClickListener(v -> {
             onBackPressed();
         });
         update.setOnClickListener(v -> {
-
 
             phoneString = phone.getText().toString().trim();
             dobString = dob.getText().toString();
@@ -167,7 +146,7 @@ public class UpdateProfile extends AppCompatActivity {
                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
                     if (response.isSuccessful()) {
-                        startActivity(new Intent(UpdateProfile.this,MainActivity.class));
+                        startActivity(new Intent(UpdateProfile.this, MainActivity.class));
                         Toast.makeText(UpdateProfile.this, "profile update", Toast.LENGTH_SHORT).show();
 
                     } else {
@@ -187,6 +166,7 @@ public class UpdateProfile extends AppCompatActivity {
 
     }
 
+
     private void loading() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Image");
@@ -194,21 +174,60 @@ public class UpdateProfile extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setMax(100);
         progressDialog.show();
 
     }
+
     private final DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 
         // when dialog box is closed, below method will be called.
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
-            selectedMonth=selectedMonth+1;
-            String date = selectedDay+"-"+selectedMonth+"-"+selectedYear;
+            selectedMonth = selectedMonth + 1;
+            String date = selectedDay + "-" + selectedMonth + "-" + selectedYear;
 
             dob.setText(date);
             dobString = date;
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && data != null) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri selectedImage = result.getUri();
+                uploadImageToFirebase(selectedImage);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
+
+    private void uploadImageToFirebase(Uri selectedImage) {
+        storage = FirebaseStorage.getInstance();
+        final StorageReference reference = storage.getReference().child("profile").child(appConfig.getUserID());
+        loading();
+        reference.putFile(selectedImage).addOnSuccessListener(task -> {
+            reference.getDownloadUrl().addOnSuccessListener(uri -> {
+                imageUrl = uri.toString();
+                image.setImageURI(selectedImage);
+                progressDialog.dismiss();
+            }).addOnFailureListener(e -> {
+                Toast.makeText(this, "failing to get url", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            });
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Internet issue", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+        }).addOnProgressListener(snapshot -> {
+            double progress = (1.0 * 100 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+            progressDialog.setProgress((int) progress);
+        });
+        ;
+    }
 
     private void getData() {
         Call<User> call = APIClient.getInstance()
@@ -222,7 +241,7 @@ public class UpdateProfile extends AppCompatActivity {
                     phone.setText(response.body().getPhone());
                     dob.setText(response.body().getDob());
                     if (!Objects.equals(response.body().getImageUrl(), "")) {
-                        Picasso.get().load(response.body().getImageUrl()).into(image);
+                        Picasso.get().load(response.body().getImageUrl()).placeholder(R.drawable.avatar).into(image);
                         imageUrl = response.body().getImageUrl();
                     }
                 }

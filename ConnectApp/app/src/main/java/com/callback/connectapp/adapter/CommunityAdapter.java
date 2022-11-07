@@ -36,7 +36,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
     @NonNull
     @Override
     public CommunityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.community_list,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.community_list, parent, false);
 
         return new CommunityViewHolder(view);
     }
@@ -47,19 +47,26 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         holder.communityName.setText(community.getName());
 //        Toast.makeText(context, "aya", Toast.LENGTH_SHORT).show();
 
-        if(!Objects.equals(community.getImage(), ""))
+        if (!Objects.equals(community.getImage(), ""))
             Picasso.get().load(community.getImage()).into(holder.communityImage);
-
 
 
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
+<<<<<<< HEAD
             public void onClick (View view) {
 
                 Intent intent =new Intent(context, CommunityPage.class);
                 intent.putExtra("id", community.get_id());
                 Toast.makeText(context,community.get_id(),Toast.LENGTH_SHORT);
                 Log.d("comm",community.get_id());
+=======
+            public void onClick(View view) {
+                Gson gson = new Gson();
+                String myJson = gson.toJson(community);
+                Intent intent = new Intent(context, CommunityPage.class);
+                intent.putExtra("myjson", myJson);
+>>>>>>> 16b33b0064aa855a96d3d0026c13d17fc1675bf0
                 context.startActivity(intent);
             }
         });
@@ -71,14 +78,15 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         return communityList.size();
     }
 
-    public static class CommunityViewHolder extends RecyclerView.ViewHolder{
+    public static class CommunityViewHolder extends RecyclerView.ViewHolder {
 
-        TextView communityName,communityCreated;
+        TextView communityName, communityCreated;
         ImageView communityImage;
         LinearLayout itemLayout;
+
         public CommunityViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemLayout=itemView.findViewById(R.id.communityLayout);
+            itemLayout = itemView.findViewById(R.id.communityLayout);
             communityName = itemView.findViewById(R.id.community_list_name);
             communityCreated = itemView.findViewById(R.id.community_list_created);
             communityImage = itemView.findViewById(R.id.community_list_image);
