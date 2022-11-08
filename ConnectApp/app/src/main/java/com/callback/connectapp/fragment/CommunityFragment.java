@@ -43,41 +43,45 @@ public class CommunityFragment extends Fragment {
     AppConfig appConfig;
     ProgressBar progressBar;
 
-    public CommunityFragment() {
+    public CommunityFragment () {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView (LayoutInflater inflater , ViewGroup container ,
+                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
 
-        View view = inflater.inflate(R.layout.fragment_community, container, false);
-          appConfig =new AppConfig(getContext());
+        View view = inflater.inflate(R.layout.fragment_community , container , false);
+        appConfig = new AppConfig(getContext());
         exploreCommunity = view.findViewById(R.id.exploreCommunity);
         createCommunity = view.findViewById(R.id.createCommunity);
         frameLayout = view.findViewById(R.id.community_fragment_layout);
+<<<<<<< HEAD
         recyclerView=view.findViewById(R.id.joinCommunityRecycler);
         progressBar = view.findViewById(R.id.community_fragment_progress);
+=======
+        recyclerView = view.findViewById(R.id.joinCommunityRecycler);
+>>>>>>> 27321faa335c7336496b464a7a92a61432f369a2
 
         noInternetDialog = new NoInternetDialog(getContext());
 
         communityList = new ArrayList <>();
 
-        communityAdapter = new CommunityAdapter(getContext(), communityList);
+        communityAdapter = new CommunityAdapter(getContext() , communityList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(communityAdapter);
 
-          fetchCommunity();
+        fetchCommunity();
 
         exploreCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick (View view) {
 
-                  Intent i = new Intent(getContext(), exploreCommunity.class);
+                Intent i = new Intent(getContext() , exploreCommunity.class);
 
                 startActivity(i);
             }
@@ -85,9 +89,9 @@ public class CommunityFragment extends Fragment {
 
         createCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick (View view) {
 
-                Intent i = new Intent(getContext(), createCommunity.class);
+                Intent i = new Intent(getContext() , createCommunity.class);
 
                 startActivity(i);
             }
@@ -97,30 +101,40 @@ public class CommunityFragment extends Fragment {
         return view;
     }
 
-    private void fetchCommunity() {
-        Call <List<Community>> call = APIClient.getInstance().getApiInterface()
+    private void fetchCommunity () {
+        Call <List <Community>> call = APIClient.getInstance().getApiInterface()
                 .getAllCommunities();
 
-        call.enqueue(new Callback <List<Community>>() {
+        call.enqueue(new Callback <List <Community>>() {
             @Override
-            public void onResponse(Call<List<Community>> call, Response <List<Community>> response) {
+            public void onResponse (Call <List <Community>> call , Response <List <Community>> response) {
                 if (response.isSuccessful()) {
-                    List<Community> communityList1 = response.body();
+                    List <Community> communityList1 = response.body();
 
+<<<<<<< HEAD
                     for(Community community:communityList1){
                         if(community.getMembers().contains(appConfig.getUserID())){
+=======
+
+                    for (Community community : communityList1) {
+                        if (community.getMembers().contains(appConfig.getUserID())) {
+>>>>>>> 27321faa335c7336496b464a7a92a61432f369a2
                             communityList.add(community);
                         }
 
                     }
+<<<<<<< HEAD
                     progressBar.setVisibility(View.GONE);
+=======
+
+>>>>>>> 27321faa335c7336496b464a7a92a61432f369a2
 
                     communityAdapter.notifyDataSetChanged();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Community>> call, Throwable t) {
+            public void onFailure (Call <List <Community>> call , Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
                 progressBar.setVisibility(View.GONE);

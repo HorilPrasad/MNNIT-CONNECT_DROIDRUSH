@@ -27,12 +27,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
+public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.CommentViewHolder> {
 
     Context context;
-    List<Comment> commentList;
+    List <Comment> commentList;
     NoInternetDialog noInternetDialog;
-    public CommentAdapter(Context context, List<Comment> communityList) {
+
+    public CommentAdapter (Context context , List <Comment> communityList) {
         this.context = context;
         this.commentList = communityList;
         noInternetDialog = new NoInternetDialog(context);
@@ -40,38 +41,42 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @NonNull
     @Override
-    public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.post_comment_row, parent, false);
+    public CommentViewHolder onCreateViewHolder (@NonNull ViewGroup parent , int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.post_comment_row , parent , false);
 
         return new CommentViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
+    public void onBindViewHolder (@NonNull CommentViewHolder holder , int position) {
         Comment comment = commentList.get(position);
 
         holder.commentText.setText(comment.getComment());
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 27321faa335c7336496b464a7a92a61432f369a2
         holder.time.setText(comment.getTimeIn());
-        holder.userImg.setOnClickListener(v->{
-            Toast.makeText(context, comment.getUser()+"", Toast.LENGTH_SHORT).show();
+        holder.userImg.setOnClickListener(v -> {
+            Toast.makeText(context , comment.getUser() + "" , Toast.LENGTH_SHORT).show();
         });
-        setUserData(comment,holder);
+        setUserData(comment , holder);
 
     }
 
-    private void setUserData(Comment comment, CommentViewHolder holder) {
-        Call<User> call = APIClient.getInstance()
+    private void setUserData (Comment comment , CommentViewHolder holder) {
+        Call <User> call = APIClient.getInstance()
                 .getApiInterface().getUser(comment.getUser());
-        call.enqueue(new Callback<User>() {
+        call.enqueue(new Callback <User>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse (Call <User> call , Response <User> response) {
                 if (response.isSuccessful()) {
                     holder.userName.setText(response.body().getName());
-                    if(!response.body().getImageUrl().equals(""))
+                    if (!response.body().getImageUrl().equals(""))
                         Picasso.get().load(response.body().getImageUrl()).placeholder(R.drawable.avatar).into(holder.userImg);
 
-                    if (!Objects.equals(response.body().getImageUrl(), "")) {
+                    if (!Objects.equals(response.body().getImageUrl() , "")) {
                         holder.userImg.setVisibility(View.VISIBLE);
                         Picasso.get().load(response.body().getImageUrl()).into(holder.userImg);
                     }
@@ -79,7 +84,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure (Call <User> call , Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
             }
@@ -88,7 +93,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
 
     @Override
-    public int getItemCount() {
+    public int getItemCount () {
         return commentList.size();
     }
 
@@ -97,7 +102,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         TextView userName, commentText, time;
         ImageView userImg;
 
-        public CommentViewHolder(@NonNull View itemView) {
+        public CommentViewHolder (@NonNull View itemView) {
             super(itemView);
 
             userName = itemView.findViewById(R.id.commentname);

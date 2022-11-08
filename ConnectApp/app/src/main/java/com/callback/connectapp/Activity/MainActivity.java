@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     BottomNavigationView bottomNavigationView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -33,12 +33,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     @Override
-    protected void onStart() {
+    protected void onStart () {
         super.onStart();
         AppConfig appConfig = new AppConfig(this);
 
         if (!appConfig.isUserLogin())
-            startActivity(new Intent(MainActivity.this, signUpActivity.class));
+            startActivity(new Intent(MainActivity.this , signUpActivity.class));
     }
 
     HomeFragment homeFragment = new HomeFragment();
@@ -47,23 +47,23 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     ProfileFragment profileFragment = new ProfileFragment();
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    public boolean onNavigationItemSelected (@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
             case R.id.home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container , homeFragment).commit();
                 return true;
 
             case R.id.post:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, createPostFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container , createPostFragment).commit();
                 return true;
 
             case R.id.community:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, communityFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container , communityFragment).commit();
                 return true;
 
             case R.id.profile:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, profileFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container , profileFragment).commit();
                 return true;
         }
         return false;

@@ -9,21 +9,21 @@ public class APIClient {
     private static APIClient mInstance;
     private Retrofit retrofit;
 
-    private APIClient(){
+    private APIClient () {
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
-    public static synchronized APIClient getInstance(){
-        if(mInstance == null){
+    public static synchronized APIClient getInstance () {
+        if (mInstance == null) {
             mInstance = new APIClient();
         }
         return mInstance;
     }
 
-    public ApiInterface getApiInterface(){
+    public ApiInterface getApiInterface () {
         return retrofit.create(ApiInterface.class);
     }
 }

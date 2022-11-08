@@ -34,7 +34,7 @@ import retrofit2.Response;
 
 
 public class CreatePostFragment extends Fragment {
-    ActivityResultLauncher<String> launcher;
+    ActivityResultLauncher <String> launcher;
     private ImageView postImage;
     private EditText etPost;
     private ImageView sendBtn, attachBtn;
@@ -51,16 +51,16 @@ public class CreatePostFragment extends Fragment {
 
     private ConstraintLayout homeLayout;
 
-    public CreatePostFragment() {
+    public CreatePostFragment () {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView (LayoutInflater inflater , ViewGroup container ,
+                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_create_post, container, false);
+        View view = inflater.inflate(R.layout.fragment_create_post , container , false);
         postImage = view.findViewById(R.id.postImage);
         etPost = view.findViewById(R.id.etPost);
         attachBtn = view.findViewById(R.id.attach);
@@ -71,8 +71,8 @@ public class CreatePostFragment extends Fragment {
 
         if (this.getArguments() != null) {
             communityId = getArguments().getString("communityId");
-        }else{
-            communityId="";
+        } else {
+            communityId = "";
         }
 
         launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
@@ -98,9 +98,9 @@ public class CreatePostFragment extends Fragment {
                         progressDialog.dismiss();
 
                     })).addOnProgressListener(snapshot -> {
-                        double progress = (1.0*100*snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
+                        double progress = (1.0 * 100 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
                         progressDialog.setProgress((int) progress);
-                    }).addOnFailureListener(e ->{
+                    }).addOnFailureListener(e -> {
                         if (!noInternetDialog.isConnected())
                             noInternetDialog.create();
                         progressDialog.dismiss();
@@ -108,8 +108,6 @@ public class CreatePostFragment extends Fragment {
                 });
 
         attachBtn.setOnClickListener(view1 -> launcher.launch("image/*"));
-
-
 
 
         sendBtn.setOnClickListener(view12 -> {
@@ -122,12 +120,12 @@ public class CreatePostFragment extends Fragment {
             progressDialog.setMessage("Uploading...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
-            postData newPost = new postData(userID, etPost.getText().toString(), url,communityId,new Date().toString());
-            Call<ApiResponse> call = APIClient.getInstance()
+            postData newPost = new postData(userID , etPost.getText().toString() , url , communityId , new Date().toString());
+            Call <ApiResponse> call = APIClient.getInstance()
                     .getApiInterface().createPost(newPost);
-            call.enqueue(new Callback<ApiResponse>() {
+            call.enqueue(new Callback <ApiResponse>() {
                 @Override
-                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
                     ApiResponse apiResponse = response.body();
                     if (response.isSuccessful()) {
                         etPost.setText("");
@@ -140,7 +138,7 @@ public class CreatePostFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<ApiResponse> call, Throwable t) {
+                public void onFailure (Call <ApiResponse> call , Throwable t) {
                     if (!noInternetDialog.isConnected())
                         noInternetDialog.create();
                     progressDialog.dismiss();
@@ -152,8 +150,7 @@ public class CreatePostFragment extends Fragment {
     }
 
 
-
-    private void loading() {
+    private void loading () {
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);

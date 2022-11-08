@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private NoInternetDialog noInternetDialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void getFirebaseToken() {
+    private void getFirebaseToken () {
         FirebaseApp.initializeApp(this);
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -66,37 +66,37 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void userLogin(String token) {
+    private void userLogin (String token) {
         String email = userEmail.getText().toString().trim();
         String password = userPassword.getText().toString();
 
-        if (check(email, password)) {
-            User user = new User(email, password, token, true);
-            Call<User> call = APIClient.getInstance().getApiInterface()
+        if (check(email , password)) {
+            User user = new User(email , password , token , true);
+            Call <User> call = APIClient.getInstance().getApiInterface()
                     .loginUser(user);
-            call.enqueue(new Callback<User>() {
+            call.enqueue(new Callback <User>() {
                 @Override
-                public void onResponse(Call<User> call, Response<User> response) {
+                public void onResponse (Call <User> call , Response <User> response) {
                     if (response.isSuccessful()) {
                         appConfig.setLoginStatus(true);
                         appConfig.setAuthToken(response.headers().get("auth_token"));
                         appConfig.setUserID(response.body().get_id());
                         appConfig.setUserEmail(email);
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        startActivity(new Intent(LoginActivity.this , MainActivity.class));
                         finishAffinity();
-                        Toast.makeText(LoginActivity.this, "login..", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this , "login.." , Toast.LENGTH_SHORT).show();
                     } else {
                         if (response.code() == 404) {
-                            Toast.makeText(LoginActivity.this, "Email Not Registered!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this , "Email Not Registered!" , Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(LoginActivity.this, "Invalid credential!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this , "Invalid credential!" , Toast.LENGTH_SHORT).show();
                         }
                     }
                     progressDialog.dismiss();
                 }
 
                 @Override
-                public void onFailure(Call<User> call, Throwable t) {
+                public void onFailure (Call <User> call , Throwable t) {
                     if (!noInternetDialog.isConnected())
                         noInternetDialog.create();
                     progressDialog.dismiss();
@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private boolean check(String email, String password) {
+    private boolean check (String email , String password) {
 
         if (email.isEmpty()) {
             userEmail.setError("Email can't be empty!");
@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
             return true;
     }
 
-    private void initialize() {
+    private void initialize () {
         userEmail = findViewById(R.id.login_email);
         userPassword = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
         noInternetDialog = new NoInternetDialog(this);
     }
 
-    public void onRegisterClick(View View) {
-        startActivity(new Intent(this, signUpActivity.class));
+    public void onRegisterClick (View View) {
+        startActivity(new Intent(this , signUpActivity.class));
     }
 }

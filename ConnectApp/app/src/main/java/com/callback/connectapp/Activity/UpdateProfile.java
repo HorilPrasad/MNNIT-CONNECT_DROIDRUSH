@@ -54,14 +54,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UpdateProfile extends AppCompatActivity {
-    ActivityResultLauncher<String> launcher;
+    ActivityResultLauncher <String> launcher;
     private EditText name, phone, dob;
     private CircleImageView image;
     private Button update;
     private AppConfig appConfig;
     private Spinner gender, branch;
     private ImageButton back;
-    private ArrayAdapter<CharSequence> genderAdapter, branchAdapter;
+    private ArrayAdapter <CharSequence> genderAdapter, branchAdapter;
     private String phoneString, genderString, branchString, dobString, imageUrl = "";
     private FirebaseStorage storage;
     private ProgressDialog progressDialog;
@@ -69,7 +69,7 @@ public class UpdateProfile extends AppCompatActivity {
     private RelativeLayout relativeLayout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_profile);
 
@@ -87,34 +87,34 @@ public class UpdateProfile extends AppCompatActivity {
 
         getData();
 
-        genderAdapter = ArrayAdapter.createFromResource(this, R.array.gender_array, R.layout.spinner_layout);
+        genderAdapter = ArrayAdapter.createFromResource(this , R.array.gender_array , R.layout.spinner_layout);
         genderAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         gender.setAdapter(genderAdapter);
 
-        branchAdapter = ArrayAdapter.createFromResource(this, R.array.course_array, R.layout.spinner_layout);
+        branchAdapter = ArrayAdapter.createFromResource(this , R.array.course_array , R.layout.spinner_layout);
         branchAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         branch.setAdapter(branchAdapter);
 
         gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemSelected (AdapterView <?> adapterView , View view , int i , long l) {
                 genderString = gender.getSelectedItem().toString();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            public void onNothingSelected (AdapterView <?> adapterView) {
 
             }
         });
 
         branch.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemSelected (AdapterView <?> adapterView , View view , int i , long l) {
                 branchString = branch.getSelectedItem().toString();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            public void onNothingSelected (AdapterView <?> adapterView) {
 
             }
         });
@@ -122,9 +122,9 @@ public class UpdateProfile extends AppCompatActivity {
 
         dob.setOnClickListener(view -> {
             Calendar cal = Calendar.getInstance(TimeZone.getDefault());
-            DatePickerDialog datePicker = new DatePickerDialog(this, datePickerListener,
-                    cal.get(Calendar.YEAR),
-                    cal.get(Calendar.MONTH),
+            DatePickerDialog datePicker = new DatePickerDialog(this , datePickerListener ,
+                    cal.get(Calendar.YEAR) ,
+                    cal.get(Calendar.MONTH) ,
                     cal.get(Calendar.DAY_OF_MONTH));
             datePicker.setCancelable(false);
             datePicker.setTitle("Select the date");
@@ -134,7 +134,7 @@ public class UpdateProfile extends AppCompatActivity {
         image.setOnClickListener(v -> {
             CropImage.activity()
                     .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1, 1)
+                    .setAspectRatio(1 , 1)
                     .start(this);
         });
 
@@ -155,28 +155,28 @@ public class UpdateProfile extends AppCompatActivity {
             phoneString = phone.getText().toString();
 
 
-            User user = new User(nameString, appConfig.getUserEmail(), genderString, dobString, phoneString, branchString, imageUrl);
-            Call<ApiResponse> call = APIClient.getInstance()
-                    .getApiInterface().editProfile(appConfig.getUserID(), user);
+            User user = new User(nameString , appConfig.getUserEmail() , genderString , dobString , phoneString , branchString , imageUrl);
+            Call <ApiResponse> call = APIClient.getInstance()
+                    .getApiInterface().editProfile(appConfig.getUserID() , user);
 
 
-            call.enqueue(new Callback<ApiResponse>() {
+            call.enqueue(new Callback <ApiResponse>() {
                 @Override
-                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
 
                     if (response.isSuccessful()) {
-                        startActivity(new Intent(UpdateProfile.this, MainActivity.class));
-                        Toast.makeText(UpdateProfile.this, "profile update", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(UpdateProfile.this , MainActivity.class));
+                        Toast.makeText(UpdateProfile.this , "profile update" , Toast.LENGTH_SHORT).show();
 
                     } else {
-                        Toast.makeText(UpdateProfile.this, "error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateProfile.this , "error" , Toast.LENGTH_SHORT).show();
 
                     }
                     progressDialog.dismiss();
                 }
 
                 @Override
-                public void onFailure(Call<ApiResponse> call, Throwable t) {
+                public void onFailure (Call <ApiResponse> call , Throwable t) {
                     if (!noInternetDialog.isConnected())
                         noInternetDialog.create();
                     progressDialog.dismiss();
@@ -188,7 +188,7 @@ public class UpdateProfile extends AppCompatActivity {
 
     }
 
-    private void loading() {
+    private void loading () {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -199,8 +199,8 @@ public class UpdateProfile extends AppCompatActivity {
     private final DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 
         // when dialog box is closed, below method will be called.
-        public void onDateSet(DatePicker view, int selectedYear,
-                              int selectedMonth, int selectedDay) {
+        public void onDateSet (DatePicker view , int selectedYear ,
+                               int selectedMonth , int selectedDay) {
             selectedMonth = selectedMonth + 1;
             String date = selectedDay + "-" + selectedMonth + "-" + selectedYear;
 
@@ -210,8 +210,8 @@ public class UpdateProfile extends AppCompatActivity {
     };
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult (int requestCode , int resultCode , @Nullable Intent data) {
+        super.onActivityResult(requestCode , resultCode , data);
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && data != null) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
@@ -223,7 +223,7 @@ public class UpdateProfile extends AppCompatActivity {
         }
     }
 
-    private void uploadImageToFirebase(Uri selectedImage) {
+    private void uploadImageToFirebase (Uri selectedImage) {
         storage = FirebaseStorage.getInstance();
         final StorageReference reference = storage.getReference().child("profile").child(appConfig.getUserID());
         loading();
@@ -237,7 +237,7 @@ public class UpdateProfile extends AppCompatActivity {
                 image.setImageURI(selectedImage);
                 progressDialog.dismiss();
             }).addOnFailureListener(e -> {
-                Toast.makeText(this, "failing to get url", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this , "failing to get url" , Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             });
         }).addOnFailureListener(e -> {
@@ -251,23 +251,23 @@ public class UpdateProfile extends AppCompatActivity {
 
     }
 
-    private void getData() {
+    private void getData () {
         loading();
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setTitle("User Data");
         progressDialog.setMessage("Fetching...");
         progressDialog.show();
-        Call<User> call = APIClient.getInstance()
+        Call <User> call = APIClient.getInstance()
                 .getApiInterface().getUser(appConfig.getUserID());
 
-        call.enqueue(new Callback<User>() {
+        call.enqueue(new Callback <User>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse (Call <User> call , Response <User> response) {
                 if (response.isSuccessful()) {
                     name.setText(response.body().getName());
                     phone.setText(response.body().getPhone());
                     dob.setText(response.body().getDob());
-                    if (!Objects.equals(response.body().getImageUrl(), "")) {
+                    if (!Objects.equals(response.body().getImageUrl() , "")) {
                         Picasso.get().load(response.body().getImageUrl()).placeholder(R.drawable.avatar).into(image);
                         imageUrl = response.body().getImageUrl();
                     }
@@ -277,8 +277,8 @@ public class UpdateProfile extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                if(!noInternetDialog.isConnected())
+            public void onFailure (Call <User> call , Throwable t) {
+                if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
                 progressDialog.dismiss();
             }

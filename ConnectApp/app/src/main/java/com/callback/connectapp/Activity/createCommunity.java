@@ -38,7 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class createCommunity extends AppCompatActivity {
-    ActivityResultLauncher<String> launcher;
+    ActivityResultLauncher <String> launcher;
     private EditText name, tag, rule, about;
     private ImageView image;
     private TextView selectImage;
@@ -51,7 +51,7 @@ public class createCommunity extends AppCompatActivity {
     private NoInternetDialog noInternetDialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_community);
 
@@ -71,11 +71,11 @@ public class createCommunity extends AppCompatActivity {
             String cTag = tag.getText().toString().trim();
             String cRule = rule.getText().toString().trim();
             String cAbout = about.getText().toString().trim();
-            List<String> members = new ArrayList<>();
+            List <String> members = new ArrayList <>();
             members.add(appConfig.getUserID());
-            Community community = new Community(appConfig.getUserID(), cName, cAbout, cTag, cRule, imageUrl, members);
+            Community community = new Community(appConfig.getUserID() , cName , cAbout , cTag , cRule , imageUrl , members);
 
-            if (check(cName, cTag, cRule)) {
+            if (check(cName , cTag , cRule)) {
                 communityCreate(community);
             }
         });
@@ -83,17 +83,16 @@ public class createCommunity extends AppCompatActivity {
         image.setOnClickListener(v -> {
             CropImage.activity()
                     .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(16, 9)
+                    .setAspectRatio(16 , 9)
                     .start(this);
         });
-
 
 
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult (int requestCode , int resultCode , @Nullable Intent data) {
+        super.onActivityResult(requestCode , resultCode , data);
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && data != null) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
@@ -105,7 +104,7 @@ public class createCommunity extends AppCompatActivity {
         }
     }
 
-    private void uploadImageToFirebase(Uri selectedImage) {
+    private void uploadImageToFirebase (Uri selectedImage) {
         storage = FirebaseStorage.getInstance();
         final StorageReference reference = storage.getReference().child("profile").child(appConfig.getUserID());
         loading();
@@ -119,7 +118,7 @@ public class createCommunity extends AppCompatActivity {
                 image.setImageURI(selectedImage);
                 progressDialog.dismiss();
             }).addOnFailureListener(e -> {
-                Toast.makeText(this, "failing to get url", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this , "failing to get url" , Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             });
         }).addOnFailureListener(e -> {
@@ -133,35 +132,36 @@ public class createCommunity extends AppCompatActivity {
 
     }
 
-    private void communityCreate(Community community) {
-        Call<ApiResponse> call = APIClient.getInstance().getApiInterface()
+    private void communityCreate (Community community) {
+        Call <ApiResponse> call = APIClient.getInstance().getApiInterface()
                 .createCommunity(community);
-        call.enqueue(new Callback<ApiResponse>() {
+        call.enqueue(new Callback <ApiResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+            public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
                 if (response.isSuccessful())
-                    startActivity(new Intent(createCommunity.this, MainActivity.class));
-                Toast.makeText(createCommunity.this, "community created", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(createCommunity.this , MainActivity.class));
+                Toast.makeText(createCommunity.this , "community created" , Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
+            public void onFailure (Call <ApiResponse> call , Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
             }
         });
 
 
-
     }
-    private void loading() {
+
+    private void loading () {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMax(100);
 
     }
-    private boolean check(String cName, String cTag, String cRule) {
+
+    private boolean check (String cName , String cTag , String cRule) {
 
         if (cName.isEmpty()) {
             name.setError("Name can't be empty!");

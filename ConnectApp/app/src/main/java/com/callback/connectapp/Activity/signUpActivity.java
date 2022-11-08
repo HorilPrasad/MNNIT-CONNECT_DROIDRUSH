@@ -30,7 +30,7 @@ public class signUpActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
@@ -39,28 +39,28 @@ public class signUpActivity extends AppCompatActivity {
 
     }
 
-    private void register() {
+    private void register () {
         String name = userName.getText().toString().trim();
         String email = userEmail.getText().toString().trim();
         String password = userPassword.getText().toString();
         String regNo = userReg.getText().toString().trim();
 
-        if (check(name, email, password, regNo)) {
+        if (check(name , email , password , regNo)) {
             loading();
-            User user = new User(name, email, regNo, password);
-            Call<User> call = APIClient.getInstance()
+            User user = new User(name , email , regNo , password);
+            Call <User> call = APIClient.getInstance()
                     .getApiInterface().registerUser(user);
 
-            call.enqueue(new Callback<User>() {
+            call.enqueue(new Callback <User>() {
                 @Override
-                public void onResponse(Call<User> call, Response<User> response) {
+                public void onResponse (Call <User> call , Response <User> response) {
 
                     if (response.isSuccessful()) {
                         appConfig.setLoginStatus(true);
                         appConfig.setUserEmail(email);
                         appConfig.setUserID(response.body().get_id());
-                        startActivity(new Intent(signUpActivity.this, CreateProfile.class));
-                        Toast.makeText(signUpActivity.this, "Successfully registered......", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(signUpActivity.this , CreateProfile.class));
+                        Toast.makeText(signUpActivity.this , "Successfully registered......" , Toast.LENGTH_LONG).show();
 
                     } else {
                         if (!noInternetDialog.isConnected())
@@ -70,7 +70,7 @@ public class signUpActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<User> call, Throwable t) {
+                public void onFailure (Call <User> call , Throwable t) {
                     if (!noInternetDialog.isConnected())
                         noInternetDialog.create();
                     progressDialog.dismiss();
@@ -80,7 +80,7 @@ public class signUpActivity extends AppCompatActivity {
 
     }
 
-    private boolean check(String name, String email, String password, String regNo) {
+    private boolean check (String name , String email , String password , String regNo) {
         if (name.isEmpty()) {
             userName.setError("Name can't be empty!");
             userName.requestFocus();
@@ -106,7 +106,7 @@ public class signUpActivity extends AppCompatActivity {
         }
     }
 
-    private void loading() {
+    private void loading () {
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("User");
         progressDialog.setMessage("Creating...");
@@ -117,7 +117,7 @@ public class signUpActivity extends AppCompatActivity {
 
     }
 
-    private void initialize() {
+    private void initialize () {
         userName = findViewById(R.id.register_user_name);
         userEmail = findViewById(R.id.register_user_email);
         userPassword = findViewById(R.id.register_user_password);
@@ -127,8 +127,8 @@ public class signUpActivity extends AppCompatActivity {
         noInternetDialog = new NoInternetDialog(this);
     }
 
-    public void onLoginClick(View view) {
-        startActivity(new Intent(this, LoginActivity.class));
+    public void onLoginClick (View view) {
+        startActivity(new Intent(this , LoginActivity.class));
 
     }
 
