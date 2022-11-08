@@ -40,14 +40,10 @@ public class exploreCommunity extends AppCompatActivity {
 
         noInternetDialog = new NoInternetDialog(this);
         recyclerView = findViewById(R.id.community_recyclerview);
-<<<<<<< HEAD
         backButton = findViewById(R.id.explore_community_backBtn);
         progressBar = findViewById(R.id.explore_community_progress);
         homeButton = findViewById(R.id.explore_community_home_btn);
         communityList = new ArrayList<>();
-=======
-        communityList = new ArrayList <>();
->>>>>>> 27321faa335c7336496b464a7a92a61432f369a2
 
         communityAdapter = new CommunityAdapter(this , communityList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

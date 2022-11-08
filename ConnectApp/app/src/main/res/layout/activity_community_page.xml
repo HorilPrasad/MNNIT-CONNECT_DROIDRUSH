@@ -9,7 +9,9 @@
     android:background="@color/login_bk_color"
     android:focusableInTouchMode="true"
     android:gravity="center"
-    tools:context="com.callback.connectapp.Activity.LoginActivity">
+    android:visibility="gone"
+    android:id="@+id/community_page_layout"
+    tools:context=".Activity.LoginActivity">
 
   <ScrollView
       android:layout_width="match_parent"
@@ -163,13 +165,13 @@
           android:id="@+id/community_recyclerview"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_margin="5dp">
+          android:layout_margin="5dp"
+          android:visibility="gone"/>
 
-
-      </androidx.recyclerview.widget.RecyclerView>
 
 
     </LinearLayout>
   </ScrollView>
+
 
 </RelativeLayout>

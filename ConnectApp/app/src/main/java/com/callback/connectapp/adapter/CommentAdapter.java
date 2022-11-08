@@ -53,10 +53,6 @@ public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.Comment
 
         holder.commentText.setText(comment.getComment());
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 27321faa335c7336496b464a7a92a61432f369a2
         holder.time.setText(comment.getTimeIn());
         holder.userImg.setOnClickListener(v -> {
             Toast.makeText(context , comment.getUser() + "" , Toast.LENGTH_SHORT).show();

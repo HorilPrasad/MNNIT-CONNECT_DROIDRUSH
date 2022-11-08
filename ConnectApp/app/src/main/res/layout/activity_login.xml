@@ -91,6 +91,7 @@
                 android:onClick="onRegisterClick"
                 android:text="New user? Register Now"
                 android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/themeColor"
                 android:textSize="17sp"
                 android:textStyle="bold" />

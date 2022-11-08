@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,9 +15,11 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.callback.connectapp.Activity.LoginActivity;
 import com.callback.connectapp.Activity.UpdateProfile;
 import com.callback.connectapp.R;
 import com.callback.connectapp.adapter.HomePostAdapter;
@@ -29,6 +30,7 @@ import com.callback.connectapp.model.postData;
 import com.callback.connectapp.retrofit.APIClient;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
@@ -43,22 +45,20 @@ import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
     private AppConfig appConfig;
-    ActivityResultLauncher <String> launcher;
     ImageView profileImg;
     TextView name, email, phone, regNo, course;
-    CardView editProfile,logoutButton,createPost;
+    ImageView logoutButton;
+    CardView editProfile,createPost;
     FirebaseStorage storage;
     ProgressDialog progressDialog;
 
-
-    private ShimmerFrameLayout mShimmerViewContainer;
     private RecyclerView postList_recycler;
     List <postData> postDataArrayList;
     private HomePostAdapter homePostAdapter;
 
-
     NoInternetDialog noInternetDialog;
     RelativeLayout relativeLayout;
+    BottomNavigationView bottomNavigationView;
 
     public ProfileFragment () {
         // Required empty public constructor
@@ -79,6 +79,10 @@ public class ProfileFragment extends Fragment {
         editProfile = view.findViewById(R.id.profile_edit_button);
         noInternetDialog = new NoInternetDialog(getContext());
         relativeLayout = view.findViewById(R.id.profile_layout);
+        logoutButton = view.findViewById(R.id.logout_button);
+        createPost = view.findViewById(R.id.profile_create_post);
+        bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.profile);
 
         profileImg = view.findViewById(R.id.profile_user_image);
         appConfig = new AppConfig(getContext());
@@ -96,6 +100,20 @@ public class ProfileFragment extends Fragment {
 
         editProfile.setOnClickListener(v -> {
             startActivity(new Intent(getContext() , UpdateProfile.class));
+        });
+
+        logoutButton.setOnClickListener(v -> {
+            appConfig.setUserID("");
+            appConfig.setUserEmail("");
+            appConfig.setLoginStatus(false);
+            appConfig.setAuthToken("");
+            getActivity().finishAffinity();
+            Toast.makeText(getContext(), "Logout", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getContext(), LoginActivity.class));
+        });
+        createPost.setOnClickListener(v -> {
+            FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.container,new CreatePostFragment()).commit();
         });
 
         getUserData();

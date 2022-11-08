@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:id="@+id/profile_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.ProfileFragment">
-
+    tools:context=".fragment.ProfileFragment"
+    android:visibility="gone">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -68,16 +68,17 @@
                     android:src="@drawable/avatar" />
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/logout_button"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
+
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    app:cardCornerRadius="50dp"
-                    app:cardBackgroundColor="@android:color/transparent">
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="32dp"
+                    android:clickable="true"
+                    app:cardCornerRadius="20dp">
                 <ImageButton
+                    android:id="@+id/logout_button"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center"

@@ -24,13 +24,7 @@ public class Comment {
     }
 
 
-<<<<<<< HEAD
-
     public void setUser(String user) {
-=======
-    public void setUser (String user) {
-
->>>>>>> 27321faa335c7336496b464a7a92a61432f369a2
         this.user = user;
     }
 

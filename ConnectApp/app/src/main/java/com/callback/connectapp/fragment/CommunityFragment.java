@@ -23,6 +23,7 @@ import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.Community;
 import com.callback.connectapp.retrofit.APIClient;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,12 +60,11 @@ public class CommunityFragment extends Fragment {
         exploreCommunity = view.findViewById(R.id.exploreCommunity);
         createCommunity = view.findViewById(R.id.createCommunity);
         frameLayout = view.findViewById(R.id.community_fragment_layout);
-<<<<<<< HEAD
         recyclerView=view.findViewById(R.id.joinCommunityRecycler);
         progressBar = view.findViewById(R.id.community_fragment_progress);
-=======
-        recyclerView = view.findViewById(R.id.joinCommunityRecycler);
->>>>>>> 27321faa335c7336496b464a7a92a61432f369a2
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.community);
+
 
         noInternetDialog = new NoInternetDialog(getContext());
 
@@ -111,23 +111,14 @@ public class CommunityFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List <Community> communityList1 = response.body();
 
-<<<<<<< HEAD
                     for(Community community:communityList1){
                         if(community.getMembers().contains(appConfig.getUserID())){
-=======
-
-                    for (Community community : communityList1) {
-                        if (community.getMembers().contains(appConfig.getUserID())) {
->>>>>>> 27321faa335c7336496b464a7a92a61432f369a2
                             communityList.add(community);
                         }
 
                     }
-<<<<<<< HEAD
                     progressBar.setVisibility(View.GONE);
-=======
 
->>>>>>> 27321faa335c7336496b464a7a92a61432f369a2
 
                     communityAdapter.notifyDataSetChanged();
                 }

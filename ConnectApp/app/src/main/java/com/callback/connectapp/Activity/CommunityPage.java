@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,10 +53,12 @@ public class CommunityPage extends AppCompatActivity {
     private List <postData> postDataArrayList;
     private String communityId;
     private NoInternetDialog noInternetDialog;
-    TextView createBy, about;
+    private TextView createBy, about;
     private HomePostAdapter postAdapter;
-    CardView cardView;
+    private CardView cardView;
     private String userId;
+    private RelativeLayout relativeLayout;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -74,6 +78,7 @@ public class CommunityPage extends AppCompatActivity {
         about = findViewById(R.id.about_community);
         noInternetDialog = new NoInternetDialog(this);
         CreatePost = findViewById(R.id.create_post);
+        relativeLayout = findViewById(R.id.community_page_layout);
         communityId = getIntent().getStringExtra("id");
 
         loadCommunity();
@@ -145,6 +150,7 @@ public class CommunityPage extends AppCompatActivity {
     }
 
     private void loadCommunity () {
+        loading();
         Call <Community> call = APIClient.getInstance().getApiInterface()
                 .getCommunityById(communityId);
 
@@ -158,7 +164,6 @@ public class CommunityPage extends AppCompatActivity {
                         Community community = response.body();
                         setCommunityData(community);
 
-
                     }
                 }
             }
@@ -167,6 +172,7 @@ public class CommunityPage extends AppCompatActivity {
             public void onFailure (Call <Community> call , Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
+                progressDialog.dismiss();
             }
         });
 
@@ -188,13 +194,15 @@ public class CommunityPage extends AppCompatActivity {
                 if (response.isSuccessful()) {
 
                     createBy.setText("Created By " + response.body().getName());
+                    relativeLayout.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFailure (Call <User> call , Throwable t) {
-                if (!noInternetDialog.isConnected()) {
-                    noInternetDialog.create();
+                    if (!noInternetDialog.isConnected()) {
+                        noInternetDialog.create();
+                    progressDialog.dismiss();
                 }
             }
         });
@@ -236,10 +244,8 @@ public class CommunityPage extends AppCompatActivity {
                     postAdapter.clear();
                     postDataArrayList.addAll(response.body());
                     postAdapter.notifyDataSetChanged();
-
-                    Log.d("sizeif" , String.valueOf(response.body().size()));
-
-
+                    recyclerView.setVisibility(View.VISIBLE);
+                    progressDialog.dismiss();
                 } else {
 
                     Toast.makeText(CommunityPage.this , "not sucesss..." , Toast.LENGTH_SHORT).show();
@@ -251,10 +257,19 @@ public class CommunityPage extends AppCompatActivity {
             public void onFailure (Call <List <postData>> call , Throwable t) {
                 if (!noInternetDialog.isConnected()) {
                     noInternetDialog.create();
+                    progressDialog.dismiss();
                 }
             }
         });
 
-
+    }
+    private void loading () {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Community");
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMax(100);
+        progressDialog.show();
     }
 }

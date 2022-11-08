@@ -112,6 +112,7 @@
                         android:textStyle="bold"
                         android:textColor="@color/themeColor"
                         android:textSize="17sp"
+                        android:gravity="center"
                         android:text="Already have an account?"
                         android:layout_marginTop="@dimen/loginViewsMargin"
                         android:onClick="onLoginClick"/>

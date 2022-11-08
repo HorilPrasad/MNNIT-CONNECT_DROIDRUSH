@@ -1,5 +1,6 @@
 package com.callback.connectapp.app;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +26,8 @@ public class NoInternetDialog {
         dialog.show();
         Button button = dialog.findViewById(R.id.retry_button);
         button.setOnClickListener(v -> {
-            dialog.dismiss();
+            ((Activity)context).finish();
+            context.startActivity(new Intent(context,context.getClass()));
         });
     }
 

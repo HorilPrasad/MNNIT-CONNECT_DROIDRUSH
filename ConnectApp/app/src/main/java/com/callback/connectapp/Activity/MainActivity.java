@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
@@ -14,21 +16,21 @@ import com.callback.connectapp.fragment.CreatePostFragment;
 import com.callback.connectapp.fragment.HomeFragment;
 import com.callback.connectapp.fragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
     BottomNavigationView bottomNavigationView;
-
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView.setOnItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.home);
+
 
     }
 
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         AppConfig appConfig = new AppConfig(this);
 
         if (!appConfig.isUserLogin())
-            startActivity(new Intent(MainActivity.this , signUpActivity.class));
+            startActivity(new Intent(MainActivity.this , LoginActivity.class));
     }
 
     HomeFragment homeFragment = new HomeFragment();
@@ -47,23 +49,34 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     ProfileFragment profileFragment = new ProfileFragment();
 
     @Override
-    public boolean onNavigationItemSelected (@NonNull MenuItem item) {
-
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container , homeFragment).commit();
+                if (bottomNavigationView.getSelectedItemId() == R.id.home)
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container , homeFragment).commit();
+                else
+                    getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.container , homeFragment).commit();
                 return true;
 
             case R.id.post:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container , createPostFragment).commit();
+                if (bottomNavigationView.getSelectedItemId() == R.id.post)
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container , createPostFragment).commit();
+                else
+                    getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.container , createPostFragment).commit();
                 return true;
 
             case R.id.community:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container , communityFragment).commit();
+                if (bottomNavigationView.getSelectedItemId() == R.id.community)
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container , communityFragment).commit();
+                else
+                    getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.container , communityFragment).commit();
                 return true;
 
             case R.id.profile:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container , profileFragment).commit();
+                if (bottomNavigationView.getSelectedItemId() == R.id.profile)
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container , profileFragment).commit();
+                else
+                    getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.container , profileFragment).commit();
                 return true;
         }
         return false;

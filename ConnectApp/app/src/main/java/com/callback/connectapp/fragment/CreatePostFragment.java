@@ -22,6 +22,7 @@ import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.postData;
 import com.callback.connectapp.retrofit.APIClient;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -68,6 +69,8 @@ public class CreatePostFragment extends Fragment {
         appConfig = new AppConfig(getContext());
         userID = appConfig.getUserID();
         noInternetDialog = new NoInternetDialog(getContext());
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.post);
 
         if (this.getArguments() != null) {
             communityId = getArguments().getString("communityId");

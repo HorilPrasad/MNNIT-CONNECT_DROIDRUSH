@@ -24,6 +24,7 @@ import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.postData;
 import com.callback.connectapp.retrofit.APIClient;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,8 @@ public class HomeFragment extends Fragment {
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_container);
         postList_recycler = view.findViewById(R.id.homeFeedRecycler);
         noInternetDialog = new NoInternetDialog(getContext());
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.home);
 
         postDataArrayList = new ArrayList <postData>();
 
