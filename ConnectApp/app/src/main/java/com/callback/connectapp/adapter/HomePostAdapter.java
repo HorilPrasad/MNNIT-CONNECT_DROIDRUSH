@@ -67,6 +67,7 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
 
         final String url = postDataArrayList.get(position).getImage();
         holder.postImage.setImageDrawable(null);
+        holder.postImage.setVisibility(View.GONE);
 //        holder.communityName.setText(userPost.getCommunityName());
         holder.likeCount.setText("likes " + userPost.getLikeCount(userPost.getLikes()));
         holder.commentCount.setText("comments " + userPost.getCommenntCount(userPost.getComments()));
