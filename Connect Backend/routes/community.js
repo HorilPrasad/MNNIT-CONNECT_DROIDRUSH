@@ -2,6 +2,8 @@ const Community = require('../models/Community');
 const express = require('express')
 const router = express.Router();
 
+const Post=require('../models/Post')
+
 //create community Post method
 
 router.post('/create',async(req,res,next)=>{
@@ -43,7 +45,7 @@ router.get('/:id',async(req,res)=>{
     }
 });
 
-router.put('/addmember/:id',async(req,res)=>{
+router.patch('/addmember/:id',async(req,res)=>{
 
 console.log(res.body);
     try{
@@ -52,10 +54,11 @@ console.log(res.body);
 
         if(community){
 
-            await community.updateOne({ $push: { members: req.body.userId } });
+            await community.updateOne({ $push: { members: req.body._id } });
 
             res.status(200).send({
                 status: 200,
+
                 message: "member added",
               });
         }else{
@@ -73,7 +76,7 @@ router.get('/post/:id',async(req,res)=>{
 
     try{
 
-        const posts =await post.findOne({communityId : req.params.id})
+        const posts =await Post.find({communityId : req.params.id})
         if (posts) {
             res.status(200).send(posts);
           } else {
