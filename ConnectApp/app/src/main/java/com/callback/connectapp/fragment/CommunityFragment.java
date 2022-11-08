@@ -41,40 +41,40 @@ public class CommunityFragment extends Fragment {
     private NoInternetDialog noInternetDialog;
     AppConfig appConfig;
 
-    public CommunityFragment() {
+    public CommunityFragment () {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView (LayoutInflater inflater , ViewGroup container ,
+                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
 
-        View view = inflater.inflate(R.layout.fragment_community, container, false);
-          appConfig =new AppConfig(getContext());
+        View view = inflater.inflate(R.layout.fragment_community , container , false);
+        appConfig = new AppConfig(getContext());
         exploreCommunity = view.findViewById(R.id.exploreCommunity);
         createCommunity = view.findViewById(R.id.createCommunity);
         frameLayout = view.findViewById(R.id.community_fragment_layout);
-        recyclerView=view.findViewById(R.id.joinCommunityRecycler);
+        recyclerView = view.findViewById(R.id.joinCommunityRecycler);
 
         noInternetDialog = new NoInternetDialog(getContext());
 
         communityList = new ArrayList <>();
 
-        communityAdapter = new CommunityAdapter(getContext(), communityList);
+        communityAdapter = new CommunityAdapter(getContext() , communityList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(communityAdapter);
 
-          fetchCommunity();
+        fetchCommunity();
 
         exploreCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick (View view) {
 
-                  Intent i = new Intent(getContext(), exploreCommunity.class);
+                Intent i = new Intent(getContext() , exploreCommunity.class);
 
                 startActivity(i);
             }
@@ -82,9 +82,9 @@ public class CommunityFragment extends Fragment {
 
         createCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick (View view) {
 
-                Intent i = new Intent(getContext(), createCommunity.class);
+                Intent i = new Intent(getContext() , createCommunity.class);
 
                 startActivity(i);
             }
@@ -94,24 +94,23 @@ public class CommunityFragment extends Fragment {
         return view;
     }
 
-    private void fetchCommunity() {
-        Call <List<Community>> call = APIClient.getInstance().getApiInterface()
+    private void fetchCommunity () {
+        Call <List <Community>> call = APIClient.getInstance().getApiInterface()
                 .getAllCommunities();
 
-        call.enqueue(new Callback <List<Community>>() {
+        call.enqueue(new Callback <List <Community>>() {
             @Override
-            public void onResponse(Call<List<Community>> call, Response <List<Community>> response) {
+            public void onResponse (Call <List <Community>> call , Response <List <Community>> response) {
                 if (response.isSuccessful()) {
-                    List<Community> communityList1 = response.body();
+                    List <Community> communityList1 = response.body();
 
 
-                    for(Community community:communityList1){
-                        if(community.getMembers().contains(appConfig.getUserID())){
+                    for (Community community : communityList1) {
+                        if (community.getMembers().contains(appConfig.getUserID())) {
                             communityList.add(community);
                         }
 
                     }
-
 
 
                     communityAdapter.notifyDataSetChanged();
@@ -119,7 +118,7 @@ public class CommunityFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<Community>> call, Throwable t) {
+            public void onFailure (Call <List <Community>> call , Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
             }

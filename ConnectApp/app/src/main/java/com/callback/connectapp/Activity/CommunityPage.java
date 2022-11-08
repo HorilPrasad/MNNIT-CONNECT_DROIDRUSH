@@ -59,6 +59,8 @@ public class CommunityPage extends AppCompatActivity {
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_community_page);
         communityImg = findViewById(R.id.communityPicture);
         memberCount = findViewById(R.id.noMember);

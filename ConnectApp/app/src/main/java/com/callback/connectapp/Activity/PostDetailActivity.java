@@ -39,7 +39,7 @@ import retrofit2.Response;
 
 public class PostDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private List<Comment> commentList;
+    private List <Comment> commentList;
 
     private AppConfig appConfig;
     private CommentAdapter commentAdapter;
@@ -53,7 +53,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private RelativeLayout constraintLayout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
         appConfig = new AppConfig(this);
@@ -63,10 +63,10 @@ public class PostDetailActivity extends AppCompatActivity {
         time = findViewById(R.id.textView6);
         userName = findViewById(R.id.textView4);
         postImage = findViewById(R.id.imageView3);
-        commentList = new ArrayList<Comment>();
+        commentList = new ArrayList <Comment>();
         sendCommentBtn = findViewById(R.id.sendcomment);
         commentText = findViewById(R.id.typecommet);
-        commentAdapter = new CommentAdapter(this, commentList);
+        commentAdapter = new CommentAdapter(this , commentList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(commentAdapter);
@@ -79,12 +79,12 @@ public class PostDetailActivity extends AppCompatActivity {
             String text = commentText.getText().toString();
 
             if (!text.isEmpty()) {
-                Comment comment = new Comment(appConfig.getUserID(), new Date().toString(), text);
-                Call<ApiResponse> call = APIClient.getInstance()
-                        .getApiInterface().commentPost(PostId, comment);
-                call.enqueue(new Callback<ApiResponse>() {
+                Comment comment = new Comment(appConfig.getUserID() , new Date().toString() , text);
+                Call <ApiResponse> call = APIClient.getInstance()
+                        .getApiInterface().commentPost(PostId , comment);
+                call.enqueue(new Callback <ApiResponse>() {
                     @Override
-                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                    public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
                         if (response.isSuccessful()) {
                             commentList.add(comment);
                             commentAdapter.notifyDataSetChanged();
@@ -93,7 +93,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                    public void onFailure (Call <ApiResponse> call , Throwable t) {
                         if (!noInternetDialog.isConnected())
                             noInternetDialog.create();
                     }
@@ -102,20 +102,20 @@ public class PostDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchAllComment() {
+    private void fetchAllComment () {
         loading();
-        Call<postData> call = APIClient.getInstance()
+        Call <postData> call = APIClient.getInstance()
                 .getApiInterface().getPost(PostId);
 
-        call.enqueue(new Callback<postData>() {
+        call.enqueue(new Callback <postData>() {
             @Override
-            public void onResponse(Call<postData> call, Response<postData> response) {
+            public void onResponse (Call <postData> call , Response <postData> response) {
                 if (response.isSuccessful()) {
 
-                    List<Comment> comment = response.body().getComments();
+                    List <Comment> comment = response.body().getComments();
                     postText.setText(response.body().getInfo());
                     String postImg = response.body().getImage();
-                    if (!Objects.equals(postImg, "")) {
+                    if (!Objects.equals(postImg , "")) {
                         postImage.setVisibility(View.VISIBLE);
                         Picasso.get().load(postImg).into(postImage);
                     }
@@ -123,16 +123,16 @@ public class PostDetailActivity extends AppCompatActivity {
 
                     String userId = response.body().getUserId();
 
-                    Call<User> cal = APIClient.getInstance()
+                    Call <User> cal = APIClient.getInstance()
                             .getApiInterface().getUser(userId);
-                    cal.enqueue(new Callback<User>() {
+                    cal.enqueue(new Callback <User>() {
                         @Override
-                        public void onResponse(Call<User> call, Response<User> response) {
+                        public void onResponse (Call <User> call , Response <User> response) {
                             if (response.isSuccessful()) {
 
                                 userName.setText(response.body().getName());
 
-                                if (!Objects.equals(response.body().getImageUrl(), "")) {
+                                if (!Objects.equals(response.body().getImageUrl() , "")) {
                                     profileImg.setVisibility(View.VISIBLE);
                                     Picasso.get().load(response.body().getImageUrl()).into(profileImg);
                                 }
@@ -142,7 +142,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<User> call, Throwable t) {
+                        public void onFailure (Call <User> call , Throwable t) {
                             if (!noInternetDialog.isConnected())
                                 noInternetDialog.create();
                             progressDialog.dismiss();
@@ -156,7 +156,7 @@ public class PostDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<postData> call, Throwable t) {
+            public void onFailure (Call <postData> call , Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
                 progressDialog.dismiss();
@@ -165,7 +165,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
     }
 
-    private void loading(){
+    private void loading () {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);

@@ -42,7 +42,7 @@ import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
     private AppConfig appConfig;
-    ActivityResultLauncher<String> launcher;
+    ActivityResultLauncher <String> launcher;
     ImageView profileImg;
     TextView name, email, phone, regNo, course;
     ImageButton editProfile;
@@ -59,15 +59,15 @@ public class ProfileFragment extends Fragment {
     NoInternetDialog noInternetDialog;
     RelativeLayout relativeLayout;
 
-    public ProfileFragment() {
+    public ProfileFragment () {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+    public View onCreateView (LayoutInflater inflater , ViewGroup container ,
+                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_profile , container , false);
 
 
         name = view.findViewById(R.id.name);
@@ -88,13 +88,13 @@ public class ProfileFragment extends Fragment {
 
         postDataArrayList = new ArrayList <postData>();
 
-        homePostAdapter = new HomePostAdapter(getContext(), postDataArrayList);
+        homePostAdapter = new HomePostAdapter(getContext() , postDataArrayList);
         postList_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
         postList_recycler.setHasFixedSize(true);
         postList_recycler.setAdapter(homePostAdapter);
 
         editProfile.setOnClickListener(v -> {
-            startActivity(new Intent(getContext(), UpdateProfile.class));
+            startActivity(new Intent(getContext() , UpdateProfile.class));
         });
 
         getUserData();
@@ -104,13 +104,13 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    private void getUserData() {
+    private void getUserData () {
         loading();
-        Call<User> call = APIClient.getInstance().getApiInterface()
+        Call <User> call = APIClient.getInstance().getApiInterface()
                 .getUser(appConfig.getUserID());
-        call.enqueue(new Callback<User>() {
+        call.enqueue(new Callback <User>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse (Call <User> call , Response <User> response) {
                 if (response.isSuccessful()) {
                     name.setText(response.body().getName());
                     email.setText(response.body().getEmail());
@@ -118,7 +118,7 @@ public class ProfileFragment extends Fragment {
                     regNo.setText(response.body().getRegNo());
                     course.setText(response.body().getBranch());
 
-                    if (!Objects.equals(response.body().getImageUrl(), ""))
+                    if (!Objects.equals(response.body().getImageUrl() , ""))
                         Picasso.get().load(response.body().getImageUrl()).placeholder(R.drawable.avatar).into(profileImg);
 
                     relativeLayout.setVisibility(View.VISIBLE);
@@ -130,7 +130,7 @@ public class ProfileFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure (Call <User> call , Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
                 progressDialog.dismiss();
@@ -139,44 +139,41 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    private void FetchAllPost() {
-        Call<List<postData>> call = APIClient.getInstance()
+    private void FetchAllPost () {
+        Call <List <postData>> call = APIClient.getInstance()
                 .getApiInterface().getAllPosts();
 
-        call.enqueue(new Callback<List<postData>>() {
+        call.enqueue(new Callback <List <postData>>() {
             @Override
-            public void onResponse(Call<List<postData>> call, Response<List<postData>> response) {
+            public void onResponse (Call <List <postData>> call , Response <List <postData>> response) {
 
                 if (response.isSuccessful()) {
 
-                    List<postData> po = response.body();
+                    List <postData> po = response.body();
                     homePostAdapter.clear();
-                    for(int i=0;i<po.size();i++){
+                    for (int i = 0; i < po.size(); i++) {
 
-                        postData data=po.get(i);
-                        if(Objects.equals(data.getUserId(),appConfig.getUserID()))
-                        {
+                        postData data = po.get(i);
+                        if (Objects.equals(data.getUserId() , appConfig.getUserID())) {
                             postDataArrayList.add(data);
                         }
                     }
 
 
-
-
                     homePostAdapter.notifyDataSetChanged();
 
-                    Log.d("sizeif", String.valueOf(response.body().size()));
+                    Log.d("sizeif" , String.valueOf(response.body().size()));
 
                 } else {
 
-                    Toast.makeText(getContext(), "not sucesss...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext() , "not sucesss..." , Toast.LENGTH_SHORT).show();
 
                 }
             }
 
             @Override
-            public void onFailure(Call<List<postData>> call, Throwable t) {
-                Toast.makeText(getContext(), "fail...", Toast.LENGTH_SHORT).show();
+            public void onFailure (Call <List <postData>> call , Throwable t) {
+                Toast.makeText(getContext() , "fail..." , Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -185,7 +182,7 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    private void loading() {
+    private void loading () {
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle("Fetch");
         progressDialog.setMessage("User data...");

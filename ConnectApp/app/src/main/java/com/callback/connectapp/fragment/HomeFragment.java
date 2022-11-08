@@ -37,30 +37,30 @@ public class HomeFragment extends Fragment {
 
     private ShimmerFrameLayout mShimmerViewContainer;
     private RecyclerView postList_recycler;
-    List<postData> postDataArrayList;
+    List <postData> postDataArrayList;
     private HomePostAdapter homePostAdapter;
     private NoInternetDialog noInternetDialog;
 
-    public HomeFragment() {
+    public HomeFragment () {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView (LayoutInflater inflater , ViewGroup container ,
+                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
 
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home , container , false);
 
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_container);
         postList_recycler = view.findViewById(R.id.homeFeedRecycler);
         noInternetDialog = new NoInternetDialog(getContext());
 
-        postDataArrayList = new ArrayList<postData>();
+        postDataArrayList = new ArrayList <postData>();
 
-        homePostAdapter = new HomePostAdapter(getContext(), postDataArrayList);
+        homePostAdapter = new HomePostAdapter(getContext() , postDataArrayList);
         postList_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
         postList_recycler.setHasFixedSize(true);
         postList_recycler.setAdapter(homePostAdapter);
@@ -71,18 +71,18 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    private void fetchAllPost() {
+    private void fetchAllPost () {
 
-        Call<List<postData>> call = APIClient.getInstance()
+        Call <List <postData>> call = APIClient.getInstance()
                 .getApiInterface().getAllPosts();
 
-        call.enqueue(new Callback<List<postData>>() {
+        call.enqueue(new Callback <List <postData>>() {
             @Override
-            public void onResponse(Call<List<postData>> call, Response<List<postData>> response) {
+            public void onResponse (Call <List <postData>> call , Response <List <postData>> response) {
 
                 if (response.isSuccessful()) {
 
-                    List<postData> po = response.body();
+                    List <postData> po = response.body();
 
                     homePostAdapter.clear();
 
@@ -95,13 +95,13 @@ public class HomeFragment extends Fragment {
                     mShimmerViewContainer.setVisibility(View.GONE);
                 } else {
 
-                    Toast.makeText(getContext(), "not sucesss...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext() , "not sucesss..." , Toast.LENGTH_SHORT).show();
 
                 }
             }
 
             @Override
-            public void onFailure(Call<List<postData>> call, Throwable t) {
+            public void onFailure (Call <List <postData>> call , Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
 
@@ -112,13 +112,13 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
+    public void onResume () {
         super.onResume();
         mShimmerViewContainer.startShimmerAnimation();
     }
 
     @Override
-    public void onPause() {
+    public void onPause () {
         mShimmerViewContainer.stopShimmerAnimation();
         super.onPause();
     }

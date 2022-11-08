@@ -34,15 +34,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postViewHolder> {
+public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postViewHolder> {
 
     Context context;
-    List<postData> postDataArrayList;
+    List <postData> postDataArrayList;
     AppConfig appConfig;
     NoInternetDialog noInternetDialog;
 
 
-    public HomePostAdapter(Context context, List<postData> postDataArrayList) {
+    public HomePostAdapter (Context context , List <postData> postDataArrayList) {
         this.context = context;
         this.postDataArrayList = postDataArrayList;
         appConfig = new AppConfig(context);
@@ -52,22 +52,22 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
 
     @NonNull
     @Override
-    public postViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+    public postViewHolder onCreateViewHolder (@NonNull final ViewGroup parent , final int viewType) {
 
-        final View view = LayoutInflater.from(context).inflate(R.layout.post_item, parent, false);
+        final View view = LayoutInflater.from(context).inflate(R.layout.post_item , parent , false);
 
         return new postViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final postViewHolder holder, final int position) {
+    public void onBindViewHolder (@NonNull final postViewHolder holder , final int position) {
 
 
         final postData userPost = postDataArrayList.get(position);
 
         final String url = postDataArrayList.get(position).getImage();
         holder.postImage.setImageDrawable(null);
-
+        holder.postImage.setVisibility(View.GONE);
 
 //        holder.communityName.setText(userPost.getCommunityName());
         holder.likeCount.setText("likes " + userPost.getLikeCount(userPost.getLikes()));
@@ -77,11 +77,10 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
         holder.time.setText(userPost.getTimeIn());
 
 
-        if (!Objects.equals(url, "")) {
+        if (!Objects.equals(url , "")) {
             holder.postImage.setVisibility(View.VISIBLE);
             Picasso.get().load(url).into(holder.postImage);
         }
-
 
 
         String userId = appConfig.getUserID();
@@ -102,17 +101,18 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
             holder.DislikeBtn.setImageResource(R.drawable.dislike);
         }
 
-        Call<User> call = APIClient.getInstance()
+        updatePost(userPost , holder);
+        Call <User> call = APIClient.getInstance()
                 .getApiInterface().getUser(userPost.getUserId());
-        call.enqueue(new Callback<User>() {
+        call.enqueue(new Callback <User>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse (Call <User> call , Response <User> response) {
                 if (response.isSuccessful()) {
 
                     holder.userName.setText(response.body().getName());
                     String url = "";
                     url = response.body().getImageUrl();
-                    if (!Objects.equals(url, "")) {
+                    if (!Objects.equals(url , "")) {
 
                         Picasso.get().load(url).placeholder(R.drawable.avatar)
                                 .into(holder.profileImg);
@@ -122,7 +122,7 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure (Call <User> call , Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
             }
@@ -132,148 +132,115 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
 
             User user = new User();
             user.set_id(appConfig.getUserID());
-            Call<ApiResponse> call1 = APIClient.getInstance()
-                    .getApiInterface().likePost(userPost.get_id(), user);
+            Call <ApiResponse> call1 = APIClient.getInstance()
+                    .getApiInterface().likePost(userPost.get_id() , user);
 
-
-            if (userPost.getDislikes().contains(appConfig.getUserID())) {
-
-                Call<ApiResponse> cal = APIClient.getInstance()
-                        .getApiInterface().dislikePost(userPost.get_id(), user);
-
-                cal.enqueue(new Callback<ApiResponse>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse> call1, Response<ApiResponse> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                            Log.d("api", response.body().toString());
-
-                            int size = userPost.getDislikes().size();
-                            if (response.body().getStatus() == 200) {
-
-                                holder.DislikeBtn.setImageResource(R.drawable.filledislike);
-                            } else {
-
-
-                                holder.DislikeBtn.setImageResource(R.drawable.dislike);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse> call1, Throwable t) {
-                        if (!noInternetDialog.isConnected())
-                            noInternetDialog.create();
-                    }
-                });
-
-            }
-
-
-            call1.enqueue(new Callback<ApiResponse>() {
+            call1.enqueue(new Callback <ApiResponse>() {
                 @Override
-                public void onResponse(Call<ApiResponse> call1, Response<ApiResponse> response) {
+                public void onResponse (Call <ApiResponse> call1 , Response <ApiResponse> response) {
 
                     if (response.isSuccessful()) {
-                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.d("ss", response.body().toString());
-
-                        if (response.body().getStatus() == 200) {
-//                                holder.likeCount.setText("likes "+String.valueOf(userPost.getLikes().size()+1));
-                            holder.LikeBtn.setImageResource(R.drawable.filledlike);
-                        } else {
-//                                holder.likeCount.setText("likes"+String.valueOf(userPost.getLikes().size()-1));
-                            holder.LikeBtn.setImageResource(R.drawable.like);
-                        }
+                        Toast.makeText(context , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                        updatePost(userPost , holder);
 
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ApiResponse> call1, Throwable t) {
+                public void onFailure (Call <ApiResponse> call1 , Throwable t) {
                     if (!noInternetDialog.isConnected())
                         noInternetDialog.create();
                 }
             });
 
-            notifyDataSetChanged();
+
         });
 
         holder.DislikeBtn.setOnClickListener(view -> {
             User user = new User();
             user.set_id(appConfig.getUserID());
-            Call<ApiResponse> call12 = APIClient.getInstance()
-                    .getApiInterface().dislikePost(userPost.get_id(), user);
+            Call <ApiResponse> call12 = APIClient.getInstance()
+                    .getApiInterface().dislikePost(userPost.get_id() , user);
 
-            if (userPost.getLikes().contains(appConfig.getUserID())) {
-
-                Call<ApiResponse> cal = APIClient.getInstance()
-                        .getApiInterface().likePost(userPost.get_id(), user);
-
-                cal.enqueue(new Callback <ApiResponse>() {
-                    @Override
-                    public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
-                        if(response.isSuccessful()){
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure (Call <ApiResponse> call , Throwable t) {
-
-                    }
-                });
-
-                holder.LikeBtn.setImageResource(R.drawable.like);
-
-            }
-
-
-            call12.enqueue(new Callback<ApiResponse>() {
+            call12.enqueue(new Callback <ApiResponse>() {
                 @Override
-                public void onResponse(Call<ApiResponse> call12, Response<ApiResponse> response) {
+                public void onResponse (Call <ApiResponse> call12 , Response <ApiResponse> response) {
                     if (response.isSuccessful()) {
-                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.d("api", response.body().toString());
-
-                        int size = userPost.getDislikes().size();
-                        if (response.body().getStatus() == 200) {
-
-                            holder.DislikeBtn.setImageResource(R.drawable.filledislike);
-                        } else {
-
-
-                            holder.DislikeBtn.setImageResource(R.drawable.dislike);
-                        }
+                        Toast.makeText(context , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                        updatePost(userPost , holder);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ApiResponse> call12, Throwable t) {
+                public void onFailure (Call <ApiResponse> call12 , Throwable t) {
                     if (!noInternetDialog.isConnected())
                         noInternetDialog.create();
                 }
             });
 
-            notifyDataSetChanged();
+
         });
         holder.commentBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(context, PostDetailActivity.class);
-            intent.putExtra("PostId", userPost.get_id());
+            Intent intent = new Intent(context , PostDetailActivity.class);
+            intent.putExtra("PostId" , userPost.get_id());
             context.startActivity(intent);
         });
         holder.constraintLayout.setVisibility(View.VISIBLE);
     }
 
+    private void updatePost (postData userPost , postViewHolder holder) {
+
+        Call <postData> call12 = APIClient.getInstance()
+                .getApiInterface().getPost(userPost.get_id());
+
+        call12.enqueue(new Callback <postData>() {
+            @Override
+            public void onResponse (Call <postData> call , Response <postData> response) {
+
+                if (response.isSuccessful()) {
+
+                    postData post = response.body();
+
+                    holder.likeCount.setText("likes " + post.getLikeCount(post.getLikes()));
+                    holder.commentCount.setText("comments " + post.getCommenntCount(post.getComments()));
+                    holder.dislikeCount.setText("dislike " + post.getDislikeCount(post.getDislikes()));
+
+                    String userId = appConfig.getUserID();
+
+                    boolean flag = post.getLikes().contains(userId);
+
+                    if (flag) {
+                        holder.LikeBtn.setImageResource(R.drawable.filledlike);
+                    } else {
+                        holder.LikeBtn.setImageResource(R.drawable.like);
+                    }
+
+                    Boolean f = post.getDislikes().contains(userId);
+                    if (post.getDislikes().contains(userId)) {
+
+                        holder.DislikeBtn.setImageResource(R.drawable.filledislike);
+                    } else {
+                        holder.DislikeBtn.setImageResource(R.drawable.dislike);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure (Call <postData> call , Throwable t) {
+                if (!noInternetDialog.isConnected())
+                    noInternetDialog.create();
+            }
+        });
+    }
 
 
     @Override
-    public int getItemCount() {
+    public int getItemCount () {
 
         return postDataArrayList.size();
     }
 
-    public void clear() {
+    public void clear () {
         postDataArrayList.clear();
         notifyDataSetChanged();
     }
@@ -283,7 +250,8 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
         TextView userName, communityName, postText, likeCount, dislikeCount, commentCount, time;
         ImageView profileImg, postImage, shareBtn, LikeBtn, DislikeBtn, commentBtn;
         ConstraintLayout constraintLayout;
-        public postViewHolder(@NonNull final View itemView) {
+
+        public postViewHolder (@NonNull final View itemView) {
             super(itemView);
 
             userName = itemView.findViewById(R.id.textView4);
