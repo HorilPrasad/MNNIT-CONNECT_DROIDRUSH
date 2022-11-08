@@ -17,11 +17,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.callback.connectapp.Activity.CommunityPage;
 import com.callback.connectapp.R;
 import com.callback.connectapp.model.Community;
+import com.callback.connectapp.model.User;
+import com.callback.connectapp.retrofit.APIClient;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.CommunityViewHolder> {
 
@@ -48,17 +54,35 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         holder.communityName.setText(community.getName());
 
         if (!Objects.equals(community.getImage(), ""))
-            Picasso.get().load(community.getImage()).placeholder(R.drawable.avatar).into(holder.communityImage);
+            Picasso.get().load(community.getImage()).placeholder(R.drawable.background).into(holder.communityImage);
 
         holder.itemLayout.setOnClickListener(view -> {
 
             Intent intent =new Intent(context, CommunityPage.class);
             intent.putExtra("id", community.get_id());
             context.startActivity(intent);
-            Toast.makeText(context,community.get_id(),Toast.LENGTH_SHORT).show();
 
 
     });
+
+        Call <User> call = APIClient.getInstance().getApiInterface()
+                .getUser(community.getUserId());
+
+        call.enqueue(new Callback <User>() {
+            @Override
+            public void onResponse (Call <User> call , Response <User> response) {
+
+                if(response.isSuccessful()){
+
+                    holder.communityCreated.setText("Created By "+response.body().getName());
+                }
+            }
+
+            @Override
+            public void onFailure (Call <User> call , Throwable t) {
+
+            }
+        });
 
     }
 

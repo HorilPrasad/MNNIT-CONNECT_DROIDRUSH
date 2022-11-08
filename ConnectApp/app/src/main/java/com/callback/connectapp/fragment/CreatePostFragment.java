@@ -42,6 +42,7 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -137,7 +138,7 @@ public class CreatePostFragment extends Fragment {
             progressDialog.setMessage("Uploading...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
-            postData newPost = new postData(userID, etPost.getText().toString(), url,communityId);
+            postData newPost = new postData(userID, etPost.getText().toString(), url,communityId,new Date().toString());
             Call<ApiResponse> call = APIClient.getInstance()
                     .getApiInterface().createPost(newPost);
             call.enqueue(new Callback<ApiResponse>() {

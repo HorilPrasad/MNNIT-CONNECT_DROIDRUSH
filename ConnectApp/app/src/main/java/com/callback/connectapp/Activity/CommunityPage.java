@@ -1,6 +1,7 @@
 package com.callback.connectapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -50,8 +51,9 @@ public class CommunityPage extends AppCompatActivity {
     private List <postData> postDataArrayList;
     private String communityId;
     private NoInternetDialog noInternetDialog;
-
+    TextView createBy, about;
     private HomePostAdapter postAdapter;
+    CardView cardView;
     private String userId;
 
     @Override
@@ -61,13 +63,15 @@ public class CommunityPage extends AppCompatActivity {
         communityImg = findViewById(R.id.communityPicture);
         memberCount = findViewById(R.id.noMember);
         joinBtn = findViewById(R.id.join_button);
-        inviteBtn = findViewById(R.id.invite_button);
+        cardView = findViewById(R.id.cardView);
         recyclerView = findViewById(R.id.community_recyclerview);
         communityName = findViewById(R.id.name_community);
         appConfig = new AppConfig(this);
         userId = appConfig.getUserID();
+        createBy = findViewById(R.id.createdBy);
+        about = findViewById(R.id.about_community);
         noInternetDialog = new NoInternetDialog(this);
-        CreatePost=findViewById(R.id.create_post);
+        CreatePost = findViewById(R.id.create_post);
         communityId = getIntent().getStringExtra("id");
 
         loadCommunity();
@@ -81,61 +85,59 @@ public class CommunityPage extends AppCompatActivity {
         LoadPost();
 
 
+        joinBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
 
-            joinBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick (View view) {
+                if (joinBtn.getText() == "join") {
 
-                    if (joinBtn.getText()=="join") {
+                    User user = new User();
+                    user.set_id(appConfig.getUserID());
+                    Call <ApiResponse> call = APIClient.getInstance().getApiInterface()
+                            .addUserToCommunity(communityId , user);
 
-                        User user=new User();
-                        user.set_id(appConfig.getUserID());
-                        Call <ApiResponse> call = APIClient.getInstance().getApiInterface()
-                                .addUserToCommunity(communityId , user);
+                    call.enqueue(new Callback <ApiResponse>() {
+                        @Override
+                        public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
+                            if (response.isSuccessful()) {
 
-                        call.enqueue(new Callback <ApiResponse>() {
-                            @Override
-                            public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
-                                if (response.isSuccessful()) {
+                                if (response.code() == 200) {
+                                    joinBtn.setText("joined");
+                                    cardView.setVisibility(View.VISIBLE);
+                                    CreatePost.setVisibility(View.VISIBLE);
+                                    Toast.makeText(CommunityPage.this , "joined" , Toast.LENGTH_SHORT).show();
 
-                                    if (response.code() == 200) {
-                                        joinBtn.setText("joined");
-                                        CreatePost.setVisibility(View.VISIBLE);
-                                        Toast.makeText(CommunityPage.this , "joined" , Toast.LENGTH_SHORT).show();
-
-                                    }
                                 }
                             }
+                        }
 
-                            @Override
-                            public void onFailure (Call <ApiResponse> call , Throwable t) {
-                                if (!noInternetDialog.isConnected())
-                                    noInternetDialog.create();
-                            }
-                        });
+                        @Override
+                        public void onFailure (Call <ApiResponse> call , Throwable t) {
+                            if (!noInternetDialog.isConnected())
+                                noInternetDialog.create();
+                        }
+                    });
 
-                    }
                 }
-            });
-
-            if(joinBtn.getText()=="joined"){
-                CreatePost.setVisibility(View.VISIBLE);
             }
+        });
+
+        if (joinBtn.getText() == "joined") {
+            cardView.setVisibility(View.VISIBLE);
+            CreatePost.setVisibility(View.VISIBLE);
+        }
 
 
-
-         CreatePost.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick (View view) {
-
-
-                 Intent i=new Intent(CommunityPage.this,CreateCommunityPost.class);
-                 i.putExtra("communityId",communityId);
-                 startActivity(i);
-             }
-         });
+        CreatePost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
 
 
+                Intent i = new Intent(CommunityPage.this , CreateCommunityPost.class);
+                i.putExtra("communityId" , communityId);
+                startActivity(i);
+            }
+        });
 
 
     }
@@ -153,7 +155,6 @@ public class CommunityPage extends AppCompatActivity {
                     if (response.code() == 200) {
                         Community community = response.body();
                         setCommunityData(community);
-                        Toast.makeText(CommunityPage.this , community.getName() , Toast.LENGTH_SHORT).show();
 
 
                     }
@@ -167,96 +168,43 @@ public class CommunityPage extends AppCompatActivity {
             }
         });
 
-//        memberCount.setText(ob.getMembers().size());
-//        communityName.setText(ob.getName());
-//
-//
-//        if (!Objects.equals(ob.getImage() , "")) {
-//
-//            Picasso.get().load(ob.getImage()).into(communityImg);
-//        }
-//
-//
-//        if (ob.getMembers().contains(userId)) {
-//
-//            userId = appConfig.getUserID();
-//
-//            if (ob.getMembers().contains(userId)) {
-//                joinBtn.setText("joined");
-//                LoadPost();
-//            } else {
-//                joinBtn.setText("join");
-//            }
-//
-//            if (joinBtn.getText() == "join") {
-//                joinBtn.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick (View view) {
-//
-//
-//                        joinBtn.setText("joined");
-//                        ob.getMembers().add(appConfig.getUserID());
-//
-//
-//                    }
-//                });
-//
-//
-//                CreatePost.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick (View view) {
-//
-//
-//                        if (joinBtn.getText() == "join") {
-//                            joinBtn.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick (View view) {
-//
-//                                    joinBtn.setText("joined");
-//                                    ob.getMembers().add(appConfig.getUserID());
-//                                    LoadPost();
-//
-//                                }
-//                            });
-//
-//                            CreatePost.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick (View view) {
-//
-//
-//                                    Bundle bundle = new Bundle();
-//                                    bundle.putString("communityId" , ob.get_id());
-//
-//                                    CreatePostFragment fragment = new CreatePostFragment();
-//                                    fragment.setArguments(bundle);
-//                                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//                                    ft.replace(R.id.container , fragment);
-//                                    ft.commit();
-//
-//
-//                                }
-//                            });
-//
-//                        }
-//
-//
-//                    }
-//                });
-//
-//            }
-//        }
+
     }
 
     @SuppressLint("SetTextI18n")
     private void setCommunityData (Community community) {
-        memberCount.setText(community.getMembers().size()+"");
+        memberCount.setText(community.getMembers().size() + "");
         communityName.setText(community.getName());
+
+        Call <User> call = APIClient.getInstance().getApiInterface()
+                .getUser(community.getUserId());
+
+        call.enqueue(new Callback <User>() {
+            @Override
+            public void onResponse (Call <User> call , Response <User> response) {
+
+                if (response.isSuccessful()) {
+
+                    createBy.setText("Created By " + response.body().getName());
+                }
+            }
+
+            @Override
+            public void onFailure (Call <User> call , Throwable t) {
+                if (!noInternetDialog.isConnected()) {
+                    noInternetDialog.create();
+                }
+            }
+        });
+
+        about.setText("About : " + community.getAbout());
         Log.d("page" , community.getMembers().toString());
         if (!Objects.equals(community.getImage() , ""))
             Picasso.get().load(community.getImage()).placeholder(R.drawable.background).into(communityImg);
 
         if (community.getMembers().contains(userId)) {
             joinBtn.setText("Joined");
+            cardView.setVisibility(View.VISIBLE);
             CreatePost.setVisibility(View.VISIBLE);
             Drawable img = getResources().getDrawable(R.drawable.ic_baseline_groups_24);
             joinBtn.setCompoundDrawables(img , null , null , null);

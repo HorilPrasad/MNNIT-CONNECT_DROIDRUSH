@@ -67,13 +67,19 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
 
         final String url = postDataArrayList.get(position).getImage();
         holder.postImage.setImageDrawable(null);
+<<<<<<< HEAD
         holder.postImage.setVisibility(View.GONE);
+=======
+
+>>>>>>> 46b471ca7b61637415352401f1f923e0123a712b
 //        holder.communityName.setText(userPost.getCommunityName());
         holder.likeCount.setText("likes " + userPost.getLikeCount(userPost.getLikes()));
         holder.commentCount.setText("comments " + userPost.getCommenntCount(userPost.getComments()));
         holder.dislikeCount.setText("dislike " + userPost.getDislikeCount(userPost.getDislikes()));
         holder.postText.setText(userPost.getInfo());
-        holder.time.setText(userPost.getRelativeTime());
+        holder.time.setText(userPost.getTimeIn());
+
+
         if (!Objects.equals(url, "")) {
             holder.postImage.setVisibility(View.VISIBLE);
             Picasso.get().load(url).into(holder.postImage);

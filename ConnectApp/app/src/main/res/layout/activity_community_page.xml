@@ -77,7 +77,17 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:text="Members"
+            android:text="Members |"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/createdBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="createBy sourabh"
             android:textColor="#000000"
             android:textSize="18sp" />
       </LinearLayout>
@@ -85,26 +95,28 @@
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:orientation="horizontal">
+          android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/about_community"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:text="About : createBy sourabh\n lsdj"
+            android:textColor="#000000"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/join_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:text="Joined" />
 
-        <Button
-            android:id="@+id/invite_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="0dp"
-            android:layout_weight="1"
-            android:drawableLeft="@drawable/ic_baseline_person_add_alt_1_24"
-            android:text="Invite"
-            android:visibility="gone" />
 
       </LinearLayout>
 
@@ -122,6 +134,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="5dp"
+            android:visibility="gone"
             app:cardCornerRadius="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/sendcomment"
@@ -134,13 +147,13 @@
               android:layout_gravity="center"
               android:background="@color/background"
               android:gravity="center"
-              android:text="Create Post"
-              android:visibility="gone"
-
+              android:text="Create Post...."
               android:textAlignment="center"
 
+              android:textStyle="bold"
 
-              android:textStyle="bold" />
+
+              android:visibility="gone" />
 
         </androidx.cardview.widget.CardView>
 
