@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6"
         app:readMoreColor="#F3A688"
-        app:readMoreMaxLine="2"
+        app:readMoreMaxLine="4"
         app:readMoreText="…read more" />
 
     <LinearLayout

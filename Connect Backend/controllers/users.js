@@ -14,7 +14,7 @@ const createError = require("http-errors");
 
 //find one user
 exports.user_find_one = async (req, res, next) => {
-    const { id } = req.params;
+    const  id  = req.params.id;
     console.log(id);
     //finding user
     try {
