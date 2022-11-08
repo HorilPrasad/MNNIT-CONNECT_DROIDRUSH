@@ -67,15 +67,7 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
 
         final String url = postDataArrayList.get(position).getImage();
         holder.postImage.setImageDrawable(null);
-<<<<<<< HEAD
         holder.postImage.setVisibility(View.GONE);
-=======
-
-<<<<<<< HEAD
->>>>>>> 46b471ca7b61637415352401f1f923e0123a712b
-=======
-
->>>>>>> 5c51d1cb886c14edef15916259853e64a5213790
 //        holder.communityName.setText(userPost.getCommunityName());
         holder.likeCount.setText("likes " + userPost.getLikeCount(userPost.getLikes()));
         holder.commentCount.setText("comments " + userPost.getCommenntCount(userPost.getComments()));
