@@ -68,6 +68,7 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
         final String url = postDataArrayList.get(position).getImage();
         holder.postImage.setImageDrawable(null);
 
+
 //        holder.communityName.setText(userPost.getCommunityName());
         holder.likeCount.setText("likes " + userPost.getLikeCount(userPost.getLikes()));
         holder.commentCount.setText("comments " + userPost.getCommenntCount(userPost.getComments()));
@@ -80,6 +81,8 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
             holder.postImage.setVisibility(View.VISIBLE);
             Picasso.get().load(url).into(holder.postImage);
         }
+
+
 
         String userId = appConfig.getUserID();
 
@@ -207,6 +210,20 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
                 Call<ApiResponse> cal = APIClient.getInstance()
                         .getApiInterface().likePost(userPost.get_id(), user);
 
+                cal.enqueue(new Callback <ApiResponse>() {
+                    @Override
+                    public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
+                        if(response.isSuccessful()){
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure (Call <ApiResponse> call , Throwable t) {
+
+                    }
+                });
+
                 holder.LikeBtn.setImageResource(R.drawable.like);
 
             }
@@ -248,6 +265,8 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
         holder.constraintLayout.setVisibility(View.VISIBLE);
     }
 
+
+
     @Override
     public int getItemCount() {
 
@@ -287,4 +306,6 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
 
         }
     }
+
+
 }
