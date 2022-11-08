@@ -29,6 +29,7 @@ import com.callback.connectapp.retrofit.APIClient;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,6 +60,7 @@ public class PostDetailActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.commentRecycler);
         postText = findViewById(R.id.readMoreTextView2);
         profileImg = findViewById(R.id.profile_image);
+        time = findViewById(R.id.textView6);
         userName = findViewById(R.id.textView4);
         postImage = findViewById(R.id.imageView3);
         commentList = new ArrayList<Comment>();
@@ -77,7 +79,7 @@ public class PostDetailActivity extends AppCompatActivity {
             String text = commentText.getText().toString();
 
             if (!text.isEmpty()) {
-                Comment comment = new Comment(appConfig.getUserID(), "", text);
+                Comment comment = new Comment(appConfig.getUserID(), new Date().toString(), text);
                 Call<ApiResponse> call = APIClient.getInstance()
                         .getApiInterface().commentPost(PostId, comment);
                 call.enqueue(new Callback<ApiResponse>() {
@@ -117,6 +119,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         postImage.setVisibility(View.VISIBLE);
                         Picasso.get().load(postImg).into(postImage);
                     }
+                    time.setText(response.body().getTimeIn());
 
                     String userId = response.body().getUserId();
 

@@ -1,8 +1,10 @@
 package com.callback.connectapp.model;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -40,11 +42,12 @@ public class postData {
     public postData() {
     }
 
-    public postData (String userId , String info , String image,String communityId) {
+    public postData (String userId , String info , String image,String communityId,String time) {
         this.userId = userId;
         this.info = info;
         this.communityId=communityId;
         this.image = image;
+        this.time=time;
     }
 
     public postData (String name , String communityName , String time , String postText , List <String>  likeCount , List <String> dislikeCount , List<Comment>  commentCount , String imgUrl , String profileUrl , String postShareLink) {
@@ -153,11 +156,12 @@ public class postData {
 
     // getRelativeTimeAgo("2020-07-07T16:07:26.465Z");
 
-    public String getRelativeTime() {
+    public String getTimeIn() {
 
         return getRelativeTimeAgo(time);
     }
 
+    // getRelativeTimeAgo("2020-07-07T16:07:26.465Z");
     public static String getRelativeTimeAgo(String rawJsonDate) {
         String parseFormat = "EEE MMM dd hh:mm:ss zzz yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(parseFormat, Locale.ENGLISH);
@@ -176,5 +180,14 @@ public class postData {
 
 
         return relativeDate;
+    }
+    public static String getSimpleDate(String rawJsonDate) {
+        String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        String newFormat = "MMMM dd, yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.applyPattern(newFormat);
+        String newDate = sf.format(new Date(rawJsonDate));
+        Log.i("Tweet", "newDate: " + newDate);
+        return newDate;
     }
 }

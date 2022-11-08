@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -105,7 +106,7 @@ public class CreateCommunityPost extends AppCompatActivity {
             progressDialog.setMessage("Uploading...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
-            postData newPost = new postData(userID , etPost.getText().toString() , url , communityId);
+            postData newPost = new postData(userID , etPost.getText().toString() , url , communityId,new Date().toString());
             Call <ApiResponse> call = APIClient.getInstance()
                     .getApiInterface().createPost(newPost);
             call.enqueue(new Callback <ApiResponse>() {

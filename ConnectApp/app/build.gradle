@@ -68,6 +68,8 @@ dependencies {
     //no internet
 
     implementation 'com.google.code.gson:gson:2.8.9'
+//time
+    implementation 'org.ocpsoft.prettytime:prettytime:5.0.4.Final'
 
 
 }
