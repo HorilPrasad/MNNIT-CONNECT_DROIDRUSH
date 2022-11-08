@@ -1,15 +1,18 @@
 package com.callback.connectapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +48,8 @@ public class PostDetailActivity extends AppCompatActivity {
     private ImageView profileImg, postImage, shareBtn, LikeBtn, DislikeBtn, commentBtn;
     private String PostId;
     private NoInternetDialog noInternetDialog;
+    private ProgressDialog progressDialog;
+    private RelativeLayout constraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,7 @@ public class PostDetailActivity extends AppCompatActivity {
         recyclerView.setAdapter(commentAdapter);
         noInternetDialog = new NoInternetDialog(this);
         PostId = getIntent().getStringExtra("PostId");
+        constraintLayout = findViewById(R.id.postdetail_layout);
         fetchAllComment();
 
         sendCommentBtn.setOnClickListener(view -> {
@@ -80,7 +86,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             commentList.add(comment);
                             commentAdapter.notifyDataSetChanged();
-                            Toast.makeText(PostDetailActivity.this, "comment send", Toast.LENGTH_SHORT).show();
+                            commentText.setText("");
                         }
                     }
 
@@ -95,7 +101,7 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void fetchAllComment() {
-
+        loading();
         Call<postData> call = APIClient.getInstance()
                 .getApiInterface().getPost(PostId);
 
@@ -127,14 +133,16 @@ public class PostDetailActivity extends AppCompatActivity {
                                     profileImg.setVisibility(View.VISIBLE);
                                     Picasso.get().load(response.body().getImageUrl()).into(profileImg);
                                 }
+                                constraintLayout.setVisibility(View.VISIBLE);
                             }
+                            progressDialog.dismiss();
                         }
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
                             if (!noInternetDialog.isConnected())
                                 noInternetDialog.create();
-                            Toast.makeText(PostDetailActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                     });
 
@@ -148,10 +156,19 @@ public class PostDetailActivity extends AppCompatActivity {
             public void onFailure(Call<postData> call, Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
-                Toast.makeText(PostDetailActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
 
+    }
 
+    private void loading(){
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle("Post");
+        progressDialog.setMessage("Loading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
     }
 }

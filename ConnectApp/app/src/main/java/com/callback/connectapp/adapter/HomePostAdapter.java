@@ -12,12 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.callback.connectapp.Activity.PostDetailActivity;
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.Comment;
 import com.callback.connectapp.model.User;
@@ -37,17 +39,16 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
     Context context;
     List<postData> postDataArrayList;
     AppConfig appConfig;
+    NoInternetDialog noInternetDialog;
 
 
     public HomePostAdapter(Context context, List<postData> postDataArrayList) {
         this.context = context;
-
         this.postDataArrayList = postDataArrayList;
         appConfig = new AppConfig(context);
+        noInternetDialog = new NoInternetDialog(context);
     }
 
-    public HomePostAdapter(PostDetailActivity context, List<Comment> commentList) {
-    }
 
     @NonNull
     @Override
@@ -72,19 +73,14 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
         holder.dislikeCount.setText("dislike " + userPost.getDislikeCount(userPost.getDislikes()));
         holder.postText.setText(userPost.getInfo());
         holder.time.setText(userPost.getRelativeTime());
-
-        Log.d("time", userPost.getRelativeTime());
-
-
         if (!Objects.equals(url, "")) {
             holder.postImage.setVisibility(View.VISIBLE);
             Picasso.get().load(url).into(holder.postImage);
         }
-        Log.d("user", userPost.toString());
 
         String userId = appConfig.getUserID();
 
-        Boolean flag = userPost.getLikes().contains(userId);
+        boolean flag = userPost.getLikes().contains(userId);
 
         if (flag) {
             holder.LikeBtn.setImageResource(R.drawable.filledlike);
@@ -121,106 +117,27 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Log.d("sizeifs", "user data fail");
+                if (!noInternetDialog.isConnected())
+                    noInternetDialog.create();
             }
         });
 
-        holder.LikeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.LikeBtn.setOnClickListener(view -> {
 
-//                Toast.makeText(context,"liked "+appConfig.getUserID(),Toast.LENGTH_LONG).show();
-                User user = new User();
-                user.set_id(appConfig.getUserID());
-                Call<ApiResponse> call = APIClient.getInstance()
-                        .getApiInterface().likePost(userPost.get_id(), user);
+            User user = new User();
+            user.set_id(appConfig.getUserID());
+            Call<ApiResponse> call1 = APIClient.getInstance()
+                    .getApiInterface().likePost(userPost.get_id(), user);
 
 
-                if (userPost.getDislikes().contains(appConfig.getUserID())) {
+            if (userPost.getDislikes().contains(appConfig.getUserID())) {
 
-                    Call<ApiResponse> cal = APIClient.getInstance()
-                            .getApiInterface().dislikePost(userPost.get_id(), user);
-
-                    cal.enqueue(new Callback<ApiResponse>() {
-                        @Override
-                        public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                            if (response.isSuccessful()) {
-                                Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                Log.d("api", response.body().toString());
-
-                                int size = userPost.getDislikes().size();
-                                if (response.body().getStatus() == 200) {
-
-                                    holder.DislikeBtn.setImageResource(R.drawable.filledislike);
-                                } else {
-
-
-                                    holder.DislikeBtn.setImageResource(R.drawable.dislike);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ApiResponse> call, Throwable t) {
-                            Log.d("api", "fail dislike");
-                        }
-                    });
-
-                }
-
-
-                call.enqueue(new Callback<ApiResponse>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-
-                        if (response.isSuccessful()) {
-                            Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                            Log.d("ss", response.body().toString());
-
-                            if (response.body().getStatus() == 200) {
-//                                holder.likeCount.setText("likes "+String.valueOf(userPost.getLikes().size()+1));
-                                holder.LikeBtn.setImageResource(R.drawable.filledlike);
-                            } else {
-//                                holder.likeCount.setText("likes"+String.valueOf(userPost.getLikes().size()-1));
-                                holder.LikeBtn.setImageResource(R.drawable.like);
-                            }
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse> call, Throwable t) {
-                        Toast.makeText(context, "fail ", Toast.LENGTH_SHORT).show();
-
-                        Log.d("ss ", "fail");
-                    }
-                });
-
-                notifyDataSetChanged();
-            }
-        });
-
-        holder.DislikeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                User user = new User();
-                user.set_id(appConfig.getUserID());
-                Call<ApiResponse> call = APIClient.getInstance()
+                Call<ApiResponse> cal = APIClient.getInstance()
                         .getApiInterface().dislikePost(userPost.get_id(), user);
 
-                if (userPost.getLikes().contains(appConfig.getUserID())) {
-
-                    Call<ApiResponse> cal = APIClient.getInstance()
-                            .getApiInterface().likePost(userPost.get_id(), user);
-
-                    holder.LikeBtn.setImageResource(R.drawable.like);
-
-                }
-
-
-                call.enqueue(new Callback<ApiResponse>() {
+                cal.enqueue(new Callback<ApiResponse>() {
                     @Override
-                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                    public void onResponse(Call<ApiResponse> call1, Response<ApiResponse> response) {
                         if (response.isSuccessful()) {
                             Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             Log.d("api", response.body().toString());
@@ -238,23 +155,94 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse> call, Throwable t) {
-                        Log.d("api", "fail dislike");
+                    public void onFailure(Call<ApiResponse> call1, Throwable t) {
+                        if (!noInternetDialog.isConnected())
+                            noInternetDialog.create();
                     }
                 });
 
-                notifyDataSetChanged();
             }
-        });
-        holder.commentBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, PostDetailActivity.class);
-                intent.putExtra("PostId", userPost.get_id());
-                context.startActivity(intent);
-            }
+
+
+            call1.enqueue(new Callback<ApiResponse>() {
+                @Override
+                public void onResponse(Call<ApiResponse> call1, Response<ApiResponse> response) {
+
+                    if (response.isSuccessful()) {
+                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.d("ss", response.body().toString());
+
+                        if (response.body().getStatus() == 200) {
+//                                holder.likeCount.setText("likes "+String.valueOf(userPost.getLikes().size()+1));
+                            holder.LikeBtn.setImageResource(R.drawable.filledlike);
+                        } else {
+//                                holder.likeCount.setText("likes"+String.valueOf(userPost.getLikes().size()-1));
+                            holder.LikeBtn.setImageResource(R.drawable.like);
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ApiResponse> call1, Throwable t) {
+                    if (!noInternetDialog.isConnected())
+                        noInternetDialog.create();
+                }
+            });
+
+            notifyDataSetChanged();
         });
 
+        holder.DislikeBtn.setOnClickListener(view -> {
+            User user = new User();
+            user.set_id(appConfig.getUserID());
+            Call<ApiResponse> call12 = APIClient.getInstance()
+                    .getApiInterface().dislikePost(userPost.get_id(), user);
+
+            if (userPost.getLikes().contains(appConfig.getUserID())) {
+
+                Call<ApiResponse> cal = APIClient.getInstance()
+                        .getApiInterface().likePost(userPost.get_id(), user);
+
+                holder.LikeBtn.setImageResource(R.drawable.like);
+
+            }
+
+
+            call12.enqueue(new Callback<ApiResponse>() {
+                @Override
+                public void onResponse(Call<ApiResponse> call12, Response<ApiResponse> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.d("api", response.body().toString());
+
+                        int size = userPost.getDislikes().size();
+                        if (response.body().getStatus() == 200) {
+
+                            holder.DislikeBtn.setImageResource(R.drawable.filledislike);
+                        } else {
+
+
+                            holder.DislikeBtn.setImageResource(R.drawable.dislike);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ApiResponse> call12, Throwable t) {
+                    if (!noInternetDialog.isConnected())
+                        noInternetDialog.create();
+                }
+            });
+
+            notifyDataSetChanged();
+        });
+        holder.commentBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(context, PostDetailActivity.class);
+            intent.putExtra("PostId", userPost.get_id());
+            context.startActivity(intent);
+        });
+        holder.constraintLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -272,7 +260,7 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
 
         TextView userName, communityName, postText, likeCount, dislikeCount, commentCount, time;
         ImageView profileImg, postImage, shareBtn, LikeBtn, DislikeBtn, commentBtn;
-
+        ConstraintLayout constraintLayout;
         public postViewHolder(@NonNull final View itemView) {
             super(itemView);
 
@@ -290,6 +278,8 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.postVi
             LikeBtn = itemView.findViewById(R.id.likebtn);
             DislikeBtn = itemView.findViewById(R.id.dislikeBtn);
             commentBtn = itemView.findViewById(R.id.commentsBtn);
+            constraintLayout = itemView.findViewById(R.id.post_item_layout);
+            constraintLayout.setVisibility(View.GONE);
 
 
         }

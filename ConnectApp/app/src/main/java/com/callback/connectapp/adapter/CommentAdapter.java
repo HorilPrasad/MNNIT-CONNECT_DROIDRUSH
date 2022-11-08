@@ -1,12 +1,12 @@
 package com.callback.connectapp.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,17 +50,23 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
         holder.commentText.setText(comment.getComment());
         holder.time.setText(comment.getDate());
+        holder.userImg.setOnClickListener(v->{
+            Toast.makeText(context, comment.getUser()+"", Toast.LENGTH_SHORT).show();
+        });
+        setUserData(comment,holder);
+
+    }
+
+    private void setUserData(Comment comment, CommentViewHolder holder) {
         Call<User> call = APIClient.getInstance()
                 .getApiInterface().getUser(comment.getUser());
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    Log.d("sizeifs", "comment userName" + response.body().toString());
                     holder.userName.setText(response.body().getName());
                     if(!response.body().getImageUrl().equals(""))
-                    Picasso.get().load(response.body().getImageUrl()).placeholder(R.drawable.avatar)
-                            .into(holder.userImg);
+                        Picasso.get().load(response.body().getImageUrl()).placeholder(R.drawable.avatar).into(holder.userImg);
 
                     if (!Objects.equals(response.body().getImageUrl(), "")) {
                         holder.userImg.setVisibility(View.VISIBLE);
@@ -75,10 +81,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     noInternetDialog.create();
             }
         });
-
-
-
     }
+
 
     @Override
     public int getItemCount() {

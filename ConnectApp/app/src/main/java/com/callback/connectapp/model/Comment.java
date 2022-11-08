@@ -11,11 +11,16 @@ public class Comment {
         this.comment = comment;
     }
 
+
     public String getUser () {
         return user;
     }
 
-    public void setUser (String user) {
+
+
+
+    public void setUser(String user) {
+
         this.user = user;
     }
 

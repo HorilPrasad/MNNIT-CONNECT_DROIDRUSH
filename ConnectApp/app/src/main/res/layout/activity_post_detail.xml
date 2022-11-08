@@ -1,22 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    >
-
-<!--    <androidx.core.widget.NestedScrollView-->
-<!--        android:id="@+id/scrollView2"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent">-->
+    android:visibility="gone"
+    android:id="@+id/postdetail_layout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -34,8 +24,6 @@
 
                 android:layout_marginTop="45dp"
                 android:layout_marginRight="6dp"
-
-                android:text="hiiiiiiii\n hii"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.461"
                 app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +54,7 @@
 
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="34dp"
-                android:src="@drawable/sourabh"
+                android:src="@drawable/avatar"
 
                 app:civ_border_color="#F8F6F5"
                 app:civ_border_width="2dp"
@@ -240,59 +228,29 @@
         android:id="@+id/commentRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="60dp"
-        app:layout_constraintHorizontal_bias="0.727"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+        android:layout_above="@+id/comment_type"
+        android:layout_below="@+id/constraintLayout"
+        android:scrollbars="vertical" />
 
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/commentsa"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent">-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/comment_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
 
-<!--        <de.hdodenhof.circleimageview.CircleImageView-->
-<!--            android:id="@+id/commentimge"-->
-<!--            android:layout_width="50dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:src="@drawable/avatar" />-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/typecommet"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_toStartOf="@id/sendcomment"-->
-<!--            android:layout_toEndOf="@id/commentimge"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_marginLeft="5dp"-->
-<!--            android:background="@color/background"-->
-<!--            android:hint="Enter Comment..."-->
-<!--            android:inputType="textCapSentences|textMultiLine"-->
-<!--            android:padding="15dp" />-->
-
-<!--        <ImageButton-->
-<!--            android:id="@+id/sendcomment"-->
-<!--            android:layout_width="40dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:background="@drawable/ic_send" />-->
-
-<!--    </RelativeLayout>-->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="5dp"
-        app:cardCornerRadius="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sendcomment"
-        app:layout_constraintStart_toStartOf="parent">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="5dp"
+            app:cardCornerRadius="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sendcomment"
+            app:layout_constraintStart_toStartOf="parent">
 
 
             <EditText
@@ -300,25 +258,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:hint="Type a message"
                 android:background="@android:color/transparent"
+                android:hint="Type a message"
                 android:inputType="textCapSentences"
                 android:padding="6dp"
                 android:textSize="20sp" />
 
 
-    </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-    <ImageView
-        android:id="@+id/sendcomment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/circle"
-        android:padding="15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cardView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/cardView"
-        app:srcCompat="@drawable/ic_send" />
+        <ImageView
+            android:id="@+id/sendcomment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/circle"
+            android:padding="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/cardView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cardView"
+            app:srcCompat="@drawable/ic_send" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
