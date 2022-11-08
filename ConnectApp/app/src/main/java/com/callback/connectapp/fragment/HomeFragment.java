@@ -90,7 +90,6 @@ public class HomeFragment extends Fragment {
                     postDataArrayList.addAll(response.body());
                     homePostAdapter.notifyDataSetChanged();
 
-                    Log.d("sizeif", String.valueOf(response.body().size()));
 
                     mShimmerViewContainer.stopShimmerAnimation();
                     mShimmerViewContainer.setVisibility(View.GONE);

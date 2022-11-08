@@ -3,18 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:id="@+id/post_item_layout">
 
     <kr.co.prnd.readmore.ReadMoreTextView
         android:id="@+id/readMoreTextView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
-
         android:layout_marginTop="45dp"
         android:layout_marginRight="6dp"
-
-        android:text="hiiiiiiii\n hii"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"

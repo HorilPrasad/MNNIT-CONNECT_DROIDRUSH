@@ -1,22 +1,22 @@
 package com.callback.connectapp.model;
 
 public class Comment {
-  private String userId;
+  private String user;
   private String date;
   private String comment;
 
     public Comment (String userId , String date , String comment) {
-        this.userId = userId;
+        this.user = userId;
         this.date = date;
         this.comment = comment;
     }
 
-    public String getUserId () {
-        return userId;
+    public String getUser() {
+        return user;
     }
 
-    public void setUserId (String userId) {
-        this.userId = userId;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getDate () {
