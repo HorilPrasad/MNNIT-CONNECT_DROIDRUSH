@@ -18,7 +18,6 @@ import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
 import com.squareup.picasso.Picasso;
 
-import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.Date;
 import java.util.List;
@@ -52,10 +51,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         Comment comment = commentList.get(position);
 
         holder.commentText.setText(comment.getComment());
-
-
-
-
 
         holder.time.setText(comment.getTimeIn());
         holder.userImg.setOnClickListener(v->{

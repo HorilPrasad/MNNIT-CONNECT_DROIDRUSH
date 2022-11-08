@@ -121,6 +121,7 @@
         android:layout_marginTop="132dp"
         android:layout_marginRight="5dp"
         android:background="@null"
+        android:inputType="textCapSentences"
         android:gravity="start"
         android:hint="write about your post here......"
 

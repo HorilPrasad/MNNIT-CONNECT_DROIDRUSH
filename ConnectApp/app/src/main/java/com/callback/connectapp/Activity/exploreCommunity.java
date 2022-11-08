@@ -4,7 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.adapter.CommunityAdapter;
@@ -25,6 +29,8 @@ public class exploreCommunity extends AppCompatActivity {
     private List<Community> communityList;
     private CommunityAdapter communityAdapter;
     private NoInternetDialog noInternetDialog;
+    private ProgressBar progressBar;
+    private ImageView backButton,homeButton;
 
 
     @Override
@@ -34,6 +40,9 @@ public class exploreCommunity extends AppCompatActivity {
 
         noInternetDialog = new NoInternetDialog(this);
         recyclerView = findViewById(R.id.community_recyclerview);
+        backButton = findViewById(R.id.explore_community_backBtn);
+        progressBar = findViewById(R.id.explore_community_progress);
+        homeButton = findViewById(R.id.explore_community_home_btn);
         communityList = new ArrayList<>();
 
         communityAdapter = new CommunityAdapter(this, communityList);
@@ -42,6 +51,13 @@ public class exploreCommunity extends AppCompatActivity {
         recyclerView.setAdapter(communityAdapter);
 
         fetchCommunity();
+        backButton.setOnClickListener(v ->{
+            onBackPressed();
+        });
+
+        homeButton.setOnClickListener(v ->{
+            startActivity(new Intent(this,MainActivity.class));
+        });
     }
 
     private void fetchCommunity() {
@@ -55,6 +71,7 @@ public class exploreCommunity extends AppCompatActivity {
                     List<Community> communityList1 = response.body();
                     communityList.addAll(communityList1);
                     communityAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
 
                 }
             }
@@ -63,6 +80,8 @@ public class exploreCommunity extends AppCompatActivity {
             public void onFailure(Call<List<Community>> call, Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
+
+                progressBar.setVisibility(View.GONE);
             }
         });
     }

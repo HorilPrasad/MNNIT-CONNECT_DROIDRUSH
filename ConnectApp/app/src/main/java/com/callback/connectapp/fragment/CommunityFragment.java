@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import com.callback.connectapp.Activity.LoginActivity;
 import com.callback.connectapp.Activity.createCommunity;
@@ -40,6 +41,7 @@ public class CommunityFragment extends Fragment {
     private CommunityAdapter communityAdapter;
     private NoInternetDialog noInternetDialog;
     AppConfig appConfig;
+    ProgressBar progressBar;
 
     public CommunityFragment() {
         // Required empty public constructor
@@ -58,6 +60,7 @@ public class CommunityFragment extends Fragment {
         createCommunity = view.findViewById(R.id.createCommunity);
         frameLayout = view.findViewById(R.id.community_fragment_layout);
         recyclerView=view.findViewById(R.id.joinCommunityRecycler);
+        progressBar = view.findViewById(R.id.community_fragment_progress);
 
         noInternetDialog = new NoInternetDialog(getContext());
 
@@ -104,15 +107,13 @@ public class CommunityFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List<Community> communityList1 = response.body();
 
-
                     for(Community community:communityList1){
                         if(community.getMembers().contains(appConfig.getUserID())){
                             communityList.add(community);
                         }
 
                     }
-
-
+                    progressBar.setVisibility(View.GONE);
 
                     communityAdapter.notifyDataSetChanged();
                 }
@@ -122,6 +123,7 @@ public class CommunityFragment extends Fragment {
             public void onFailure(Call<List<Community>> call, Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }

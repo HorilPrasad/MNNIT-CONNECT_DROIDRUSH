@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,7 +46,7 @@ public class ProfileFragment extends Fragment {
     ActivityResultLauncher<String> launcher;
     ImageView profileImg;
     TextView name, email, phone, regNo, course;
-    ImageButton editProfile;
+    CardView editProfile,logoutButton,createPost;
     FirebaseStorage storage;
     ProgressDialog progressDialog;
 
@@ -86,7 +87,7 @@ public class ProfileFragment extends Fragment {
         postList_recycler = view.findViewById(R.id.profilePostRecycler);
 
 
-        postDataArrayList = new ArrayList <postData>();
+        postDataArrayList = new ArrayList <>();
 
         homePostAdapter = new HomePostAdapter(getContext(), postDataArrayList);
         postList_recycler.setLayoutManager(new LinearLayoutManager(getContext()));

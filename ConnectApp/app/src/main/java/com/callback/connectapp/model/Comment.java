@@ -12,8 +12,8 @@ public class Comment {
   private String time;
   private String comment;
 
-    public Comment (String userId , String date , String comment) {
-        this.user = userId;
+    public Comment (String user , String date , String comment) {
+        this.user = user;
         this.time = date;
         this.comment = comment;
     }
@@ -25,9 +25,7 @@ public class Comment {
 
 
 
-
     public void setUser(String user) {
-
         this.user = user;
     }
 

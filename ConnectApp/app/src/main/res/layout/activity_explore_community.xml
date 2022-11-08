@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".Activity.exploreCommunity">
 
+    <ProgressBar
+        android:id="@+id/explore_community_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="0dp"
@@ -40,11 +49,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
 
-
                 app:titleTextColor="#ffff" />
 
             <ImageView
-                android:id="@+id/home_btn"
+                android:id="@+id/explore_community_home_btn"
                 android:layout_width="50dp"
                 android:layout_height="40dp"
 
@@ -67,19 +75,18 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-                app:layout_constraintEnd_toStartOf="@+id/home_btn"
+                app:layout_constraintEnd_toStartOf="@+id/explore_community_home_btn"
 
-                app:layout_constraintStart_toEndOf="@+id/backBtn"
+                app:layout_constraintStart_toEndOf="@+id/explore_community_backBtn"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/backBtn"
+                android:id="@+id/explore_community_backBtn"
                 android:layout_width="50dp"
                 android:layout_height="40dp"
-
                 android:src="@drawable/ic_arrow_back"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/home_btn"
+                app:layout_constraintEnd_toStartOf="@+id/explore_community_home_btn"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/toolbar"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -104,13 +111,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/community_recyclerview"
-        android:layout_width="413dp"
-        android:layout_height="523dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/community_list"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
+        tools:listitem="@layout/community_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
