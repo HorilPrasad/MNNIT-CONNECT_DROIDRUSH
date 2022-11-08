@@ -76,6 +76,11 @@ router.put("/like/:id", async function (req, res) {
         const post = await Post.findById(req.params.id);
         if (!post.likes.includes(req.body._id)) {
             await post.updateOne({ $push: { likes: req.body._id } });
+
+            if(post.dislikes.includes(req.body._id)){
+                await post.updateOne({ $pull: { dislikes: req.body._id } });
+
+            }
             res.status(200).send({
                 status: 200,
                 message: "liked post",
@@ -99,6 +104,11 @@ router.put("/:id/dislike", async function (req, res) {
         const post = await Post.findById(req.params.id);
         if (!post.dislikes.includes(req.body._id)) {
             await post.updateOne({ $push: { dislikes: req.body._id } });
+
+            if(post.likes.includes(req.body._id)){
+
+                await post.updateOne({ $pull: { likes: req.body._id } });
+            }
             res.status(200).send({
                 status: 200,
                 message: "dislike post",
