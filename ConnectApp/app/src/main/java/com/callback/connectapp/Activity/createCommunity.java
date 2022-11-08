@@ -2,8 +2,10 @@ package com.callback.connectapp.Activity;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +26,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,6 +46,8 @@ public class createCommunity extends AppCompatActivity {
     private AppConfig appConfig;
     FirebaseStorage storage;
     String imageUrl = "";
+    TextView uploadImg;
+    ProgressDialog progressDialog;
     private NoInternetDialog noInternetDialog;
 
     @Override
@@ -59,6 +65,7 @@ public class createCommunity extends AppCompatActivity {
         about = findViewById(R.id.about_community);
         noInternetDialog = new NoInternetDialog(this);
 
+
         create.setOnClickListener(v -> {
             String cName = name.getText().toString().trim();
             String cTag = tag.getText().toString().trim();
@@ -72,6 +79,58 @@ public class createCommunity extends AppCompatActivity {
                 communityCreate(community);
             }
         });
+
+        image.setOnClickListener(v -> {
+            CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(16, 9)
+                    .start(this);
+        });
+
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && data != null) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri selectedImage = result.getUri();
+                uploadImageToFirebase(selectedImage);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
+
+    private void uploadImageToFirebase(Uri selectedImage) {
+        storage = FirebaseStorage.getInstance();
+        final StorageReference reference = storage.getReference().child("profile").child(appConfig.getUserID());
+        loading();
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setTitle("User Image");
+        progressDialog.setMessage("Uploading...");
+        progressDialog.show();
+        reference.putFile(selectedImage).addOnSuccessListener(task -> {
+            reference.getDownloadUrl().addOnSuccessListener(uri -> {
+                imageUrl = uri.toString();
+                image.setImageURI(selectedImage);
+                progressDialog.dismiss();
+            }).addOnFailureListener(e -> {
+                Toast.makeText(this, "failing to get url", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            });
+        }).addOnFailureListener(e -> {
+            if (!noInternetDialog.isConnected())
+                noInternetDialog.create();
+            progressDialog.dismiss();
+        }).addOnProgressListener(snapshot -> {
+            double progress = (1.0 * 100 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+            progressDialog.setProgress((int) progress);
+        });
+
     }
 
     private void communityCreate(Community community) {
@@ -93,44 +152,15 @@ public class createCommunity extends AppCompatActivity {
         });
 
 
-        launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
-                , result -> {
-                    image.setImageURI(result);
 
-                    //storing Img in firebase storage
-                    storage = FirebaseStorage.getInstance();
-                    Calendar cal = Calendar.getInstance();
-                    long k = cal.getTimeInMillis();
-                    String key = Long.toString(k);
-                    final StorageReference reference = storage.getReference().child("profile").child(appConfig.getUserID());
-                    reference.putFile(result).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                            reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    // store uri in mongo db
-                                    imageUrl = uri.toString();
-
-                                    Toast.makeText(createCommunity.this, imageUrl, Toast.LENGTH_SHORT).show();
-
-
-                                }
-                            });
-                        }
-                    });
-                });
-
-
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launcher.launch("image/*");
-            }
-        });
     }
+    private void loading() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMax(100);
 
+    }
     private boolean check(String cName, String cTag, String cRule) {
 
         if (cName.isEmpty()) {

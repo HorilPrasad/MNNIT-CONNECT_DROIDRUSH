@@ -56,8 +56,8 @@ public class CreateCommunityPost extends AppCompatActivity {
         appConfig = new AppConfig(this);
         userID = appConfig.getUserID();
 
-        Intent i=getIntent();
-        communityId=i.getStringExtra("communityId");
+        Intent i = getIntent();
+        communityId = i.getStringExtra("communityId");
 
         launcher = registerForActivityResult(new ActivityResultContracts.GetContent()
                 , result -> {
@@ -82,9 +82,9 @@ public class CreateCommunityPost extends AppCompatActivity {
                         progressDialog.dismiss();
 
                     })).addOnProgressListener(snapshot -> {
-                        double progress = (1.0*100*snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
+                        double progress = (1.0 * 100 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
                         progressDialog.setProgress((int) progress);
-                    }).addOnFailureListener(e ->{
+                    }).addOnFailureListener(e -> {
                         if (!noInternetDialog.isConnected())
                             noInternetDialog.create();
                         progressDialog.dismiss();
@@ -94,29 +94,30 @@ public class CreateCommunityPost extends AppCompatActivity {
         attachBtn.setOnClickListener(view1 -> launcher.launch("image/*"));
 
 
-
-
         sendBtn.setOnClickListener(view12 -> {
 
             if (url == null) {
                 url = "";
             }
+
             loading();
             progressDialog.setTitle("Post");
             progressDialog.setMessage("Uploading...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
-            postData newPost = new postData(userID, etPost.getText().toString(), url,communityId);
-            Call<ApiResponse> call = APIClient.getInstance()
+            postData newPost = new postData(userID , etPost.getText().toString() , url , communityId);
+            Call <ApiResponse> call = APIClient.getInstance()
                     .getApiInterface().createPost(newPost);
-            call.enqueue(new Callback<ApiResponse>() {
+            call.enqueue(new Callback <ApiResponse>() {
                 @Override
-                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
                     ApiResponse apiResponse = response.body();
                     if (response.isSuccessful()) {
                         etPost.setText("");
 
-                            url="";
+                        url = "";
+                      finish();
+                        startActivity(new Intent(CreateCommunityPost.this , exploreCommunity.class));
                     } else {
 
                     }
@@ -124,7 +125,7 @@ public class CreateCommunityPost extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<ApiResponse> call, Throwable t) {
+                public void onFailure (Call <ApiResponse> call , Throwable t) {
                     if (!noInternetDialog.isConnected())
                         noInternetDialog.create();
                     progressDialog.dismiss();
@@ -136,8 +137,7 @@ public class CreateCommunityPost extends AppCompatActivity {
     }
 
 
-
-    private void loading() {
+    private void loading () {
         progressDialog = new ProgressDialog(CreateCommunityPost.this);
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);

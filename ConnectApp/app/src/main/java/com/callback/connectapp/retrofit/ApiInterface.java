@@ -86,6 +86,9 @@ public interface ApiInterface {
     @GET("/community/{id}")
     Call<Community> getCommunityById(@Path("id") String id);
 
+    @PATCH("/community/addmember/{id}")
+    Call<ApiResponse>addUserToCommunity(@Path("id") String id,@Body User user);
+
     //get community post
     @GET("/community/post/{id}")
     Call<List<postData>> getCommunityPost(@Path("id") String id);

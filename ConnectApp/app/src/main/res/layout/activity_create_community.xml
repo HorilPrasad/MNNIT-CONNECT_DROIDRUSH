@@ -159,6 +159,7 @@
         android:inputType="textEmailAddress"
         android:maxLines="1"
         android:padding="20dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

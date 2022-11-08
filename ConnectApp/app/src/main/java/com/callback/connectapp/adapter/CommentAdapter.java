@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.Comment;
-import com.callback.connectapp.model.Community;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
 import com.squareup.picasso.Picasso;
@@ -52,7 +51,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         holder.commentText.setText(comment.getComment());
         holder.time.setText(comment.getDate());
         Call<User> call = APIClient.getInstance()
-                .getApiInterface().getUser(comment.getUserId());
+                .getApiInterface().getUser(comment.getUser());
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {

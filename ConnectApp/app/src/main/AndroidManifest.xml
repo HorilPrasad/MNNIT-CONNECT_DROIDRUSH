@@ -21,7 +21,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".CreateCommunityPost"
+            android:name=".Activity.CreateCommunityPost"
             android:exported="false" />
         <activity
             android:name=".Activity.PostDetailActivity"
