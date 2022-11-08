@@ -42,7 +42,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private EditText commentText;
     private ImageView sendCommentBtn;
     private TextView userName, communityName, postText, likeCount, dislikeCount, commentCount, time;
-    private ImageView profileImg, postImage, shareBtn, LikeBtn, DislikeBtn, commentBtn, commentUserimg;
+    private ImageView profileImg, postImage, shareBtn, LikeBtn, DislikeBtn, commentBtn;
     private String PostId;
     private NoInternetDialog noInternetDialog;
 
@@ -54,7 +54,6 @@ public class PostDetailActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.commentRecycler);
         postText = findViewById(R.id.readMoreTextView2);
         profileImg = findViewById(R.id.profile_image);
-        commentUserimg = findViewById(R.id.commentimge);
         userName = findViewById(R.id.textView4);
         postImage = findViewById(R.id.imageView3);
         commentList = new ArrayList<Comment>();

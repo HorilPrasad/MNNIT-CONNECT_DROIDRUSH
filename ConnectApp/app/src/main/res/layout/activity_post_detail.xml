@@ -241,45 +241,84 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="60dp"
         app:layout_constraintHorizontal_bias="0.727"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
-    <RelativeLayout
-        android:id="@+id/commentsa"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/commentsa"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent">-->
+
+<!--        <de.hdodenhof.circleimageview.CircleImageView-->
+<!--            android:id="@+id/commentimge"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:src="@drawable/avatar" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/typecommet"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_toStartOf="@id/sendcomment"-->
+<!--            android:layout_toEndOf="@id/commentimge"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_marginLeft="5dp"-->
+<!--            android:background="@color/background"-->
+<!--            android:hint="Enter Comment..."-->
+<!--            android:inputType="textCapSentences|textMultiLine"-->
+<!--            android:padding="15dp" />-->
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/sendcomment"-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:background="@drawable/ic_send" />-->
+
+<!--    </RelativeLayout>-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sendcomment"
         app:layout_constraintStart_toStartOf="parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/commentimge"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/avatar" />
 
-        <EditText
-            android:id="@+id/typecommet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/sendcomment"
-            android:layout_toEndOf="@id/commentimge"
-            android:layout_weight="1"
-            android:layout_marginLeft="5dp"
-            android:background="@color/background"
-            android:hint="Enter Comment..."
-            android:inputType="textCapSentences|textMultiLine"
-            android:padding="15dp" />
+            <EditText
+                android:id="@+id/typecommet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:hint="Type a message"
+                android:background="@android:color/transparent"
+                android:inputType="textCapSentences"
+                android:padding="6dp"
+                android:textSize="20sp" />
 
-        <ImageButton
-            android:id="@+id/sendcomment"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/ic_send" />
 
-    </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/sendcomment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/circle"
+        android:padding="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cardView"
+        app:srcCompat="@drawable/ic_send" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
