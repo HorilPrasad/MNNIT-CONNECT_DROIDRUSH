@@ -2,6 +2,7 @@ package com.callback.connectapp.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import com.callback.connectapp.Activity.UpdateProfile;
 import com.callback.connectapp.R;
 import com.callback.connectapp.adapter.HomePostAdapter;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.ImageDialog;
 import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.model.postData;
@@ -59,6 +61,7 @@ public class ProfileFragment extends Fragment {
     NoInternetDialog noInternetDialog;
     RelativeLayout relativeLayout;
     BottomNavigationView bottomNavigationView;
+    User user;
 
     public ProfileFragment () {
         // Required empty public constructor
@@ -87,13 +90,19 @@ public class ProfileFragment extends Fragment {
         profileImg = view.findViewById(R.id.profile_user_image);
         appConfig = new AppConfig(getContext());
 
-
         postList_recycler = view.findViewById(R.id.profilePostRecycler);
 
 
         postDataArrayList = new ArrayList <>();
 
         homePostAdapter = new HomePostAdapter(getContext() , postDataArrayList);
+
+        profileImg.setOnClickListener(v -> {
+            ImageDialog imageDialog = new ImageDialog(getContext(),user.getImageUrl());
+            if (!user.getImageUrl().equals("") && user.getImageUrl() != null)
+                imageDialog.createDialog();
+
+        });
         postList_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
         postList_recycler.setHasFixedSize(true);
         postList_recycler.setAdapter(homePostAdapter);
@@ -136,7 +145,7 @@ public class ProfileFragment extends Fragment {
                     phone.setText(response.body().getPhone());
                     regNo.setText(response.body().getRegNo());
                     course.setText(response.body().getBranch());
-
+                    user = response.body();
                     if (!Objects.equals(response.body().getImageUrl() , ""))
                         Picasso.get().load(response.body().getImageUrl()).placeholder(R.drawable.avatar).into(profileImg);
 

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.callback.connectapp.Activity.PostDetailActivity;
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
+import com.callback.connectapp.app.ImageDialog;
 import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.Comment;
@@ -81,6 +82,10 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
             holder.postImage.setVisibility(View.VISIBLE);
             Picasso.get().load(url).into(holder.postImage);
         }
+        holder.postImage.setOnClickListener(v ->{
+            ImageDialog imageDialog = new ImageDialog(context,userPost.getImage());
+            imageDialog.createDialog();
+        });
 
 
         String userId = appConfig.getUserID();
@@ -100,7 +105,11 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
         } else {
             holder.DislikeBtn.setImageResource(R.drawable.dislike);
         }
-
+        final User[] userDetails = new User[1];
+        holder.profileImg.setOnClickListener(v -> {
+            ImageDialog imageDialog = new ImageDialog(context,userDetails[0].getImageUrl());
+            imageDialog.createDialog();
+        });
         updatePost(userPost , holder);
         Call <User> call = APIClient.getInstance()
                 .getApiInterface().getUser(userPost.getUserId());
@@ -108,12 +117,11 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
             @Override
             public void onResponse (Call <User> call , Response <User> response) {
                 if (response.isSuccessful()) {
-
+                    userDetails[0] = response.body();
                     holder.userName.setText(response.body().getName());
                     String url = "";
                     url = response.body().getImageUrl();
                     if (!Objects.equals(url , "")) {
-
                         Picasso.get().load(url).placeholder(R.drawable.avatar)
                                 .into(holder.profileImg);
                     }

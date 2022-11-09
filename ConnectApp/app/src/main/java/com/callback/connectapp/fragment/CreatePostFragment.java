@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -23,6 +24,7 @@ import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.postData;
 import com.callback.connectapp.retrofit.APIClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -49,6 +51,7 @@ public class CreatePostFragment extends Fragment {
     public postData data;
     NoInternetDialog noInternetDialog;
     private String url;
+    FrameLayout frameLayout;
 
     private ConstraintLayout homeLayout;
 
@@ -71,6 +74,7 @@ public class CreatePostFragment extends Fragment {
         noInternetDialog = new NoInternetDialog(getContext());
         BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.post);
+        frameLayout = view.findViewById(R.id.create_post_fragment_layout);
 
         if (this.getArguments() != null) {
             communityId = getArguments().getString("communityId");
@@ -118,35 +122,43 @@ public class CreatePostFragment extends Fragment {
             if (url == null) {
                 url = "";
             }
-            loading();
-            progressDialog.setTitle("Post");
-            progressDialog.setMessage("Uploading...");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.show();
-            postData newPost = new postData(userID , etPost.getText().toString() , url , communityId , new Date().toString());
-            Call <ApiResponse> call = APIClient.getInstance()
-                    .getApiInterface().createPost(newPost);
-            call.enqueue(new Callback <ApiResponse>() {
-                @Override
-                public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
-                    ApiResponse apiResponse = response.body();
-                    if (response.isSuccessful()) {
-                        etPost.setText("");
+            if(!url.equals("") || !etPost.getText().toString().isEmpty()) {
+                loading();
+                progressDialog.setTitle("Post");
+                progressDialog.setMessage("Uploading...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.show();
+                postData newPost = new postData(userID, etPost.getText().toString(), url, communityId, new Date().toString());
+                Call<ApiResponse> call = APIClient.getInstance()
+                        .getApiInterface().createPost(newPost);
+                call.enqueue(new Callback<ApiResponse>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                        ApiResponse apiResponse = response.body();
+                        if (response.isSuccessful()) {
+                            etPost.setText("");
+                            Snackbar snackbar = Snackbar.make(frameLayout,"Post Successfully...",Snackbar.LENGTH_LONG);
+                            snackbar.setBackgroundTint(getResources().getColor(R.color.green));
+                            snackbar.show();
 
+                        } else {
 
-                    } else {
-
+                        }
+                        progressDialog.dismiss();
                     }
-                    progressDialog.dismiss();
-                }
 
-                @Override
-                public void onFailure (Call <ApiResponse> call , Throwable t) {
-                    if (!noInternetDialog.isConnected())
-                        noInternetDialog.create();
-                    progressDialog.dismiss();
-                }
-            });
+                    @Override
+                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                        if (!noInternetDialog.isConnected())
+                            noInternetDialog.create();
+                        progressDialog.dismiss();
+                    }
+                });
+            }else{
+                Snackbar snackbar = Snackbar.make(frameLayout,"Empty post!",Snackbar.LENGTH_LONG);
+                snackbar.setBackgroundTint(getResources().getColor(R.color.red));
+                snackbar.show();
+            }
         });
 
         return view;

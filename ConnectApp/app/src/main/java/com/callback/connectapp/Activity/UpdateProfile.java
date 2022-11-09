@@ -85,6 +85,8 @@ public class UpdateProfile extends AppCompatActivity {
         noInternetDialog = new NoInternetDialog(this);
         relativeLayout = findViewById(R.id.update_profile_layout);
 
+
+
         getData();
 
         genderAdapter = ArrayAdapter.createFromResource(this , R.array.gender_array , R.layout.spinner_layout);

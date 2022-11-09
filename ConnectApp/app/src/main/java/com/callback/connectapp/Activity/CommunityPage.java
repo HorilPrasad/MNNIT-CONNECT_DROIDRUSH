@@ -44,7 +44,8 @@ import retrofit2.http.HEAD;
 
 public class CommunityPage extends AppCompatActivity {
     private TextView communityName, memberCount;
-    private Button joinBtn, inviteBtn;
+    private CardView joinButtonCard;
+    private TextView joinBtn;
     private ImageView communityImg;
     private TextView CreatePost;
     private AppConfig appConfig;
@@ -69,6 +70,7 @@ public class CommunityPage extends AppCompatActivity {
         communityImg = findViewById(R.id.communityPicture);
         memberCount = findViewById(R.id.noMember);
         joinBtn = findViewById(R.id.join_button);
+        joinButtonCard = findViewById(R.id.join_button_card);
         cardView = findViewById(R.id.cardView);
         recyclerView = findViewById(R.id.community_recyclerview);
         communityName = findViewById(R.id.name_community);
@@ -92,40 +94,39 @@ public class CommunityPage extends AppCompatActivity {
         LoadPost();
 
 
-        joinBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view) {
+        joinBtn.setOnClickListener(view -> {
 
-                if (joinBtn.getText() == "join") {
+            if (joinBtn.getText() == "join") {
 
-                    User user = new User();
-                    user.set_id(appConfig.getUserID());
-                    Call <ApiResponse> call = APIClient.getInstance().getApiInterface()
-                            .addUserToCommunity(communityId , user);
+                User user = new User();
+                user.set_id(appConfig.getUserID());
+                Call <ApiResponse> call = APIClient.getInstance().getApiInterface()
+                        .addUserToCommunity(communityId , user);
 
-                    call.enqueue(new Callback <ApiResponse>() {
-                        @Override
-                        public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
-                            if (response.isSuccessful()) {
+                call.enqueue(new Callback <ApiResponse>() {
+                    @Override
+                    public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
+                        if (response.isSuccessful()) {
 
-                                if (response.code() == 200) {
-                                    joinBtn.setText("joined");
-                                    cardView.setVisibility(View.VISIBLE);
-                                    CreatePost.setVisibility(View.VISIBLE);
-                                    Toast.makeText(CommunityPage.this , "joined" , Toast.LENGTH_SHORT).show();
+                            if (response.code() == 200) {
+                                joinBtn.setText("joined");
+                                joinButtonCard.setCardBackgroundColor(getResources().getColor(R.color.colorAccent));
+                                cardView.setVisibility(View.VISIBLE);
+                                CreatePost.setVisibility(View.VISIBLE);
+                                joinBtn.setEnabled(false);
+                                Toast.makeText(CommunityPage.this , "joined" , Toast.LENGTH_SHORT).show();
 
-                                }
                             }
                         }
+                    }
 
-                        @Override
-                        public void onFailure (Call <ApiResponse> call , Throwable t) {
-                            if (!noInternetDialog.isConnected())
-                                noInternetDialog.create();
-                        }
-                    });
+                    @Override
+                    public void onFailure (Call <ApiResponse> call , Throwable t) {
+                        if (!noInternetDialog.isConnected())
+                            noInternetDialog.create();
+                    }
+                });
 
-                }
             }
         });
 
@@ -216,12 +217,11 @@ public class CommunityPage extends AppCompatActivity {
             joinBtn.setText("Joined");
             cardView.setVisibility(View.VISIBLE);
             CreatePost.setVisibility(View.VISIBLE);
-            Drawable img = getResources().getDrawable(R.drawable.ic_baseline_groups_24);
-            joinBtn.setCompoundDrawables(img , null , null , null);
+            joinButtonCard.setCardBackgroundColor(getResources().getColor(R.color.colorAccent));
+            joinBtn.setEnabled(false);
 
         } else {
             joinBtn.setText("join");
-            joinBtn.setCompoundDrawables(null , null , null , null);
         }
 
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/create_post_fragment_layout"
     tools:context=".fragment.CreatePostFragment">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

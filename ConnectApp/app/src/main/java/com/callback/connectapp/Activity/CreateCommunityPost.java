@@ -118,7 +118,7 @@ public class CreateCommunityPost extends AppCompatActivity {
 
                         url = "";
                         finish();
-                        startActivity(new Intent(CreateCommunityPost.this , exploreCommunity.class));
+                        onBackPressed();
                     } else {
 
                     }
