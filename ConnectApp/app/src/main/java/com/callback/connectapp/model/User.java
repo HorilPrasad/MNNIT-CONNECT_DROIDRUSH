@@ -1,5 +1,7 @@
 package com.callback.connectapp.model;
 
+import java.util.List;
+
 public class User {
     private String name;
     private String email;
@@ -11,8 +13,19 @@ public class User {
     private String token;
     private String phone;
     private String regNo;
+    private List <String> Saved;
     private String branch;
     private String imageUrl;
+
+    public List <String> getSaved () {
+        return Saved;
+    }
+
+    public void setSaved (List <String> saved) {
+        Saved = saved;
+    }
+
+
     public User() {
     }
 
