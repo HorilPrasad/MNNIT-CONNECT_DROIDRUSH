@@ -86,7 +86,6 @@ public class ProfileFragment extends Fragment {
         createPost = view.findViewById(R.id.profile_create_post);
         bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.profile);
-
         profileImg = view.findViewById(R.id.profile_user_image);
         appConfig = new AppConfig(getContext());
 
@@ -177,20 +176,15 @@ public class ProfileFragment extends Fragment {
 
                 if (response.isSuccessful()) {
 
-                    List <postData> po = response.body();
-                    homePostAdapter.clear();
-                    for (int i = 0; i < po.size(); i++) {
-
-                        postData data = po.get(i);
-                        if (Objects.equals(data.getUserId() , appConfig.getUserID())) {
-                            postDataArrayList.add(data);
-                        }
+                    List <postData> postData = response.body();
+                    for (postData post:postData){
+                        if (post.getUserId().equals(appConfig.getUserID()) && post.getCommunityId().equals(""))
+                            postDataArrayList.add(post);
                     }
 
 
                     homePostAdapter.notifyDataSetChanged();
 
-                    Log.d("sizeif" , String.valueOf(response.body().size()));
 
                 } else {
 

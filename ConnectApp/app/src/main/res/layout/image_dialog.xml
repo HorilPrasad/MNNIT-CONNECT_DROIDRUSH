@@ -6,8 +6,8 @@
     <ImageView
         android:id="@+id/image_dialog_image_view"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="400dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/sourabh"/>
+        android:src="@drawable/avatar1"/>
 
 </LinearLayout>

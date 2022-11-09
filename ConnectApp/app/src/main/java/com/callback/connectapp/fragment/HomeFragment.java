@@ -28,6 +28,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,7 +62,7 @@ public class HomeFragment extends Fragment {
         BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.home);
 
-        postDataArrayList = new ArrayList <postData>();
+        postDataArrayList = new ArrayList <>();
 
         homePostAdapter = new HomePostAdapter(getContext() , postDataArrayList);
         postList_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -84,18 +85,12 @@ public class HomeFragment extends Fragment {
             public void onResponse (Call <List <postData>> call , Response <List <postData>> response) {
 
                 if (response.isSuccessful()) {
-
-                    List <postData> po = response.body();
-
-                    homePostAdapter.clear();
-
-
                     postDataArrayList.addAll(response.body());
                     homePostAdapter.notifyDataSetChanged();
 
-
                     mShimmerViewContainer.stopShimmerAnimation();
                     mShimmerViewContainer.setVisibility(View.GONE);
+
                 } else {
 
                     Toast.makeText(getContext() , "not sucesss..." , Toast.LENGTH_SHORT).show();

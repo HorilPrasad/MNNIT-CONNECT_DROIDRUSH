@@ -239,9 +239,6 @@ public class CommunityPage extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
 
-                    List <postData> po = response.body();
-
-                    postAdapter.clear();
                     postDataArrayList.addAll(response.body());
                     postAdapter.notifyDataSetChanged();
                     recyclerView.setVisibility(View.VISIBLE);

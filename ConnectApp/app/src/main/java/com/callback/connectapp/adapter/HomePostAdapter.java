@@ -23,6 +23,7 @@ import com.callback.connectapp.app.ImageDialog;
 import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.Comment;
+import com.callback.connectapp.model.Community;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.model.postData;
 import com.callback.connectapp.retrofit.APIClient;
@@ -65,52 +66,8 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
 
 
         final postData userPost = postDataArrayList.get(position);
-
-        final String url = postDataArrayList.get(position).getImage();
-        holder.postImage.setImageDrawable(null);
-        holder.postImage.setVisibility(View.GONE);
-
-//        holder.communityName.setText(userPost.getCommunityName());
-        holder.likeCount.setText(userPost.getLikeCount(userPost.getLikes())+" likes");
-        holder.commentCount.setText(userPost.getCommenntCount(userPost.getComments())+" comments");
-        holder.dislikeCount.setText(userPost.getDislikeCount(userPost.getDislikes())+" dislike");
-        holder.postText.setText(userPost.getInfo());
-        holder.time.setText(userPost.getTimeIn());
-
-
-        if (!Objects.equals(url , "")) {
-            holder.postImage.setVisibility(View.VISIBLE);
-            Picasso.get().load(url).into(holder.postImage);
-        }
-        holder.postImage.setOnClickListener(v ->{
-            ImageDialog imageDialog = new ImageDialog(context,userPost.getImage());
-            imageDialog.createDialog();
-        });
-
-
-        String userId = appConfig.getUserID();
-
-        boolean flag = userPost.getLikes().contains(userId);
-
-        if (flag) {
-            holder.LikeBtn.setImageResource(R.drawable.filledlike);
-        } else {
-            holder.LikeBtn.setImageResource(R.drawable.like);
-        }
-
-        Boolean f = userPost.getDislikes().contains(userId);
-        if (userPost.getDislikes().contains(userId)) {
-
-            holder.DislikeBtn.setImageResource(R.drawable.filledislike);
-        } else {
-            holder.DislikeBtn.setImageResource(R.drawable.dislike);
-        }
+        final Community[] community = new Community[1];
         final User[] userDetails = new User[1];
-        holder.profileImg.setOnClickListener(v -> {
-            ImageDialog imageDialog = new ImageDialog(context,userDetails[0].getImageUrl());
-            imageDialog.createDialog();
-        });
-        updatePost(userPost , holder);
         Call <User> call = APIClient.getInstance()
                 .getApiInterface().getUser(userPost.getUserId());
         call.enqueue(new Callback <User>() {
@@ -118,12 +75,39 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
             public void onResponse (Call <User> call , Response <User> response) {
                 if (response.isSuccessful()) {
                     userDetails[0] = response.body();
-                    holder.userName.setText(response.body().getName());
-                    String url = "";
-                    url = response.body().getImageUrl();
-                    if (!Objects.equals(url , "")) {
-                        Picasso.get().load(url).placeholder(R.drawable.avatar)
-                                .into(holder.profileImg);
+                    if (!userPost.getCommunityId().equals("")){
+                        Call<Community> call3 = APIClient.getInstance().getApiInterface()
+                                .getCommunityById(userPost.getCommunityId());
+                        call3.enqueue(new Callback<Community>() {
+                            @Override
+                            public void onResponse(Call<Community> call3, Response<Community> response) {
+                                if (response.isSuccessful())
+                                {
+                                    community[0] = response.body();
+                                    holder.userName.setText(community[0].getName());
+                                    holder.branch.setText(userDetails[0].getName());
+                                    if (!Objects.equals(community[0].getImage() , "")) {
+                                        Picasso.get().load(community[0].getImage()).placeholder(R.drawable.avatar)
+                                                .into(holder.profileImg);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Community> call3, Throwable t) {
+                                if (!noInternetDialog.isConnected())
+                                    noInternetDialog.create();
+                            }
+                        });
+
+
+                    }else{
+                        holder.userName.setText(userDetails[0].getName());
+                        holder.branch.setText(userDetails[0].getBranch());
+                        if (!Objects.equals(userDetails[0].getImageUrl() , "")) {
+                            Picasso.get().load(userDetails[0].getImageUrl()).placeholder(R.drawable.avatar)
+                                    .into(holder.profileImg);
+                        }
                     }
 
                 }
@@ -135,6 +119,55 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
                     noInternetDialog.create();
             }
         });
+        final String url = postDataArrayList.get(position).getImage();
+        holder.postImage.setImageDrawable(null);
+        holder.postImage.setVisibility(View.GONE);
+        holder.likeCount.setText(userPost.getLikeCount(userPost.getLikes())+" likes");
+        holder.commentCount.setText(userPost.getCommenntCount(userPost.getComments())+" comments");
+        holder.dislikeCount.setText(userPost.getDislikeCount(userPost.getDislikes())+" dislike");
+        holder.postText.setText(userPost.getInfo());
+        holder.time.setText(userPost.getTimeIn());
+
+
+        if (!Objects.equals(url , "")) {
+            holder.postImage.setVisibility(View.VISIBLE);
+            Picasso.get().load(url).into(holder.postImage);
+        }
+
+        holder.postImage.setOnClickListener(v ->{
+            ImageDialog imageDialog = new ImageDialog(context,userPost.getImage());
+            imageDialog.createDialog();
+        });
+
+        String userId = appConfig.getUserID();
+
+        boolean flag = userPost.getLikes().contains(userId);
+
+        if (flag) {
+            holder.LikeBtn.setImageResource(R.drawable.filledlike);
+        } else {
+            holder.LikeBtn.setImageResource(R.drawable.like);
+        }
+
+        if (userPost.getDislikes().contains(userId)) {
+
+            holder.DislikeBtn.setImageResource(R.drawable.filledislike);
+        } else {
+            holder.DislikeBtn.setImageResource(R.drawable.dislike);
+        }
+
+        holder.profileImg.setOnClickListener(v -> {
+            ImageDialog imageDialog;
+            if (userPost.getCommunityId().equals(""))
+                imageDialog = new ImageDialog(context,userDetails[0].getImageUrl());
+            else
+                imageDialog = new ImageDialog(context,community[0].getImage());
+            imageDialog.createDialog();
+        });
+
+        updatePost(userPost , holder);
+
+
 
         holder.LikeBtn.setOnClickListener(view -> {
 
@@ -223,7 +256,6 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
                         holder.LikeBtn.setImageResource(R.drawable.like);
                     }
 
-                    Boolean f = post.getDislikes().contains(userId);
                     if (post.getDislikes().contains(userId)) {
 
                         holder.DislikeBtn.setImageResource(R.drawable.filledislike);
@@ -248,14 +280,10 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
         return postDataArrayList.size();
     }
 
-    public void clear () {
-        postDataArrayList.clear();
-        notifyDataSetChanged();
-    }
 
     public static class postViewHolder extends RecyclerView.ViewHolder {
 
-        TextView userName, communityName, postText, likeCount, dislikeCount, commentCount, time;
+        TextView userName, branch, postText, likeCount, dislikeCount, commentCount, time;
         ImageView profileImg, postImage, shareBtn, LikeBtn, DislikeBtn, commentBtn;
         ConstraintLayout constraintLayout;
 
@@ -263,7 +291,7 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
             super(itemView);
 
             userName = itemView.findViewById(R.id.textView4);
-            communityName = itemView.findViewById(R.id.textView5);
+            branch = itemView.findViewById(R.id.textView5);
             time = itemView.findViewById(R.id.textView6);
             postText = itemView.findViewById(R.id.readMoreTextView2);
             likeCount = itemView.findViewById(R.id.likeCount);
