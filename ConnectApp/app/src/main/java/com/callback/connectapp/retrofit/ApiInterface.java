@@ -69,7 +69,7 @@ public interface ApiInterface {
     Call <ApiResponse> dislikePost (@Path("id") String id , @Body User user);
 
     @PUT("post/{id}/comment")
-    Call <ApiResponse> commentPost (@Path("id") String id , @Body Comment c);
+    Call <ApiResponse> commentPost (@Path("id") String id , @Body Comment comment);
 
     @DELETE("post/{id}")
     Call <ApiResponse> deletePost (@Path("id") String id , @Body User user);

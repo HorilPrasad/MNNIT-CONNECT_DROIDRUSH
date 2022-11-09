@@ -132,7 +132,7 @@ router.put("/:id/comment", async function (req, res) {
         if (1) {
 
             // post.comments.unshift(userComment);
-            await post.updateOne({ $push: { comments: { user: req.body.userId, comment: req.body.comment,time: req.body.time } } });
+            await post.updateOne({ $push: { comments: { user: req.body.user, comment: req.body.comment,time: req.body.time } } });
             res.status(200).send({
                 status: 200,
                 message: "post commented",

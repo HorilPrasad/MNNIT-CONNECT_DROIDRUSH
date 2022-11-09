@@ -50,13 +50,13 @@ public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.Comment
     @Override
     public void onBindViewHolder (@NonNull CommentViewHolder holder , int position) {
         Comment comment = commentList.get(position);
-
+        Toast.makeText(context, comment.getComment()+"", Toast.LENGTH_SHORT).show();
         holder.commentText.setText(comment.getComment());
-
         holder.time.setText(comment.getTimeIn());
         holder.userImg.setOnClickListener(v -> {
             Toast.makeText(context , comment.getUser() + "" , Toast.LENGTH_SHORT).show();
         });
+
         setUserData(comment , holder);
 
     }

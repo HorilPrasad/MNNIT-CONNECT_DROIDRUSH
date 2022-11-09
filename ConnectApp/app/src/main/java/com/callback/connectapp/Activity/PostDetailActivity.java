@@ -6,19 +6,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.adapter.CommentAdapter;
-import com.callback.connectapp.adapter.HomePostAdapter;
 import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
@@ -63,9 +59,15 @@ public class PostDetailActivity extends AppCompatActivity {
         time = findViewById(R.id.textView6);
         userName = findViewById(R.id.textView4);
         postImage = findViewById(R.id.imageView3);
-        commentList = new ArrayList <Comment>();
+        commentList = new ArrayList <>();
         sendCommentBtn = findViewById(R.id.sendcomment);
         commentText = findViewById(R.id.typecommet);
+        likeCount = findViewById(R.id.likeCount);
+        dislikeCount = findViewById(R.id.dislikeCount);
+        commentCount = findViewById(R.id.commentCount);
+        LikeBtn = findViewById(R.id.likebtn);
+        DislikeBtn = findViewById(R.id.dislikeBtn);
+        commentBtn = findViewById(R.id.commentsBtn);
         commentAdapter = new CommentAdapter(this , commentList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -111,9 +113,28 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse (Call <postData> call , Response <postData> response) {
                 if (response.isSuccessful()) {
-
+                    postData post = response.body();
                     List <Comment> comment = response.body().getComments();
                     postText.setText(response.body().getInfo());
+
+                    String userId = appConfig.getUserID();
+                    boolean flag = post.getLikes().contains(userId);
+
+                    likeCount.setText(post.getLikeCount(post.getLikes())+" likes");
+                    commentCount.setText(post.getCommenntCount(post.getComments())+" comments");
+                    dislikeCount.setText(post.getDislikeCount(post.getDislikes())+" dislike");
+                    if (flag) {
+                        LikeBtn.setImageResource(R.drawable.filledlike);
+                    } else {
+                        LikeBtn.setImageResource(R.drawable.like);
+                    }
+
+                    if (post.getDislikes().contains(userId)) {
+
+                        DislikeBtn.setImageResource(R.drawable.filledislike);
+                    } else {
+                        DislikeBtn.setImageResource(R.drawable.dislike);
+                    }
                     String postImg = response.body().getImage();
                     if (!Objects.equals(postImg , "")) {
                         postImage.setVisibility(View.VISIBLE);
@@ -121,10 +142,10 @@ public class PostDetailActivity extends AppCompatActivity {
                     }
                     time.setText(response.body().getTimeIn());
 
-                    String userId = response.body().getUserId();
+                    String postUserId = response.body().getUserId();
 
                     Call <User> cal = APIClient.getInstance()
-                            .getApiInterface().getUser(userId);
+                            .getApiInterface().getUser(postUserId);
                     cal.enqueue(new Callback <User>() {
                         @Override
                         public void onResponse (Call <User> call , Response <User> response) {

@@ -1,6 +1,7 @@
 package com.callback.connectapp.fragment;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -119,6 +121,16 @@ public class CreatePostFragment extends Fragment {
 
         sendBtn.setOnClickListener(view12 -> {
 
+            InputMethodManager inputMethodManager =
+                    (InputMethodManager) getActivity().getSystemService(
+                            Activity.INPUT_METHOD_SERVICE);
+            if(inputMethodManager.isAcceptingText()){
+                inputMethodManager.hideSoftInputFromWindow(
+                        getActivity().getCurrentFocus().getWindowToken(),
+                        0
+                );
+            }
+
             if (url == null) {
                 url = "";
             }
@@ -134,13 +146,14 @@ public class CreatePostFragment extends Fragment {
                 call.enqueue(new Callback<ApiResponse>() {
                     @Override
                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                        ApiResponse apiResponse = response.body();
+
                         if (response.isSuccessful()) {
                             etPost.setText("");
                             Snackbar snackbar = Snackbar.make(frameLayout,"Post Successfully...",Snackbar.LENGTH_LONG);
                             snackbar.setBackgroundTint(getResources().getColor(R.color.green));
                             snackbar.show();
-
+                            postImage.setImageURI(null);
+                            url = "";
                         } else {
 
                         }

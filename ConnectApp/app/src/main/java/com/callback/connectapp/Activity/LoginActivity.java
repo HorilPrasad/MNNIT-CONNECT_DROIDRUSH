@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -34,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private AppConfig appConfig;
     private ProgressDialog progressDialog;
     private NoInternetDialog noInternetDialog;
+    private RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -82,14 +85,19 @@ public class LoginActivity extends AppCompatActivity {
                         appConfig.setAuthToken(response.headers().get("auth_token"));
                         appConfig.setUserID(response.body().get_id());
                         appConfig.setUserEmail(email);
-                        startActivity(new Intent(LoginActivity.this , MainActivity.class));
+                        Snackbar snackbar = Snackbar.make(relativeLayout,"User has been login successfully...",Snackbar.LENGTH_SHORT).setBackgroundTint(getResources().getColor(R.color.green));
+                        snackbar.show();
                         finishAffinity();
-                        Toast.makeText(LoginActivity.this , "login.." , Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity.this , MainActivity.class));
+
                     } else {
                         if (response.code() == 404) {
-                            Toast.makeText(LoginActivity.this , "Email Not Registered!" , Toast.LENGTH_SHORT).show();
+
+                            Snackbar snackbar = Snackbar.make(relativeLayout,"Email not register...",Snackbar.LENGTH_SHORT).setBackgroundTint(getResources().getColor(R.color.red));
+                            snackbar.show();
                         } else {
-                            Toast.makeText(LoginActivity.this , "Invalid credential!" , Toast.LENGTH_SHORT).show();
+                            Snackbar snackbar = Snackbar.make(relativeLayout,"Invalid credential!",Snackbar.LENGTH_SHORT).setBackgroundTint(getResources().getColor(R.color.red));
+                            snackbar.show();
                         }
                     }
                     progressDialog.dismiss();
@@ -131,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
         appConfig = new AppConfig(this);
         progressDialog = new ProgressDialog(this);
         noInternetDialog = new NoInternetDialog(this);
+        relativeLayout = findViewById(R.id.login_layout);
     }
 
     public void onRegisterClick (View View) {

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.callback.connectapp.R;
@@ -17,6 +18,7 @@ import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
+import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,6 +30,7 @@ public class signUpActivity extends AppCompatActivity {
     private AppConfig appConfig;
     private NoInternetDialog noInternetDialog;
     private ProgressDialog progressDialog;
+    private RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -59,12 +62,15 @@ public class signUpActivity extends AppCompatActivity {
                         appConfig.setLoginStatus(true);
                         appConfig.setUserEmail(email);
                         appConfig.setUserID(response.body().get_id());
+                        Snackbar snackbar = Snackbar.make(relativeLayout,"Account has been successfully created...",Snackbar.LENGTH_SHORT).setBackgroundTint(getResources().getColor(R.color.green));
+                        snackbar.show();
                         startActivity(new Intent(signUpActivity.this , CreateProfile.class));
-                        Toast.makeText(signUpActivity.this , "Successfully registered......" , Toast.LENGTH_LONG).show();
 
                     } else {
                         if (!noInternetDialog.isConnected())
                             noInternetDialog.create();
+                        Snackbar snackbar = Snackbar.make(relativeLayout,"Error!",Snackbar.LENGTH_SHORT).setBackgroundTint(getResources().getColor(R.color.red));
+                        snackbar.show();
                     }
                     progressDialog.dismiss();
                 }
@@ -125,6 +131,7 @@ public class signUpActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.register_button);
         appConfig = new AppConfig(this);
         noInternetDialog = new NoInternetDialog(this);
+        relativeLayout = findViewById(R.id.signup_layout);
     }
 
     public void onLoginClick (View view) {

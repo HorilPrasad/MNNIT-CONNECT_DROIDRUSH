@@ -71,9 +71,9 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
         holder.postImage.setVisibility(View.GONE);
 
 //        holder.communityName.setText(userPost.getCommunityName());
-        holder.likeCount.setText("likes " + userPost.getLikeCount(userPost.getLikes()));
-        holder.commentCount.setText("comments " + userPost.getCommenntCount(userPost.getComments()));
-        holder.dislikeCount.setText("dislike " + userPost.getDislikeCount(userPost.getDislikes()));
+        holder.likeCount.setText(userPost.getLikeCount(userPost.getLikes())+" likes");
+        holder.commentCount.setText(userPost.getCommenntCount(userPost.getComments())+" comments");
+        holder.dislikeCount.setText(userPost.getDislikeCount(userPost.getDislikes())+" dislike");
         holder.postText.setText(userPost.getInfo());
         holder.time.setText(userPost.getTimeIn());
 
@@ -209,9 +209,9 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
 
                     postData post = response.body();
 
-                    holder.likeCount.setText("likes " + post.getLikeCount(post.getLikes()));
-                    holder.commentCount.setText("comments " + post.getCommenntCount(post.getComments()));
-                    holder.dislikeCount.setText("dislike " + post.getDislikeCount(post.getDislikes()));
+                    holder.likeCount.setText(post.getLikeCount(post.getLikes())+" likes");
+                    holder.commentCount.setText(post.getCommenntCount(post.getComments())+" comments");
+                    holder.dislikeCount.setText(post.getDislikeCount(post.getDislikes())+" dislike");
 
                     String userId = appConfig.getUserID();
 
