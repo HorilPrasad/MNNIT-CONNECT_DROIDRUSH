@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Post = require('../models/Post');
+const User = require('../models/User');
 
 // Create Post
 router.post("/create", async function (req, res) {
@@ -10,13 +11,13 @@ router.post("/create", async function (req, res) {
         res.status(200).send({
             status: 200,
             message: "post created",
-          });
+        });
 
     } catch (error) {
         res.status(500).send({
             status: 200,
             message: " creating error",
-          });
+        });
     }
 });
 
@@ -31,12 +32,12 @@ router.put("/:id", async function (req, res) {
             res.status(200).send({
                 status: 200,
                 message: "post updated",
-              });
+            });
         } else {
             res.status(403).send({
                 status: 200,
                 message: " error",
-              });
+            });
         };
 
     } catch (error) {
@@ -55,12 +56,12 @@ router.delete("/:id", async function (req, res) {
             res.status(200).send({
                 status: 200,
                 message: "post delete",
-              });
+            });
         } else {
             res.status(403).send({
                 status: 200,
                 message: "NOt  allowed",
-              });
+            });
         }
     } catch (error) {
         res.status(500).json(error);
@@ -77,20 +78,20 @@ router.put("/like/:id", async function (req, res) {
         if (!post.likes.includes(req.body._id)) {
             await post.updateOne({ $push: { likes: req.body._id } });
 
-            if(post.dislikes.includes(req.body._id)){
+            if (post.dislikes.includes(req.body._id)) {
                 await post.updateOne({ $pull: { dislikes: req.body._id } });
 
             }
             res.status(200).send({
                 status: 200,
                 message: "liked post",
-              });
+            });
         } else {
-            await post.updateOne({ $pull: { likes: req.body._id} });
+            await post.updateOne({ $pull: { likes: req.body._id } });
             res.status(200).send({
                 status: 202,
                 message: "like remove",
-              });
+            });
         };
 
     } catch (error) {
@@ -105,20 +106,20 @@ router.put("/:id/dislike", async function (req, res) {
         if (!post.dislikes.includes(req.body._id)) {
             await post.updateOne({ $push: { dislikes: req.body._id } });
 
-            if(post.likes.includes(req.body._id)){
+            if (post.likes.includes(req.body._id)) {
 
                 await post.updateOne({ $pull: { likes: req.body._id } });
             }
             res.status(200).send({
                 status: 200,
                 message: "dislike post",
-              });
+            });
         } else {
             await post.updateOne({ $pull: { dislikes: req.body._id } });
             res.status(200).send({
                 status: 202,
                 message: "remove dislike",
-              });
+            });
         };
 
     } catch (error) {
@@ -129,18 +130,18 @@ router.put("/:id/dislike", async function (req, res) {
 router.put("/:id/comment", async function (req, res) {
     try {
         const post = await Post.findById(req.params.id);
-        if (1) {
 
-            // post.comments.unshift(userComment);
-            await post.updateOne({ $push: { comments: { user: req.body.user, comment: req.body.comment,time: req.body.time } } });
-            res.status(200).send({
-                status: 200,
-                message: "post commented",
-              });
-        } else {
-            // await post.updateOne({$pull: {comments:req.body.userId }});
-            // res.status(200).json("Post has been uncommmented");
-        }
+
+        // post.comments.unshift(userComment);
+        await post.updateOne({ $push: { comments: { user: req.body.user, comment: req.body.comment, time: req.body.time } } });
+        res.status(200).send({
+            status: 200,
+            message: "post commented",
+        });
+
+        // await post.updateOne({$pull: {comments:req.body.userId }});
+        // res.status(200).json("Post has been uncommmented");
+
 
     } catch (error) {
         res.status(500).json(error);
@@ -168,6 +169,29 @@ router.get("/:id", async function (req, res) {
         res.status(500).json(error);
     };
 });
+
+router.put("/saved/:id", async function (req, res) {
+
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user.Saved.includes(req.body._id)) {
+            await user.updateOne({ $push: { Saved: req.body._id } });
+
+
+            res.status(200).send({
+                status: 200,
+                message: "saved post",
+            });
+        }
+
+    } catch (err) {
+
+        res.status(500).json(err);
+    }
+
+});
+
+
 
 // Fetch Time line Posts
 router.get("/timeline/more", async function (req, res) {
