@@ -102,6 +102,7 @@
         android:layout_height="52dp"
         android:layout_margin="10dp"
         android:padding="10dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

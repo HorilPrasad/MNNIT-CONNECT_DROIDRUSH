@@ -71,14 +71,13 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
             public void onResponse (Call <User> call , Response <User> response) {
                 if (response.isSuccessful()) {
                     userDetails[0] = response.body();
-                    if (!userPost.getCommunityId().equals("")){
-                        Call<Community> call3 = APIClient.getInstance().getApiInterface()
+                    if (!userPost.getCommunityId().equals("")) {
+                        Call <Community> call3 = APIClient.getInstance().getApiInterface()
                                 .getCommunityById(userPost.getCommunityId());
-                        call3.enqueue(new Callback<Community>() {
+                        call3.enqueue(new Callback <Community>() {
                             @Override
-                            public void onResponse(Call<Community> call3, Response<Community> response) {
-                                if (response.isSuccessful())
-                                {
+                            public void onResponse (Call <Community> call3 , Response <Community> response) {
+                                if (response.isSuccessful()) {
                                     community[0] = response.body();
                                     holder.userName.setText(community[0].getName());
                                     holder.branch.setText(userDetails[0].getName());
@@ -90,14 +89,14 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
                             }
 
                             @Override
-                            public void onFailure(Call<Community> call3, Throwable t) {
+                            public void onFailure (Call <Community> call3 , Throwable t) {
                                 if (!noInternetDialog.isConnected())
                                     noInternetDialog.create();
                             }
                         });
 
 
-                    }else{
+                    } else {
                         holder.userName.setText(userDetails[0].getName());
                         holder.branch.setText(userDetails[0].getBranch());
                         if (!Objects.equals(userDetails[0].getImageUrl() , "")) {
@@ -117,26 +116,26 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
         });
 
 
-        if(userPost.getSaved().contains(appConfig.getUserID())){
+        if (userPost.getSaved().contains(appConfig.getUserID())) {
             holder.savePost.setImageResource(R.drawable.bookmark_fill);
         }
 
         holder.savePost.setOnClickListener(v -> {
-            if(!userPost.getSaved().contains(appConfig.getUserID())){
+            if (!userPost.getSaved().contains(appConfig.getUserID())) {
                 User user = new User();
                 user.set_id(appConfig.getUserID());
-                Call<ApiResponse> call1 = APIClient.getInstance()
-                        .getApiInterface().savePost(userPost.get_id(),user);
-                call1.enqueue(new Callback<ApiResponse>() {
+                Call <ApiResponse> call1 = APIClient.getInstance()
+                        .getApiInterface().savePost(userPost.get_id() , user);
+                call1.enqueue(new Callback <ApiResponse>() {
                     @Override
-                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                        if (response.isSuccessful()){
+                    public void onResponse (Call <ApiResponse> call , Response <ApiResponse> response) {
+                        if (response.isSuccessful()) {
                             holder.savePost.setImageResource(R.drawable.bookmark_fill);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                    public void onFailure (Call <ApiResponse> call , Throwable t) {
                         if (!noInternetDialog.isConnected())
                             noInternetDialog.create();
                     }
@@ -147,9 +146,9 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
         final String url = postDataArrayList.get(position).getImage();
         holder.postImage.setImageDrawable(null);
         holder.postImage.setVisibility(View.GONE);
-        holder.likeCount.setText(userPost.getLikeCount(userPost.getLikes())+" likes");
-        holder.commentCount.setText(userPost.getCommenntCount(userPost.getComments())+" comments");
-        holder.dislikeCount.setText(userPost.getDislikeCount(userPost.getDislikes())+" dislike");
+        holder.likeCount.setText(userPost.getLikeCount(userPost.getLikes()) + " likes");
+        holder.commentCount.setText(userPost.getCommenntCount(userPost.getComments()) + " comments");
+        holder.dislikeCount.setText(userPost.getDislikeCount(userPost.getDislikes()) + " dislike");
         holder.postText.setText(userPost.getInfo());
         holder.time.setText(userPost.getTimeIn());
 
@@ -159,8 +158,8 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
             Picasso.get().load(url).into(holder.postImage);
         }
 
-        holder.postImage.setOnClickListener(v ->{
-            ImageDialog imageDialog = new ImageDialog(context,userPost.getImage());
+        holder.postImage.setOnClickListener(v -> {
+            ImageDialog imageDialog = new ImageDialog(context , userPost.getImage());
             imageDialog.createDialog();
         });
 
@@ -184,14 +183,13 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
         holder.profileImg.setOnClickListener(v -> {
             ImageDialog imageDialog;
             if (userPost.getCommunityId().equals(""))
-                imageDialog = new ImageDialog(context,userDetails[0].getImageUrl());
+                imageDialog = new ImageDialog(context , userDetails[0].getImageUrl());
             else
-                imageDialog = new ImageDialog(context,community[0].getImage());
+                imageDialog = new ImageDialog(context , community[0].getImage());
             imageDialog.createDialog();
         });
 
         updatePost(userPost , holder);
-
 
 
         holder.LikeBtn.setOnClickListener(view -> {
@@ -267,9 +265,9 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
 
                     PostData post = response.body();
 
-                    holder.likeCount.setText(post.getLikeCount(post.getLikes())+" likes");
-                    holder.commentCount.setText(post.getCommenntCount(post.getComments())+" comments");
-                    holder.dislikeCount.setText(post.getDislikeCount(post.getDislikes())+" dislike");
+                    holder.likeCount.setText(post.getLikeCount(post.getLikes()) + " likes");
+                    holder.commentCount.setText(post.getCommenntCount(post.getComments()) + " comments");
+                    holder.dislikeCount.setText(post.getDislikeCount(post.getDislikes()) + " dislike");
 
                     String userId = appConfig.getUserID();
 
@@ -299,11 +297,12 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
 
         holder.shareBtn.setOnClickListener(view -> {
 
-            // here we  will be passing the text to share
-            shareTextOnly((String) holder.postText.getText() ,userPost.getImage().toString());
+             if(holder.postText.getText()!=null)
+            shareTextOnly(holder.postText.getText().toString() , userPost.getImage().toString());
         });
     }
-    private void shareTextOnly(String titlee,String imgUrl) {
+
+    private void shareTextOnly (String titlee , String imgUrl) {
         String sharebody = titlee;
 
         // The value which we will sending through data via
@@ -313,11 +312,11 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
 
         // setting type of data shared as text
         intentt.setType("text/plain");
-        intentt.putExtra(Intent.EXTRA_SUBJECT, "Subject Here");
+        intentt.putExtra(Intent.EXTRA_SUBJECT , "Subject Here");
 
         // Adding the text to share using putExtra
-        intentt.putExtra(Intent.EXTRA_TEXT, sharebody + "\n \n "+imgUrl);
-                 context.startActivity(Intent.createChooser(intentt, "Share Via"));
+        intentt.putExtra(Intent.EXTRA_TEXT , sharebody + "\n \n " + imgUrl);
+        context.startActivity(Intent.createChooser(intentt , "Share Via"));
     }
 
     @Override
@@ -330,7 +329,7 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
     public static class postViewHolder extends RecyclerView.ViewHolder {
 
         TextView userName, branch, postText, likeCount, dislikeCount, commentCount, time;
-        ImageView profileImg, postImage, shareBtn, LikeBtn, DislikeBtn, commentBtn,savePost;
+        ImageView profileImg, postImage, shareBtn, LikeBtn, DislikeBtn, commentBtn, savePost;
         ConstraintLayout constraintLayout;
 
         public postViewHolder (@NonNull final View itemView) {
@@ -345,7 +344,7 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
             commentCount = itemView.findViewById(R.id.commentCount);
             profileImg = itemView.findViewById(R.id.profile_image);
             postImage = itemView.findViewById(R.id.imageView3);
-            shareBtn = itemView.findViewById(R.id.imageView);
+            shareBtn = itemView.findViewById(R.id.shareBtn);
             savePost = itemView.findViewById(R.id.save_post);
             LikeBtn = itemView.findViewById(R.id.likebtn);
             DislikeBtn = itemView.findViewById(R.id.dislikeBtn);

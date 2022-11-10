@@ -106,10 +106,13 @@ public class createCommunity extends AppCompatActivity {
 
     private void uploadImageToFirebase (Uri selectedImage) {
         storage = FirebaseStorage.getInstance();
-        final StorageReference reference = storage.getReference().child("profile").child(appConfig.getUserID());
+        Calendar cal = Calendar.getInstance();
+        long k = cal.getTimeInMillis();
+        String key = Long.toString(k);
+        final StorageReference reference = storage.getReference().child("profile").child(key);
         loading();
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setTitle("User Image");
+        progressDialog.setTitle("community Image");
         progressDialog.setMessage("Uploading...");
         progressDialog.show();
         reference.putFile(selectedImage).addOnSuccessListener(task -> {

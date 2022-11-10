@@ -52,7 +52,7 @@ public class CommunityAdapter extends RecyclerView.Adapter <CommunityAdapter.Com
         Community community = communityList.get(position);
 
         holder.communityName.setText(community.getName());
-
+        holder.communityImage.setImageDrawable(null);
         if (!Objects.equals(community.getImage() , ""))
             Picasso.get().load(community.getImage()).placeholder(R.drawable.background).into(holder.communityImage);
 

@@ -170,6 +170,7 @@ public class CreateProfile extends AppCompatActivity {
         progressDialog.setTitle("User Profile Image");
         progressDialog.setMessage("Uploading...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.show();
         reference.putFile(selectedImage).addOnSuccessListener(task -> {
             reference.getDownloadUrl().addOnSuccessListener(uri -> {
                 imageUrl = uri.toString();
@@ -194,6 +195,7 @@ public class CreateProfile extends AppCompatActivity {
         progressDialog.setMessage("creating...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         if (check(phoneString , dobString)) {
+            progressDialog.show();
             if (imageUrl == null)
                 imageUrl = "";
 

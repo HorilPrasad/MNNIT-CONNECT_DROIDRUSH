@@ -64,10 +64,9 @@ public class signUpActivity extends AppCompatActivity {
                         appConfig.setLoginStatus(true);
                         appConfig.setUserEmail(email);
                         appConfig.setUserID(response.body().get_id());
-                        appConfig.setProfileCreated(false);
                         Snackbar snackbar = Snackbar.make(relativeLayout,"Account has been successfully created...",Snackbar.LENGTH_SHORT).setBackgroundTint(getResources().getColor(R.color.green));
                         snackbar.show();
-                        startActivity(new Intent(signUpActivity.this , MainActivity.class));
+                        startActivity(new Intent(signUpActivity.this , CreateProfile.class));
                         finishAffinity();
                     } else {
                         if (!noInternetDialog.isConnected())

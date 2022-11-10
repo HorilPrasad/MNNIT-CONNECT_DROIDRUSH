@@ -76,7 +76,7 @@ public class SplashScreen extends AppCompatActivity {
             // Requesting the permission
             ActivityCompat.requestPermissions(SplashScreen.this , new String[]{permission} , requestCode);
         } else {
-            Toast.makeText(SplashScreen.this , "Permission already granted" , Toast.LENGTH_SHORT).show();
+//            Toast.makeText(SplashScreen.this , "Permission already granted" , Toast.LENGTH_SHORT).show();
         }
     }
 
