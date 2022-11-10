@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="400dp"
+    android:layout_height="400dp"
+    android:orientation="vertical"
+    android:id="@+id/otp_verify_layout"
+    tools:context=".fragment.OtpVerification">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Verify otp sent in you email id"
+        android:layout_marginTop="80dp"
+        android:textSize="22sp"
+        android:textColor="@color/colorAccent"
+        android:padding="5dp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+    <com.chaos.view.PinView
+        android:id="@+id/user_otp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/PinWidget.PinView"
+        app:itemCount="4"
+        android:minHeight="50dp"
+        android:padding="5dp"
+        android:layout_gravity="center_horizontal"
+        android:cursorVisible="true"
+        app:lineColor="@color/colorAccent"
+        android:layout_marginTop="80dp"
+        android:inputType="number"
+        app:cursorColor="@color/teal_700"
+        app:itemRadius="10dp"
+        app:itemWidth="40dp"
+        app:itemHeight="40dp"
+        app:hideLineWhenFilled="false"
+        android:itemBackground="@color/white"/>
+    <androidx.cardview.widget.CardView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp">
+        <TextView
+            android:id="@+id/verify_otp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Verify"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"/>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

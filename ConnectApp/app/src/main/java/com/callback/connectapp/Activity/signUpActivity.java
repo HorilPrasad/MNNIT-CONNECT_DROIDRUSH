@@ -6,16 +6,14 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.app.NoInternetDialog;
-import com.callback.connectapp.model.ApiResponse;
+import com.callback.connectapp.app.OtpVerificationDialog;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
 import com.google.android.material.snackbar.Snackbar;
@@ -33,6 +31,7 @@ public class signUpActivity extends AppCompatActivity {
     private NoInternetDialog noInternetDialog;
     private ProgressDialog progressDialog;
     private RelativeLayout relativeLayout;
+    private OtpVerificationDialog otpVerificationDialog;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -61,14 +60,11 @@ public class signUpActivity extends AppCompatActivity {
                 public void onResponse (Call <User> call , Response <User> response) {
 
                     if (response.isSuccessful()) {
-                        appConfig.setLoginStatus(true);
                         appConfig.setUserEmail(email);
                         appConfig.setUserID(response.body().get_id());
-                        appConfig.setProfileCreated(false);
                         Snackbar snackbar = Snackbar.make(relativeLayout,"Account has been successfully created...",Snackbar.LENGTH_SHORT).setBackgroundTint(getResources().getColor(R.color.green));
                         snackbar.show();
-                        startActivity(new Intent(signUpActivity.this , MainActivity.class));
-                        finishAffinity();
+                        otpVerificationDialog.createDialog();
                     } else {
                         if (!noInternetDialog.isConnected())
                             noInternetDialog.create();
@@ -141,6 +137,7 @@ public class signUpActivity extends AppCompatActivity {
         appConfig = new AppConfig(this);
         noInternetDialog = new NoInternetDialog(this);
         relativeLayout = findViewById(R.id.signup_layout);
+        otpVerificationDialog = new OtpVerificationDialog(this);
     }
 
     public void onLoginClick (View view) {

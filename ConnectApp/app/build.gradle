@@ -76,6 +76,7 @@ dependencies {
     //animation
 
     implementation "com.airbnb.android:lottie:3.4.0"
+    implementation 'io.github.chaosleung:pinview:1.4.4'
 
 
 }

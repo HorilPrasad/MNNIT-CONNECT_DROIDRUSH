@@ -5,6 +5,7 @@ import com.callback.connectapp.model.Comment;
 import com.callback.connectapp.model.Community;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.model.PostData;
+import com.callback.connectapp.model.VerifyResponse;
 
 import java.util.List;
 
@@ -26,12 +27,14 @@ public interface ApiInterface {
     @POST("/user/login")
     Call <User> loginUser (@Body User user);
 
-//    @POST("/user/create")
-//    Call<ApiResponse> createProfile(@Body User user);
-
+    @GET("/user/verify/{id}")
+    Call<VerifyResponse> getUserVerificationCode(@Path("id") String id);
 
     @PUT("/user/edit/{id}")
     Call <ApiResponse> editProfile (@Path("id") String id , @Body User user);
+
+    @PUT("/user/status/{id}")
+    Call <ApiResponse> statusUpdate (@Path("id") String id , @Body User user);
 
 
     @GET("/user/users/{id}")

@@ -17,8 +17,8 @@ router.post('/register', UserController.user_register);
 //login user
 router.post('/login', UserController.user_login);
 
-// //verify user email
-// router.get('/verify/:us', UserController.user_verify);
+//verify user email
+router.get('/verify/:id', UserController.user_verify);
 
 // //finding one user
 router.get('/users/:id', UserController.user_find_one)
@@ -34,6 +34,8 @@ router.post('/create/:id', UserController.user_create_profile)
 
 //edit profile
 router.put('/edit/:id', UserController.user_edit_profile)
+//update verify status
+router.put('/status/:id', UserController.user_verify_status)
 
 // //change password
 // router.patch('/password', verify, UserController.user_change_password)
