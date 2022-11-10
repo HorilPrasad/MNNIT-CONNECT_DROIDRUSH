@@ -20,6 +20,8 @@ import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.regex.Pattern;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,10 +64,11 @@ public class signUpActivity extends AppCompatActivity {
                         appConfig.setLoginStatus(true);
                         appConfig.setUserEmail(email);
                         appConfig.setUserID(response.body().get_id());
+                        appConfig.setProfileCreated(false);
                         Snackbar snackbar = Snackbar.make(relativeLayout,"Account has been successfully created...",Snackbar.LENGTH_SHORT).setBackgroundTint(getResources().getColor(R.color.green));
                         snackbar.show();
-                        startActivity(new Intent(signUpActivity.this , CreateProfile.class));
-
+                        startActivity(new Intent(signUpActivity.this , MainActivity.class));
+                        finishAffinity();
                     } else {
                         if (!noInternetDialog.isConnected())
                             noInternetDialog.create();
@@ -87,6 +90,11 @@ public class signUpActivity extends AppCompatActivity {
     }
 
     private boolean check (String name , String email , String password , String regNo) {
+
+        final String domain = "mnnit.ac.in";
+        final String EMAIL_PATTERN =
+                "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + Pattern.quote(domain) + "$";
         if (name.isEmpty()) {
             userName.setError("Name can't be empty!");
             userName.requestFocus();
@@ -107,7 +115,8 @@ public class signUpActivity extends AppCompatActivity {
             userReg.setError("Registration number can't be empty!");
             userReg.requestFocus();
             return false;
-        } else {
+        }
+        else {
             return true;
         }
     }

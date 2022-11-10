@@ -2,9 +2,7 @@ package com.callback.connectapp.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -28,10 +25,9 @@ import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.app.ImageDialog;
 import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.User;
-import com.callback.connectapp.model.postData;
+import com.callback.connectapp.model.PostData;
 import com.callback.connectapp.retrofit.APIClient;
 
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
@@ -55,7 +51,7 @@ public class ProfileFragment extends Fragment {
     ProgressDialog progressDialog;
 
     private RecyclerView postList_recycler;
-    List <postData> postDataArrayList;
+    List <PostData> postDataArrayList;
     private HomePostAdapter homePostAdapter;
 
     NoInternetDialog noInternetDialog;
@@ -167,17 +163,17 @@ public class ProfileFragment extends Fragment {
 
 
     private void FetchAllPost () {
-        Call <List <postData>> call = APIClient.getInstance()
+        Call <List <PostData>> call = APIClient.getInstance()
                 .getApiInterface().getAllPosts();
 
-        call.enqueue(new Callback <List <postData>>() {
+        call.enqueue(new Callback <List <PostData>>() {
             @Override
-            public void onResponse (Call <List <postData>> call , Response <List <postData>> response) {
+            public void onResponse (Call <List <PostData>> call , Response <List <PostData>> response) {
 
                 if (response.isSuccessful()) {
 
-                    List <postData> postData = response.body();
-                    for (postData post:postData){
+                    List <PostData> postData = response.body();
+                    for (PostData post:postData){
                         if (post.getUserId().equals(appConfig.getUserID()) && post.getCommunityId().equals(""))
                             postDataArrayList.add(post);
                     }
@@ -194,7 +190,7 @@ public class ProfileFragment extends Fragment {
             }
 
             @Override
-            public void onFailure (Call <List <postData>> call , Throwable t) {
+            public void onFailure (Call <List <PostData>> call , Throwable t) {
                 Toast.makeText(getContext() , "fail..." , Toast.LENGTH_SHORT).show();
 
             }

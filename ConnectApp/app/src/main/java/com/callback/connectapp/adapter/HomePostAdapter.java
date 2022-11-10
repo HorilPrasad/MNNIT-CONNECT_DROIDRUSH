@@ -3,7 +3,6 @@ package com.callback.connectapp.adapter;
 import android.content.Context;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +21,9 @@ import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.app.ImageDialog;
 import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
-import com.callback.connectapp.model.Comment;
 import com.callback.connectapp.model.Community;
 import com.callback.connectapp.model.User;
-import com.callback.connectapp.model.postData;
+import com.callback.connectapp.model.PostData;
 import com.callback.connectapp.retrofit.APIClient;
 import com.squareup.picasso.Picasso;
 
@@ -39,12 +37,12 @@ import retrofit2.Response;
 public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postViewHolder> {
 
     Context context;
-    List <postData> postDataArrayList;
+    List <PostData> postDataArrayList;
     AppConfig appConfig;
     NoInternetDialog noInternetDialog;
 
 
-    public HomePostAdapter (Context context , List <postData> postDataArrayList) {
+    public HomePostAdapter (Context context , List <PostData> postDataArrayList) {
         this.context = context;
         this.postDataArrayList = postDataArrayList;
         appConfig = new AppConfig(context);
@@ -65,7 +63,7 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
     public void onBindViewHolder (@NonNull final postViewHolder holder , final int position) {
 
 
-        final postData userPost = postDataArrayList.get(position);
+        final PostData userPost = postDataArrayList.get(position);
         final Community[] community = new Community[1];
         final User[] userDetails = new User[1];
         Call <User> call = APIClient.getInstance()
@@ -119,6 +117,35 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
                     noInternetDialog.create();
             }
         });
+
+
+        if(userPost.getSaved().contains(appConfig.getUserID())){
+            holder.savePost.setImageResource(R.drawable.bookmark_fill);
+        }
+
+        holder.savePost.setOnClickListener(v -> {
+            if(!userPost.getSaved().contains(appConfig.getUserID())){
+                User user = new User();
+                user.set_id(appConfig.getUserID());
+                Call<ApiResponse> call1 = APIClient.getInstance()
+                        .getApiInterface().savePost(userPost.get_id(),user);
+                call1.enqueue(new Callback<ApiResponse>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                        if (response.isSuccessful()){
+                            holder.savePost.setImageResource(R.drawable.bookmark_fill);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                        if (!noInternetDialog.isConnected())
+                            noInternetDialog.create();
+                    }
+                });
+            }
+        });
+
         final String url = postDataArrayList.get(position).getImage();
         holder.postImage.setImageDrawable(null);
         holder.postImage.setVisibility(View.GONE);
@@ -229,18 +256,18 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
         holder.constraintLayout.setVisibility(View.VISIBLE);
     }
 
-    private void updatePost (postData userPost , postViewHolder holder) {
+    private void updatePost (PostData userPost , postViewHolder holder) {
 
-        Call <postData> call12 = APIClient.getInstance()
+        Call <PostData> call12 = APIClient.getInstance()
                 .getApiInterface().getPost(userPost.get_id());
 
-        call12.enqueue(new Callback <postData>() {
+        call12.enqueue(new Callback <PostData>() {
             @Override
-            public void onResponse (Call <postData> call , Response <postData> response) {
+            public void onResponse (Call <PostData> call , Response <PostData> response) {
 
                 if (response.isSuccessful()) {
 
-                    postData post = response.body();
+                    PostData post = response.body();
 
                     holder.likeCount.setText(post.getLikeCount(post.getLikes())+" likes");
                     holder.commentCount.setText(post.getCommenntCount(post.getComments())+" comments");
@@ -266,7 +293,7 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
             }
 
             @Override
-            public void onFailure (Call <postData> call , Throwable t) {
+            public void onFailure (Call <PostData> call , Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
             }
@@ -284,7 +311,7 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
     public static class postViewHolder extends RecyclerView.ViewHolder {
 
         TextView userName, branch, postText, likeCount, dislikeCount, commentCount, time;
-        ImageView profileImg, postImage, shareBtn, LikeBtn, DislikeBtn, commentBtn;
+        ImageView profileImg, postImage, shareBtn, LikeBtn, DislikeBtn, commentBtn,savePost;
         ConstraintLayout constraintLayout;
 
         public postViewHolder (@NonNull final View itemView) {
@@ -300,7 +327,7 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
             profileImg = itemView.findViewById(R.id.profile_image);
             postImage = itemView.findViewById(R.id.imageView3);
             shareBtn = itemView.findViewById(R.id.imageView);
-
+            savePost = itemView.findViewById(R.id.save_post);
             LikeBtn = itemView.findViewById(R.id.likebtn);
             DislikeBtn = itemView.findViewById(R.id.dislikeBtn);
             commentBtn = itemView.findViewById(R.id.commentsBtn);

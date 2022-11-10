@@ -64,6 +64,7 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:text="User Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/profile_image"
@@ -91,16 +92,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/save_post"
         android:layout_width="42dp"
         android:layout_height="32dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.865"
-
         app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/share" />
+        app:srcCompat="@drawable/bookmark" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -138,13 +138,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="1dp">
+                android:padding="2dp">
 
                 <ImageView
                     android:id="@+id/likebtn"
@@ -169,6 +170,13 @@
                     android:layout_height="32dp"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/chat" />
+                <ImageView
+                    android:id="@+id/shareBtn"
+                    android:layout_width="0dp"
+                    android:clickable="true"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/share" />
             </LinearLayout>
 
             <LinearLayout
@@ -183,7 +191,7 @@
                     android:layout_height="32dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Likes " />
+                    android:text="Likes" />
 
                 <TextView
                     android:id="@+id/dislikeCount"
@@ -192,7 +200,7 @@
 
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Dislike " />
+                    android:text="Dislike" />
 
                 <TextView
                     android:id="@+id/commentCount"
@@ -200,7 +208,14 @@
                     android:layout_height="32dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="comments " />
+                    android:text="comments" />
+                <TextView
+                    android:id="@+id/shareCount"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="share" />
             </LinearLayout>
 
         </LinearLayout>

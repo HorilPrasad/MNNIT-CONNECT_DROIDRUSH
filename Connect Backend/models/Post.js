@@ -30,6 +30,10 @@ const postSchema = new mongoose.Schema(
         type: Array,
         default:[]
     },
+    saved:{
+      type: Array,
+      default:[]
+    },
     comments: [
         {
           user: {

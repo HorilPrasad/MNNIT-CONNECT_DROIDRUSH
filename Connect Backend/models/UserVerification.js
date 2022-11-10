@@ -1,10 +1,10 @@
 const mongoose= require('mongoose')
 
 const userVerificationSchema = new mongoose.Schema({
-    userID:{
+    userId:{
         type: String
     },
-    uniqueString: {
+    otp: {
         type: String
     },
     createdAt: {

@@ -2,19 +2,15 @@ package com.callback.connectapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,13 +20,11 @@ import com.callback.connectapp.R;
 import com.callback.connectapp.adapter.HomePostAdapter;
 import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.app.NoInternetDialog;
-import com.callback.connectapp.fragment.CreatePostFragment;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.Community;
 import com.callback.connectapp.model.User;
-import com.callback.connectapp.model.postData;
+import com.callback.connectapp.model.PostData;
 import com.callback.connectapp.retrofit.APIClient;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -40,7 +34,6 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.HEAD;
 
 public class CommunityPage extends AppCompatActivity {
     private TextView communityName, memberCount;
@@ -51,7 +44,7 @@ public class CommunityPage extends AppCompatActivity {
     private AppConfig appConfig;
     private RecyclerView recyclerView;
 
-    private List <postData> postDataArrayList;
+    private List <PostData> postDataArrayList;
     private String communityId;
     private NoInternetDialog noInternetDialog;
     private TextView createBy, about;
@@ -230,12 +223,12 @@ public class CommunityPage extends AppCompatActivity {
 
     private void LoadPost () {
 
-        Call <List <postData>> call = APIClient.getInstance()
+        Call <List <PostData>> call = APIClient.getInstance()
                 .getApiInterface().getCommunityPost(communityId);
 
-        call.enqueue(new Callback <List <postData>>() {
+        call.enqueue(new Callback <List <PostData>>() {
             @Override
-            public void onResponse (Call <List <postData>> call , Response <List <postData>> response) {
+            public void onResponse (Call <List <PostData>> call , Response <List <PostData>> response) {
 
                 if (response.isSuccessful()) {
 
@@ -251,7 +244,7 @@ public class CommunityPage extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure (Call <List <postData>> call , Throwable t) {
+            public void onFailure (Call <List <PostData>> call , Throwable t) {
                 if (!noInternetDialog.isConnected()) {
                     noInternetDialog.create();
                     progressDialog.dismiss();

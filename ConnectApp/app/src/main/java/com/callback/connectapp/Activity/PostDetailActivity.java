@@ -1,7 +1,6 @@
 package com.callback.connectapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +19,7 @@ import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.Comment;
 import com.callback.connectapp.model.User;
-import com.callback.connectapp.model.postData;
+import com.callback.connectapp.model.PostData;
 import com.callback.connectapp.retrofit.APIClient;
 import com.squareup.picasso.Picasso;
 
@@ -106,14 +105,14 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private void fetchAllComment () {
         loading();
-        Call <postData> call = APIClient.getInstance()
+        Call <PostData> call = APIClient.getInstance()
                 .getApiInterface().getPost(PostId);
 
-        call.enqueue(new Callback <postData>() {
+        call.enqueue(new Callback <PostData>() {
             @Override
-            public void onResponse (Call <postData> call , Response <postData> response) {
+            public void onResponse (Call <PostData> call , Response <PostData> response) {
                 if (response.isSuccessful()) {
-                    postData post = response.body();
+                    PostData post = response.body();
                     List <Comment> comment = response.body().getComments();
                     postText.setText(response.body().getInfo());
 
@@ -177,7 +176,7 @@ public class PostDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure (Call <postData> call , Throwable t) {
+            public void onFailure (Call <PostData> call , Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
                 progressDialog.dismiss();
