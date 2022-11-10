@@ -44,6 +44,7 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.TimeZone;

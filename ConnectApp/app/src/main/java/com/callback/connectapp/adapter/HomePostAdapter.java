@@ -3,6 +3,9 @@ package com.callback.connectapp.adapter;
 import android.content.Context;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -29,6 +33,8 @@ import com.callback.connectapp.model.postData;
 import com.callback.connectapp.retrofit.APIClient;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Objects;
 
@@ -271,8 +277,29 @@ public class HomePostAdapter extends RecyclerView.Adapter <HomePostAdapter.postV
                     noInternetDialog.create();
             }
         });
-    }
 
+        holder.shareBtn.setOnClickListener(view -> {
+
+            // here we  will be passing the text to share
+            shareTextOnly((String) holder.postText.getText() ,userPost.getImage().toString());
+        });
+    }
+    private void shareTextOnly(String titlee,String imgUrl) {
+        String sharebody = titlee;
+
+        // The value which we will sending through data via
+        // other applications is defined
+        // via the Intent.ACTION_SEND
+        Intent intentt = new Intent(Intent.ACTION_SEND);
+
+        // setting type of data shared as text
+        intentt.setType("text/plain");
+        intentt.putExtra(Intent.EXTRA_SUBJECT, "Subject Here");
+
+        // Adding the text to share using putExtra
+        intentt.putExtra(Intent.EXTRA_TEXT, sharebody + "\n \n "+imgUrl);
+                 context.startActivity(Intent.createChooser(intentt, "Share Via"));
+    }
 
     @Override
     public int getItemCount () {
