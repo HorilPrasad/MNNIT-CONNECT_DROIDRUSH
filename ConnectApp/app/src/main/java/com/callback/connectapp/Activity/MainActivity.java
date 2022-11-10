@@ -40,10 +40,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         AppConfig appConfig = new AppConfig(this);
         if (!appConfig.isUserLogin()){
             startActivity(new Intent(MainActivity.this , LoginActivity.class));
-<<<<<<< HEAD
-=======
+
         }
->>>>>>> 6c188239f7390e17d497ea0e03b64ac98cbb638a
+
 
     }
 

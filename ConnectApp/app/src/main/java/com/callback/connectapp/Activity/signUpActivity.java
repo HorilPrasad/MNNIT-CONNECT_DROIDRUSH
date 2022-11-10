@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.HEAD;
 
 public class signUpActivity extends AppCompatActivity {
     private EditText userName, userEmail, userPassword, userReg;
@@ -64,12 +65,11 @@ public class signUpActivity extends AppCompatActivity {
                         appConfig.setUserID(response.body().get_id());
                         Snackbar snackbar = Snackbar.make(relativeLayout,"Account has been successfully created...",Snackbar.LENGTH_SHORT).setBackgroundTint(getResources().getColor(R.color.green));
                         snackbar.show();
-<<<<<<< HEAD
-                        startActivity(new Intent(signUpActivity.this , CreateProfile.class));
-                        finishAffinity();
-=======
+
+
+
                         otpVerificationDialog.createDialog();
->>>>>>> 6c188239f7390e17d497ea0e03b64ac98cbb638a
+
                     } else {
                         if (!noInternetDialog.isConnected())
                             noInternetDialog.create();
