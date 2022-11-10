@@ -52,10 +52,6 @@ const userSchema = new mongoose.Schema({
     imageUrl: {
         type: String
     },
-    Saved:{
-        type: Array,
-        default:[]
-    },
 
 })
 

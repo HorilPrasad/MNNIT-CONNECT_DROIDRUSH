@@ -24,7 +24,8 @@ public class ImageDialog {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.image_dialog);
         ImageView imageView = dialog.findViewById(R.id.image_dialog_image_view);
-        Picasso.get().load(imageUrl).placeholder(R.drawable.avatar1).into(imageView);
+        if(imageUrl != null && !imageUrl.isEmpty())
+            Picasso.get().load(imageUrl).placeholder(R.drawable.avatar1).into(imageView);
         dialog.show();
     }
 

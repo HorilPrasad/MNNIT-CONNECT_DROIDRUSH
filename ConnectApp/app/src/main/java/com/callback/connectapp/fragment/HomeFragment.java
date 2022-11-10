@@ -1,34 +1,26 @@
 package com.callback.connectapp.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
-import com.callback.connectapp.Activity.CreateProfile;
-import com.callback.connectapp.Activity.signUpActivity;
 import com.callback.connectapp.R;
 import com.callback.connectapp.adapter.HomePostAdapter;
 import com.callback.connectapp.app.NoInternetDialog;
-import com.callback.connectapp.model.ApiResponse;
-import com.callback.connectapp.model.postData;
+import com.callback.connectapp.model.PostData;
 import com.callback.connectapp.retrofit.APIClient;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +31,7 @@ public class HomeFragment extends Fragment {
 
     private ShimmerFrameLayout mShimmerViewContainer;
     private RecyclerView postList_recycler;
-    List <postData> postDataArrayList;
+    List <PostData> postDataArrayList;
     private HomePostAdapter homePostAdapter;
     private NoInternetDialog noInternetDialog;
 
@@ -77,12 +69,12 @@ public class HomeFragment extends Fragment {
 
     private void fetchAllPost () {
 
-        Call <List <postData>> call = APIClient.getInstance()
+        Call <List <PostData>> call = APIClient.getInstance()
                 .getApiInterface().getAllPosts();
 
-        call.enqueue(new Callback <List <postData>>() {
+        call.enqueue(new Callback <List <PostData>>() {
             @Override
-            public void onResponse (Call <List <postData>> call , Response <List <postData>> response) {
+            public void onResponse (Call <List <PostData>> call , Response <List <PostData>> response) {
 
                 if (response.isSuccessful()) {
                     postDataArrayList.addAll(response.body());
@@ -99,7 +91,7 @@ public class HomeFragment extends Fragment {
             }
 
             @Override
-            public void onFailure (Call <List <postData>> call , Throwable t) {
+            public void onFailure (Call <List <PostData>> call , Throwable t) {
                 if (!noInternetDialog.isConnected())
                     noInternetDialog.create();
 

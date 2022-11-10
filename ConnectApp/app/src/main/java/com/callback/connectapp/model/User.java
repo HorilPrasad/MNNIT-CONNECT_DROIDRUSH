@@ -13,17 +13,8 @@ public class User {
     private String token;
     private String phone;
     private String regNo;
-    private List <String> Saved;
     private String branch;
     private String imageUrl;
-
-    public List <String> getSaved () {
-        return Saved;
-    }
-
-    public void setSaved (List <String> saved) {
-        Saved = saved;
-    }
 
 
     public User() {

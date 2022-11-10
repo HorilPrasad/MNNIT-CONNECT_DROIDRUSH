@@ -8,8 +8,54 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class postData {
+public class PostData {
     private String _id;
+
+    private String userId;
+    private String communityName;
+    private String communityId;
+    private String time;
+    private String info;
+    private List <String> likes;
+    private List <String> dislikes;
+    private List <Comment> comments;
+    private List <String> saved;
+    private String image;
+    private String profileUrl;
+    private String postShareLink;
+
+    public PostData() {
+    }
+
+    public PostData(String userId , String info , String image, String communityId, String time) {
+        this.userId = userId;
+        this.info = info;
+        this.communityId=communityId;
+        this.image = image;
+        this.time=time;
+    }
+
+    public PostData(String name , String communityName , String time , String postText , List <String>  likeCount , List <String> dislikeCount , List<Comment>  commentCount , String imgUrl , String profileUrl , String postShareLink) {
+        this.userId = name;
+        this.communityName = communityName;
+        this.time = time;
+        this.info = postText;
+        this.likes = likeCount;
+        this.dislikes = dislikeCount;
+        this.comments = commentCount;
+        this.image = imgUrl;
+        this.profileUrl = profileUrl;
+        this.postShareLink = postShareLink;
+    }
+
+
+    public List<String> getSaved() {
+        return saved;
+    }
+
+    public void setSaved(List<String> saved) {
+        this.saved = saved;
+    }
 
     public String get_id () {
         return _id;
@@ -27,41 +73,6 @@ public class postData {
         this.communityId = communityId;
     }
 
-    private String userId;
-    private String communityName;
-    private String communityId;
-    private String time;
-    private String info;
-    private List <String> likes;
-    private List <String> dislikes;
-    private List<Comment> comments;
-    private String image;
-    private String profileUrl;
-    private String postShareLink;
-
-    public postData() {
-    }
-
-    public postData (String userId , String info , String image,String communityId,String time) {
-        this.userId = userId;
-        this.info = info;
-        this.communityId=communityId;
-        this.image = image;
-        this.time=time;
-    }
-
-    public postData (String name , String communityName , String time , String postText , List <String>  likeCount , List <String> dislikeCount , List<Comment>  commentCount , String imgUrl , String profileUrl , String postShareLink) {
-        this.userId = name;
-        this.communityName = communityName;
-        this.time = time;
-        this.info = postText;
-        this.likes = likeCount;
-        this.dislikes = dislikeCount;
-        this.comments = commentCount;
-        this.image = imgUrl;
-        this.profileUrl = profileUrl;
-        this.postShareLink = postShareLink;
-    }
    public int getLikeCount(List<String> t){
 
         return t.size();

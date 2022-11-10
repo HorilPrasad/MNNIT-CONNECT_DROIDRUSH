@@ -24,6 +24,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.regex.Pattern;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -115,6 +117,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean check (String email , String password) {
 
+        final String domain = "mnnit.ac.in";
+        final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + Pattern.quote(domain) + "$";
         if (email.isEmpty()) {
             userEmail.setError("Email can't be empty!");
             userEmail.requestFocus();

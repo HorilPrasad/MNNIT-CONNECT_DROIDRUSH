@@ -131,7 +131,6 @@ router.put("/:id/comment", async function (req, res) {
     try {
         const post = await Post.findById(req.params.id);
 
-
         // post.comments.unshift(userComment);
         await post.updateOne({ $push: { comments: { user: req.body.user, comment: req.body.comment, time: req.body.time } } });
         res.status(200).send({
@@ -173,10 +172,9 @@ router.get("/:id", async function (req, res) {
 router.put("/saved/:id", async function (req, res) {
 
     try {
-        const user = await User.findById(req.params.id);
-        if (!user.Saved.includes(req.body._id)) {
-            await user.updateOne({ $push: { Saved: req.body._id } });
-
+        const post = await Post.findById(req.params.id);
+        if (!post.saved.includes(req.body._id)) {
+            await post.updateOne({ $push: { saved: req.body._id } });
 
             res.status(200).send({
                 status: 200,

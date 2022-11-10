@@ -10,13 +10,12 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.model.ApiResponse;
-import com.callback.connectapp.model.postData;
+import com.callback.connectapp.model.PostData;
 import com.callback.connectapp.retrofit.APIClient;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -37,11 +36,11 @@ public class CreateCommunityPost extends AppCompatActivity {
     private ProgressBar pb;
     private AppConfig appConfig;
     FirebaseStorage storage;
-    postData post;
+    PostData post;
     private ProgressDialog progressDialog;
     String communityId;
     private String userID;
-    public postData data;
+    public PostData data;
     NoInternetDialog noInternetDialog;
     private String url;
 
@@ -106,7 +105,7 @@ public class CreateCommunityPost extends AppCompatActivity {
             progressDialog.setMessage("Uploading...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
-            postData newPost = new postData(userID , etPost.getText().toString() , url , communityId , new Date().toString());
+            PostData newPost = new PostData(userID , etPost.getText().toString() , url , communityId , new Date().toString());
             Call <ApiResponse> call = APIClient.getInstance()
                     .getApiInterface().createPost(newPost);
             call.enqueue(new Callback <ApiResponse>() {
