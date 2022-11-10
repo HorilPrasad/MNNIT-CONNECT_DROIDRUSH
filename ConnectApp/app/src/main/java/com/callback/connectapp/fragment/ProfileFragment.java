@@ -141,7 +141,10 @@ public class ProfileFragment extends Fragment {
                     regNo.setText(response.body().getRegNo());
                     course.setText(response.body().getBranch());
                     user = response.body();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6c188239f7390e17d497ea0e03b64ac98cbb638a
                     profileImg.setImageDrawable(null);
                     if (!Objects.equals(response.body().getImageUrl() , ""))
                         Picasso.get().load(response.body().getImageUrl()).placeholder(R.drawable.avatar).into(profileImg);

@@ -15,6 +15,9 @@ public class User {
     private String regNo;
     private String branch;
     private String imageUrl;
+    private boolean verified;
+
+
 
 
     public User() {
@@ -49,6 +52,14 @@ public class User {
         this.phone = phone;
         this.branch = branch;
         this.imageUrl = imageUrl;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 
     public String getImageUrl() {

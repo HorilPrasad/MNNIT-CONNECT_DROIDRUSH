@@ -194,6 +194,7 @@ public class CreateProfile extends AppCompatActivity {
         progressDialog.setTitle("User Profile");
         progressDialog.setMessage("creating...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
         if (check(phoneString , dobString)) {
             progressDialog.show();
             if (imageUrl == null)
