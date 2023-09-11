@@ -32,6 +32,20 @@ router.get('/communities',async (req,res) =>{
     }
 });
 
+router.put('/verify/:id', async (req, res) => {
+
+    try{
+        await Community.findOneAndUpdate({_id:req.params.id},{verified:req.body.verified})
+        res.status(200).send({
+            status:200,
+            message:"verified"
+        })
+        console.log("verified")
+    }catch(err){
+
+    }
+})
+
 //get A specfic community
 router.get('/:id',async(req,res)=>{
     const id = req.params.id;

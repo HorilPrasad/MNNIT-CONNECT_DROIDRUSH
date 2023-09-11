@@ -16,6 +16,7 @@ public class User {
     private String branch;
     private String imageUrl;
     private boolean verified;
+    private String role;
 
 
 
@@ -56,6 +57,14 @@ public class User {
 
     public boolean isVerified() {
         return verified;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public void setVerified(boolean verified) {

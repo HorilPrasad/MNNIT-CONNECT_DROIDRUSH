@@ -11,6 +11,7 @@ public class Community {
     private String rules;
     private String image;
     private List<String> members;
+    private boolean verified;
 
     public Community() {
     }
@@ -40,6 +41,14 @@ public class Community {
         this.rules = rules;
         this.image = image;
         this.members = members;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 
     public String get_id() {

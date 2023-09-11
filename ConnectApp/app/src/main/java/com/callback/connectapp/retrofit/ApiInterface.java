@@ -97,4 +97,7 @@ public interface ApiInterface {
 
     @GET("/post/{id}")
     Call <List <Community>> getUserCommunities (@Path("id") String id , @Body User user);
+
+    @PUT("/community/verify/{id}")
+    Call <ApiResponse> verifyCommunity (@Path("id") String id , @Body Community community);
 }

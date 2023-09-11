@@ -1,6 +1,5 @@
 package com.callback.connectapp.Activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
@@ -18,8 +16,6 @@ import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.database.TinyDB;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -90,7 +86,10 @@ public class LoginActivity extends AppCompatActivity {
                         Snackbar snackbar = Snackbar.make(relativeLayout,"User has been login successfully...",Snackbar.LENGTH_SHORT).setBackgroundTint(getResources().getColor(R.color.green));
                         snackbar.show();
                         finishAffinity();
-                        startActivity(new Intent(LoginActivity.this , MainActivity.class));
+                        if (response.body().getRole().equals("admin"))
+                            startActivity(new Intent(LoginActivity.this , AdminDashboard.class));
+                        else
+                            startActivity(new Intent(LoginActivity.this , MainActivity.class));
 
                     } else {
                         if (response.code() == 404) {
@@ -148,6 +147,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onRegisterClick (View View) {
-        startActivity(new Intent(this , signUpActivity.class));
+        startActivity(new Intent(this , SignUpActivity.class));
     }
 }

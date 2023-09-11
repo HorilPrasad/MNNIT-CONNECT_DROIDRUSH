@@ -29,6 +29,10 @@ const communitySchema = new mongoose.Schema({
     members:{
         type:Array,
         default:[]
+    },
+    verified:{
+        type:Boolean,
+        default:false
     }
 });
 

@@ -11,6 +11,7 @@ const {
   profileValidation,
 } = require("../validation");
 const createError = require("http-errors");
+const { findById, findOne } = require("../models/UserVerification");
 
 //node mailer 
 let transporter = nodemailer.createTransport({
@@ -153,7 +154,9 @@ exports.user_create_profile = async (req, res, next) => {
       const emailExist = await User.findOne({ email: req.body.email });
   
       if (emailExist) {
-        throw createError(400, "Email already exist");
+        res.status(200).send(emailExist);
+        
+        // sendVerificationEmail(emailExist);
         return;
       }
     } catch (err) {
@@ -177,8 +180,8 @@ exports.user_create_profile = async (req, res, next) => {
     try {
       const savedUser = await user.save();
       res.status(200).send(savedUser);
-      
-        sendVerificationEmail(savedUser);
+      console.log(savedUser._id);
+        // sendVerificationEmail(savedUser);
     
         console.log("sending email")
     } catch (err) {
@@ -400,7 +403,7 @@ const sendVerificationEmail = ({ name, _id, email }, res, next) => {
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
                         <td bgcolor="#ffffff" align="left" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <p style="margin: 0;">Hi ${name}, We're excited to have you get started. First, you need to confirm your account. Just press the button below.</p>
+                            <p style="margin: 0;">Hi <b>${name}</b>, We're excited to have you get started. First, you need to confirm your account. Verify your OTP.</p>
                         </td>
                     </tr>
                     <tr>
@@ -465,13 +468,29 @@ const sendVerificationEmail = ({ name, _id, email }, res, next) => {
       next(error);
       return;
     } else {
-      const userVerify = new UserVerifcation({
-        userId: _id,
-        otp: otp,
-      });
-      const savedVerify = await userVerify.save();
-      console.log("message sent"+otp);
-      console.log(savedVerify);
+      const userId = _id;
+      console.log(userId)
+      try{
+        const userVerifyDetails = await UserVerifcation.findOne({userId})
+        if(!userVerifyDetails){
+          const userVerify = new UserVerifcation({
+            userId: userId,
+            otp: otp,
+        });
+          const savedVerify = await userVerify.save();
+          console.log("message sent "+otp);
+          console.log(savedVerify);
+          
+
+        }else{
+          await UserVerifcation.findOneAndUpdate({userId},{otp})
+          console.log("message sent "+otp);
+          console.log(savedVerify);
+        }
+      }catch(err){
+        return;
+      }
+      
       
     }
   });

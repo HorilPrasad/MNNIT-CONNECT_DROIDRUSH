@@ -23,7 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class exploreCommunity extends AppCompatActivity {
+public class ExploreCommunity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private List <Community> communityList;
@@ -69,7 +69,10 @@ public class exploreCommunity extends AppCompatActivity {
             public void onResponse (Call <List <Community>> call , Response <List <Community>> response) {
                 if (response.isSuccessful()) {
                     List <Community> communityList1 = response.body();
-                    communityList.addAll(communityList1);
+                    for(Community community:communityList1){
+                        if (community.isVerified())
+                            communityList.add(community);
+                    }
                     communityAdapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.GONE);
 

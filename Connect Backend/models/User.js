@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     },
     verified: {
         type: Boolean,
-        default: false
+        default: true
     },
     location: {
         type: String
@@ -52,6 +52,10 @@ const userSchema = new mongoose.Schema({
     imageUrl: {
         type: String
     },
+    role:{
+        type:String,
+        default:"user"
+    }
 
 })
 

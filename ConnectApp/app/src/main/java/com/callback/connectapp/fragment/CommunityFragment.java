@@ -14,9 +14,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
-import com.callback.connectapp.Activity.LoginActivity;
-import com.callback.connectapp.Activity.createCommunity;
-import com.callback.connectapp.Activity.exploreCommunity;
+import com.callback.connectapp.Activity.CreateCommunity;
+import com.callback.connectapp.Activity.ExploreCommunity;
 import com.callback.connectapp.R;
 import com.callback.connectapp.adapter.CommunityAdapter;
 import com.callback.connectapp.app.AppConfig;
@@ -81,7 +80,7 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onClick (View view) {
 
-                Intent i = new Intent(getContext() , exploreCommunity.class);
+                Intent i = new Intent(getContext() , ExploreCommunity.class);
 
                 startActivity(i);
             }
@@ -91,7 +90,7 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onClick (View view) {
 
-                Intent i = new Intent(getContext() , createCommunity.class);
+                Intent i = new Intent(getContext() , CreateCommunity.class);
 
                 startActivity(i);
             }

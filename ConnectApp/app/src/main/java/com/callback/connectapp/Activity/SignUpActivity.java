@@ -23,9 +23,8 @@ import java.util.regex.Pattern;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.HEAD;
 
-public class signUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
     private EditText userName, userEmail, userPassword, userReg;
     private AppCompatButton registerButton;
     private AppConfig appConfig;

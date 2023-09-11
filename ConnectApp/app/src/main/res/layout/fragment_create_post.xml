@@ -122,7 +122,9 @@
         android:layout_marginTop="132dp"
         android:layout_marginRight="5dp"
         android:background="@null"
-        android:inputType="textCapSentences"
+        android:inputType="textMultiLine"
+        android:maxLines="15"
+        android:scrollbars="vertical"
         android:gravity="start"
         android:hint="write about your post here......"
 
