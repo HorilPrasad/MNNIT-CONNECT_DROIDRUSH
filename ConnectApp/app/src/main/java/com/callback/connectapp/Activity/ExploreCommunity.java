@@ -70,7 +70,6 @@ public class ExploreCommunity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     List <Community> communityList1 = response.body();
                     for(Community community:communityList1){
-                        if (community.isVerified())
                             communityList.add(community);
                     }
                     communityAdapter.notifyDataSetChanged();

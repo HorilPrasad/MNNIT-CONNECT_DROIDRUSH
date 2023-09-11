@@ -3,17 +3,20 @@ package com.callback.connectapp.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.callback.connectapp.R;
 import com.callback.connectapp.app.AppConfig;
 import com.callback.connectapp.app.NoInternetDialog;
 import com.callback.connectapp.app.OtpVerificationDialog;
+import com.callback.connectapp.model.ApiResponse;
 import com.callback.connectapp.model.User;
 import com.callback.connectapp.retrofit.APIClient;
 import com.google.android.material.snackbar.Snackbar;
@@ -64,10 +67,9 @@ public class SignUpActivity extends AppCompatActivity {
                         appConfig.setUserID(response.body().get_id());
                         Snackbar snackbar = Snackbar.make(relativeLayout,"Account has been successfully created...",Snackbar.LENGTH_SHORT).setBackgroundTint(getResources().getColor(R.color.green));
                         snackbar.show();
-
-
-
-                        otpVerificationDialog.createDialog();
+                        startActivity(new Intent(SignUpActivity.this, CreateProfile.class));
+                        finishAffinity();
+//                        otpVerificationDialog.createDialog();
 
                     } else {
                         if (!noInternetDialog.isConnected())
@@ -131,7 +133,6 @@ public class SignUpActivity extends AppCompatActivity {
         progressDialog.show();
 
     }
-
     private void initialize () {
         userName = findViewById(R.id.register_user_name);
         userEmail = findViewById(R.id.register_user_email);

@@ -38,11 +38,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     protected void onStart () {
         super.onStart();
         AppConfig appConfig = new AppConfig(this);
-//        if (!appConfig.isUserLogin()){
-//            startActivity(new Intent(MainActivity.this , LoginActivity.class));
-//
-//        }
-        startActivity(new Intent(MainActivity.this,AdminDashboard.class));
+        if (!appConfig.isUserLogin()){
+            startActivity(new Intent(MainActivity.this , LoginActivity.class));
+
+        }
+//        startActivity(new Intent(MainActivity.this,AdminDashboard.class));
 
 
     }
