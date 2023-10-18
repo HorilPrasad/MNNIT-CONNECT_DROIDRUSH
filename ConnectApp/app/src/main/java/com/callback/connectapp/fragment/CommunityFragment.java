@@ -61,8 +61,6 @@ public class CommunityFragment extends Fragment {
         frameLayout = view.findViewById(R.id.community_fragment_layout);
         recyclerView=view.findViewById(R.id.joinCommunityRecycler);
         progressBar = view.findViewById(R.id.community_fragment_progress);
-        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.community);
 
 
         noInternetDialog = new NoInternetDialog(getContext());

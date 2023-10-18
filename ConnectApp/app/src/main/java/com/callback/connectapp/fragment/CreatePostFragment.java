@@ -74,8 +74,6 @@ public class CreatePostFragment extends Fragment {
         appConfig = new AppConfig(getContext());
         userID = appConfig.getUserID();
         noInternetDialog = new NoInternetDialog(getContext());
-        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.post);
         frameLayout = view.findViewById(R.id.create_post_fragment_layout);
 
         if (this.getArguments() != null) {

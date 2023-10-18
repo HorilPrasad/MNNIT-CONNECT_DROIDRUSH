@@ -51,8 +51,6 @@ public class HomeFragment extends Fragment {
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_container);
         postList_recycler = view.findViewById(R.id.homeFeedRecycler);
         noInternetDialog = new NoInternetDialog(getContext());
-        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.home);
 
         postDataArrayList = new ArrayList <>();
 
@@ -61,8 +59,6 @@ public class HomeFragment extends Fragment {
         postList_recycler.setHasFixedSize(true);
         postList_recycler.setAdapter(homePostAdapter);
 
-
-        fetchAllPost();
 
         return view;
     }
@@ -77,11 +73,14 @@ public class HomeFragment extends Fragment {
             public void onResponse (Call <List <PostData>> call , Response <List <PostData>> response) {
 
                 if (response.isSuccessful()) {
-                    postDataArrayList.addAll(response.body());
-                    homePostAdapter.notifyDataSetChanged();
+                    if (response.body() != null) {
+                        postDataArrayList.addAll(response.body());
 
-                    mShimmerViewContainer.stopShimmerAnimation();
-                    mShimmerViewContainer.setVisibility(View.GONE);
+                        homePostAdapter.notifyDataSetChanged();
+
+                        mShimmerViewContainer.stopShimmerAnimation();
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                    }
 
                 } else {
 

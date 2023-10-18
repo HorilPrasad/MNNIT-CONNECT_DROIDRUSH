@@ -57,7 +57,6 @@ public class ProfileFragment extends Fragment {
 
     NoInternetDialog noInternetDialog;
     RelativeLayout relativeLayout;
-    BottomNavigationView bottomNavigationView;
     User user;
 
     public ProfileFragment () {
@@ -81,8 +80,6 @@ public class ProfileFragment extends Fragment {
         relativeLayout = view.findViewById(R.id.profile_layout);
         logoutButton = view.findViewById(R.id.logout_button);
         createPost = view.findViewById(R.id.profile_create_post);
-        bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.profile);
         profileImg = view.findViewById(R.id.profile_user_image);
         appConfig = new AppConfig(getContext());
 
